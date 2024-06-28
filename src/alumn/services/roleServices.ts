@@ -1,11 +1,11 @@
 import { RoleRepository } from "../repositories/Role";
 import { DateUtils } from "../../shared/utils/Date";
-import { Role } from "../models/Role";
+import { Rolle } from "../models/Rolle";
 
 
 export class roleService {
 
-    public static async getAllRoles(): Promise<Role[]> {
+    public static async getAllRoles(): Promise<Rolle[]> {
         try{
             return await RoleRepository.findAll();
         }catch (error: any){
@@ -13,7 +13,7 @@ export class roleService {
         }
     }
 
-    public static async getEmployeeById(roleId: number): Promise<Role | null> {
+    public static async getEmployeeById(roleId: number): Promise<Rolle | null> {
         try{
             return await RoleRepository.findById(roleId);
 
@@ -22,7 +22,7 @@ export class roleService {
         }
     }
 
-    public static async addRole(role: Role) {
+    public static async addRole(role: Rolle) {
         try {
             role.created_at = DateUtils.formatDate(new Date());
             role.updated_at = DateUtils.formatDate(new Date());
@@ -32,7 +32,7 @@ export class roleService {
         }
     }
 
-    public static async modifyRole(roleId: number, roleData: Role){
+    public static async modifyRole(roleId: number, roleData: Rolle){
         try{
             const roleFinded =  await RoleRepository.findById(roleId);
             if(roleFinded){
