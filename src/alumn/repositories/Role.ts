@@ -1,6 +1,6 @@
 import { ResultSetHeader } from "mysql2";
 import connection from "../../shared/config/database";
-import { Role } from "../models/Role";
+import { Role } from "../models/Rolle";
 
 export class RoleRepository {
 

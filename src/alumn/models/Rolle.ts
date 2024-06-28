@@ -1,4 +1,4 @@
-export interface Role {
+export interface Rolle {
     role_id: number | null; 
     personal_id: number | null; 
     teacher: boolean; 
