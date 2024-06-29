@@ -1,9 +1,9 @@
 import { Response, Request } from "express"
-import { groupService } from "../services/groupServices"
+import { groupService } from "../services/classServices"
 
-export const getAlumnAll = async (_req: Request, res: Response) => {
+export const getClassAll = async (_req: Request, res: Response) => {
   try {
-    const groups = await groupService.getAllEmployees()
+    const groups = await groupService.getAllClass()
 
     if(groups) {
       res.status(201).json(groups)
@@ -15,9 +15,9 @@ export const getAlumnAll = async (_req: Request, res: Response) => {
   }
 }
 
-export const getAlumnId = async (req: Request, res: Response) => {
+export const getClassId = async (req: Request, res: Response) => {
   try {
-    const groups = await groupService.getEmployeeById(parseInt(req.params.alumn_id, 10))
+    const groups = await groupService.getClassId(parseInt(req.params.alumn_id, 10))
 
     if(groups) {
       res.status(201).json(groups)
@@ -29,9 +29,9 @@ export const getAlumnId = async (req: Request, res: Response) => {
   }
 }
 
-export const createAlumn = async (req: Request, res: Response) => {
+export const createClass = async (req: Request, res: Response) => {
   try {
-    const newEmployee = await groupService.addGroup(req.body);
+    const newEmployee = await groupService.addClass(req.body);
     if(newEmployee){
       res.status(201).json(newEmployee);
     }else{
@@ -42,9 +42,9 @@ export const createAlumn = async (req: Request, res: Response) => {
   }
 }
 
-export const  updateALumn = async (req: Request, res: Response) => {
+export const  updateClass = async (req: Request, res: Response) => {
   try {
-    const updatedEmployee = await groupService.modifyGroup(parseInt(req.params.alumnId, 10), req.body);
+    const updatedEmployee = await groupService.modifyClass(parseInt(req.params.alumnId, 10), req.body);
     if(updatedEmployee){
       res.status(201).json(updatedEmployee);
     }else{
@@ -55,9 +55,9 @@ export const  updateALumn = async (req: Request, res: Response) => {
   }
 };
 
-export const deleteAlumn = async (req: Request, res: Response) => {
+export const deleteClass = async (req: Request, res: Response) => {
   try {
-    const deleted = await groupService.deleteEmployee(parseInt(req.params.alumn_id, 10));
+    const deleted = await groupService.deleteClass(parseInt(req.params.alumn_id, 10));
 
     if(deleted) {
       res.status(201).json({message: "salio bien"})

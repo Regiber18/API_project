@@ -15,7 +15,7 @@ export const getAllBallots = async (_req: Request, res: Response) => {
   }
 }
 
-export const getAlumnId = async (req: Request, res: Response) => {
+export const getBallotId = async (req: Request, res: Response) => {
   try {
     const alumns = await BallotService.getBallotById(parseInt(req.params.ballot_id, 10))
 
@@ -29,7 +29,7 @@ export const getAlumnId = async (req: Request, res: Response) => {
   }
 }
 
-export const createAlumn = async (req: Request, res: Response) => {
+export const createBallot = async (req: Request, res: Response) => {
   try {
     const newEmployee = await BallotService.addBallot(req.body);
     if(newEmployee){
@@ -42,7 +42,7 @@ export const createAlumn = async (req: Request, res: Response) => {
   }
 }
 
-export const  updateALumn = async (req: Request, res: Response) => {
+export const  updateBallot = async (req: Request, res: Response) => {
   try {
     const updatedEmployee = await BallotService.modifyBallot(parseInt(req.params.ballot_id, 10), req.body);
     if(updatedEmployee){
@@ -55,7 +55,7 @@ export const  updateALumn = async (req: Request, res: Response) => {
   }
 };
 
-export const deleteAlumn = async (req: Request, res: Response) => {
+export const deleteBallot = async (req: Request, res: Response) => {
   try {
     const deleted = await BallotService.deleteBallot(parseInt(req.params.ballot_id, 10));
 

@@ -1,14 +1,14 @@
 import { Router } from "express";
-import { getAlumnAll, getAlumnId, createAlumn, updateALumn, deleteAlumn, loginPersonal} from "../controllers/personalController"
+import { getPersonalAll, getPersonalId, createPersonal, updatePersonal, deletePersonal, loginPersonal} from "../controllers/personalController"
 import { authMiddleware } from "../../shared/middlewares/auth";
 const routePersonal: Router = Router();
 
 routePersonal.post('/login', loginPersonal)
 
-routePersonal.get('/', getAlumnAll);
-routePersonal.get('/:personal_id', authMiddleware, getAlumnId);
-routePersonal.post('/', createAlumn);
-routePersonal.put('/:personal_id', updateALumn)
-routePersonal.delete('/:personal_id', deleteAlumn)
+routePersonal.get('/', getPersonalAll);
+routePersonal.post('/', createPersonal);
+routePersonal.get('/:personal_id', authMiddleware, getPersonalId);
+routePersonal.put('/:personal_id', updatePersonal)
+routePersonal.delete('/:personal_id', deletePersonal)
 
 export default routePersonal; 
