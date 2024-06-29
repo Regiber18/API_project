@@ -1,6 +1,6 @@
 export interface Alumns{
     alumn_id: number | null;
-    group_id: number | null;
+    class_id: number | null;
     name: string;
     age: number;
     created_at: String;

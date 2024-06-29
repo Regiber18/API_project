@@ -1,6 +1,6 @@
 import { ResultSetHeader } from "mysql2";
 import connection from "../../shared/config/database";
-import { Role } from "../models/Rolle";
+import { Role } from "../models/Role";
 
 export class RoleRepository {
 
@@ -37,10 +37,10 @@ export class RoleRepository {
     } 
 
     public static async createRole(role: Role): Promise<Role> {
-        const query = 'INSERT INTO ballot (management, escolarControl, resources, teacher, created_at, created_by, updated_at, updated_by, deleted) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
+        const query = 'INSERT INTO ballot (management, escolarControl, teacher, created_at, created_by, updated_at, updated_by, deleted) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
         console.log(role);
         return new Promise((resolve, reject) => {
-          connection.execute(query, [role.management, role.escolarControl, role.resources, role.teacher, role.created_at,role.created_by, role.updated_at, role.updated_by, role.deleted], (error, result: ResultSetHeader) => {
+          connection.execute(query, [role.management, role.escolarControl, role.teacher, role.created_at,role.created_by, role.updated_at, role.updated_by, role.deleted], (error, result: ResultSetHeader) => {
             if (error) {
               reject(error);
             } else {
@@ -53,9 +53,9 @@ export class RoleRepository {
       }
 
     public static async updateRole(role_id: number, roleData: Role): Promise<Role | null> {
-        const query = 'UPDATE role SET management = ?, escolarControl = ?, resources = ?, teacher = ?, updated_at = ?, updated_by = ?, deleted = ? WHERE role_id = ?';
+        const query = 'UPDATE role SET management = ?, escolarControl = ?, teacher = ?, updated_at = ?, updated_by = ?, deleted = ? WHERE role_id = ?';
         return new Promise((resolve, reject) => {
-          connection.execute(query, [roleData.management, roleData.escolarControl, roleData.resources, roleData.teacher, roleData.updated_at, roleData.updated_by,roleData.deleted, role_id], (error, result: ResultSetHeader) => {
+          connection.execute(query, [roleData.management, roleData.escolarControl, roleData.teacher, roleData.updated_at, roleData.updated_by,roleData.deleted, role_id], (error, result: ResultSetHeader) => {
             if (error) {
               reject(error);
             } else {

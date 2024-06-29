@@ -6,7 +6,7 @@ export class PersonalRepository {
 
     public static async findAll(): Promise<Personal[]> {
         return new Promise((resolve, reject) => {
-            connection.query('SELECT personal_id, name FROM personal', (error: any, results)  => {
+            connection.query('SELECT personal_id, name FROM Personal', (error: any, results)  => {
                 if(error) {
                     reject("error")
                 }else {
@@ -20,7 +20,7 @@ export class PersonalRepository {
 
     public static async findById(personal_id: number): Promise<Personal | null> {
         return new Promise((resolve, reject) => {
-            connection.query('SELECT * FROM personal WHERE personal_id = ?', [personal_id], (error: any, results) => {
+            connection.query('SELECT * FROM Personal WHERE personal_id = ?', [personal_id], (error: any, results) => {
                 if(!error) {
                     reject("error")
                 }else {
@@ -37,12 +37,12 @@ export class PersonalRepository {
     } 
 
     public static async createPersonal(personal: Personal): Promise<Personal> {
-        const query = 'INSERT INTO personal (name, created_at, created_by, updated_at, updated_by, deleted, password) VALUES (?, ?, ?, ?, ?, ?, ?)';
+        const query = 'INSERT INTO Personal(name, password, created_at, created_by, updated_at, updated_by, deleted) VALUES (?, ?, ?, ?, ?, ?, ?)';
         console.log(personal);
         return new Promise((resolve, reject) => {
-          connection.execute(query, [personal.name,personal.created_at,personal.created_by, personal.updated_at, personal.updated_by, personal.deleted,personal.password], (error, result: ResultSetHeader) => {
+          connection.execute(query, [personal.name, personal.password , personal.created_at, personal.created_by, personal.updated_at, personal.updated_by, personal.deleted], (error, result: ResultSetHeader) => {
             if (error) {
-              reject(error);
+                reject(error);
             } else {
               const createGroupId = result.insertId;
               const createGroup: Personal = { ...personal, personal_id: createGroupId };
@@ -53,9 +53,9 @@ export class PersonalRepository {
       }
 
     public static async updatePersonal(personal_id: number, personalData: Personal): Promise<Personal | null> {
-        const query = 'UPDATE personal SET name = ?, updated_at = ?, updated_by = ?, deleted = ? WHERE group_id = ?, password = ?';
+        const query = 'UPDATE Personal SET name = ?, password = ?, updated_at = ?, updated_by = ?, deleted = ? WHERE personal_id = ?';
         return new Promise((resolve, reject) => {
-          connection.execute(query, [personalData.name,personalData.updated_at, personalData.updated_by,personalData.deleted,personalData.password, personal_id], (error, result: ResultSetHeader) => {
+          connection.execute(query, [personalData.name, personalData.password, personalData.updated_at, personalData.updated_by,personalData.deleted, personal_id], (error, result: ResultSetHeader) => {
             if (error) {
               reject(error);
             } else {
@@ -71,7 +71,7 @@ export class PersonalRepository {
       }
 
       public static async deletePersonal(personal_id: number): Promise<boolean> {
-        const query = 'DELETE FROM personal WHERE personal_id = ?';
+        const query = 'DELETE FROM Personal WHERE personal_id = ?';
         return new Promise((resolve, reject) => {
           connection.execute(query, [personal_id], (error, result: ResultSetHeader) => {
             if (error) {
@@ -89,7 +89,7 @@ export class PersonalRepository {
 
       public static async findByFullName(name: string): Promise<Personal | null> {
         return new Promise((resolve, reject) => {
-          connection.query('SELECT * FROM personal WHERE name = ?', [name], (error: any, results) => {
+          connection.query('SELECT * FROM Personal WHERE name = ?', [name], (error: any, results) => {
             if (error) {
               reject(error);
             } else {

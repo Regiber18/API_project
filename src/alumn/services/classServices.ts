@@ -1,11 +1,11 @@
-import { GroupRepository } from "../repositories/GroupRepository";
+import { GroupRepository } from "../repositories/ClassRepository";
 import { DateUtils } from "../../shared/utils/Date";
-import { Group } from "../models/Group";
+import { Class } from "../models/Class";
 
 
 export class groupService {
 
-    public static async getAllEmployees(): Promise<Group[]> {
+    public static async getAllClass(): Promise<Class[]> {
         try{
             return await GroupRepository.findAll();
         }catch (error: any){
@@ -13,28 +13,28 @@ export class groupService {
         }
     }
 
-    public static async getEmployeeById(employeeId: number): Promise<Group | null> {
+    public static async getClassId(classId: number): Promise<Class | null> {
         try{
-            return await GroupRepository.findById(employeeId);
+            return await GroupRepository.findById(classId);
 
         }catch (error: any){
             throw new Error(`Error al encontrar grupo: ${error.message}`);
         }
     }
 
-    public static async addGroup(group: Group) {
+    public static async addClass(clas: Class) {
         try {
-            group.created_at = DateUtils.formatDate(new Date());
-            group.updated_at = DateUtils.formatDate(new Date());
-            return await GroupRepository.createGroup(group);
+            clas.created_at = DateUtils.formatDate(new Date());
+            clas.updated_at = DateUtils.formatDate(new Date());
+            return await GroupRepository.createClass(clas);
         } catch (error: any) {
             throw new Error(`Error al crear grupo: ${error.message}`);
         }
     }
 
-    public static async modifyGroup(ballot_id: number, groupData:Group){
+    public static async modifyClass(class_id: number, groupData:Class){
         try{
-            const groupFinded =  await GroupRepository.findById(ballot_id);
+            const groupFinded =  await GroupRepository.findById(class_id);
             if(groupFinded){
                 if(groupData.name){
                     groupFinded.name = groupData.name;
@@ -50,15 +50,15 @@ export class groupService {
             }
             groupFinded.updated_by = groupData.updated_by
             groupFinded.updated_at = DateUtils.formatDate(new Date());
-            return await GroupRepository.updateGroup(ballot_id, groupFinded);
+            return await GroupRepository.updateClass(class_id, groupFinded);
         }catch (error: any){
             throw new Error(`Error al modificar grupo: ${error.message}`);
         }
     }
 
-    public static async deleteEmployee(group_id: number): Promise<boolean> {
+    public static async deleteClass(class_id: number): Promise<boolean> {
         try{
-            return await GroupRepository.deleteGroup(group_id);
+            return await GroupRepository.deleteClass(class_id);
 
         }catch (error: any){
             throw new Error(`Error al eliminar grupo: ${error.message}`);

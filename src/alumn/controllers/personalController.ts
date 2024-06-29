@@ -1,9 +1,9 @@
 import { Response, Request } from "express"
 import { personalServices } from "../services/personalServices"
 
-export const getAlumnAll = async (_req: Request, res: Response) => {
+export const getPersonalAll = async (_req: Request, res: Response) => {
   try {
-    const alumns = await personalServices.getAllEmployees()
+    const alumns = await personalServices.getAllPersonal()
 
     if(alumns) {
       res.status(201).json(alumns)
@@ -15,9 +15,9 @@ export const getAlumnAll = async (_req: Request, res: Response) => {
   }
 }
 
-export const getAlumnId = async (req: Request, res: Response) => {
+export const getPersonalId = async (req: Request, res: Response) => {
   try {
-    const alumns = await personalServices.getEmployeeById(parseInt(req.params.personal_id, 10))
+    const alumns = await personalServices.getPersonalById(parseInt(req.params.personal_id, 10))
 
     if(alumns) {
       res.status(201).json(alumns)
@@ -29,9 +29,9 @@ export const getAlumnId = async (req: Request, res: Response) => {
   }
 }
 
-export const createAlumn = async (req: Request, res: Response) => {
+export const createPersonal = async (req: Request, res: Response) => {
   try {
-    const newEmployee = await personalServices.addEmployee(req.body);
+    const newEmployee = await personalServices.addPersonal(req.body);
     if(newEmployee){
       res.status(201).json(newEmployee);
     }else{
@@ -42,9 +42,9 @@ export const createAlumn = async (req: Request, res: Response) => {
   }
 }
 
-export const  updateALumn = async (req: Request, res: Response) => {
+export const  updatePersonal = async (req: Request, res: Response) => {
   try {
-    const updatedEmployee = await personalServices.modifyEmployee(parseInt(req.params.personal_id, 10), req.body);
+    const updatedEmployee = await personalServices.modifyPersonal(parseInt(req.params.personal_id, 10), req.body);
     if(updatedEmployee){
       res.status(201).json(updatedEmployee);
     }else{
@@ -55,9 +55,9 @@ export const  updateALumn = async (req: Request, res: Response) => {
   }
 };
 
-export const deleteAlumn = async (req: Request, res: Response) => {
+export const deletePersonal = async (req: Request, res: Response) => {
   try {
-    const deleted = await personalServices.deleteEmployee(parseInt(req.params.personal_id, 10));
+    const deleted = await personalServices.deletePersonal(parseInt(req.params.personal_id, 10));
 
     if(deleted) {
       res.status(201).json({message: "salio bien"})

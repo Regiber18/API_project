@@ -6,7 +6,7 @@ import dotenv from 'dotenv';
 import alumnRoutes from './alumn/routes/alumnRoutes';
 import ballotsRoute from './alumn/routes/ballotRoutes';
 import personalRoute from "./alumn/routes/personalRoutes"; 
-import groupRoutes from "./alumn/routes/groupRoutes"
+import classRoutes from "./alumn/routes/classRoutes"
 
 
 
@@ -29,7 +29,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/api/alumn', alumnRoutes);
 app.use('/api/ballot', ballotsRoute)
 app.use('/api/personal', personalRoute)
-app.use('/api/group', groupRoutes)
+app.use('/api/class', classRoutes)
 
 // Middleware para manejar rutas no encontradas
 app.use(notFoundHandler);

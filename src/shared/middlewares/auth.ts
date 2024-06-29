@@ -26,7 +26,7 @@ export const authMiddleware = async (req: AuthRequest, res: Response, next: Next
       return;
     }
 
-    req.employeeData = payload;
+    req.personalData = payload;
     next();
   } catch (error: any) {
     if (error.name === 'TokenExpiredError') {

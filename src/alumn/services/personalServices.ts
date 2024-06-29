@@ -8,28 +8,27 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const secretKey = process.env.SECRET || "";
-
 const saltRounds = 10;
 
 export class personalServices {
 
-    public static async getAllEmployees(): Promise<Personal[]> {
+    public static async getAllPersonal(): Promise<Personal[]> {
         try {
             return await PersonalRepository.findAll();
         } catch (error: any) {
-            throw new Error(`Error al obtener personal: ${error.message}`);
+            throw new Error(`Error getting all personal records: ${error.message}`);
         }
     }
 
-    public static async getEmployeeById(personalId: number): Promise<Personal | null> {
+    public static async getPersonalById(personalId: number): Promise<Personal | null> {
         try {
             return await PersonalRepository.findById(personalId);
         } catch (error: any) {
-            throw new Error(`Error al encontrar personal: ${error.message}`);
+            throw new Error(`Error finding personal by ID: ${error.message}`);
         }
     }
 
-    public static async addEmployee(personal: Personal) {
+    public static async addPersonal(personal: Personal) {
         try {
             const salt = await bcrypt.genSalt(saltRounds);
             personal.created_at = DateUtils.formatDate(new Date());
@@ -37,49 +36,49 @@ export class personalServices {
             personal.password = await bcrypt.hash(personal.password, salt);  
             return await PersonalRepository.createPersonal(personal);
         } catch (error: any) {
-            throw new Error(`Error al crear personal: ${error.message}`);
+            throw new Error(`Error creating personal record: ${error.message}`);
         }
     }
 
-    public static async modifyEmployee(personalId: number, personalData: Personal) {
+    public static async modifyPersonal(personalId: number, personalData: Personal) {
         try {
-            const personalFinded = await PersonalRepository.findById(personalId);
-            if (!personalFinded) {
+            const personalFound = await PersonalRepository.findById(personalId);
+            if (!personalFound) {
                 return null;
             }
 
             const salt = await bcrypt.genSalt(saltRounds);
 
             if (personalData.name) {
-                personalFinded.name = personalData.name;
+                personalFound.name = personalData.name;
             }
             if (personalData.password) {  
-                personalFinded.password = await bcrypt.hash(personalData.password, salt);  
+                personalFound.password = await bcrypt.hash(personalData.password, salt);  
             }
-            if(personalData.deleted){
-                personalData.deleted = personalData.deleted;
+            if (personalData.deleted !== undefined) {
+                personalFound.deleted = personalData.deleted;
             }
 
-            personalFinded.updated_by = personalData.updated_by;
-            personalFinded.updated_at = DateUtils.formatDate(new Date());
+            personalFound.updated_by = personalData.updated_by;
+            personalFound.updated_at = DateUtils.formatDate(new Date());
 
-            return await PersonalRepository.updatePersonal(personalId, personalFinded);
+            return await PersonalRepository.updatePersonal(personalId, personalFound);
         } catch (error: any) {
-            throw new Error(`Error al modificar personal: ${error.message}`);
+            throw new Error(`Error updating personal record: ${error.message}`);
         }
     }
 
-    public static async deleteEmployee(personal_id: number): Promise<boolean> {
+    public static async deletePersonal(personalId: number): Promise<boolean> {
         try {
-            return await PersonalRepository.deletePersonal(personal_id);
+            return await PersonalRepository.deletePersonal(personalId);
         } catch (error: any) {
-            throw new Error(`Error al eliminar personal: ${error.message}`);
+            throw new Error(`Error deleting personal record: ${error.message}`);
         }
     }
 
     public static async login(name: string, password: string) {
         try {
-            const personal = await this.getEmployeeByFullName(name);
+            const personal = await this.getPersonalByFullName(name);
             if (!personal) {
                 return null;
             }
@@ -91,19 +90,19 @@ export class personalServices {
             const payload = {
                 personal_id: personal.personal_id,
                 name: personal.name,
-            }
+            };
             return jwt.sign(payload, secretKey, { expiresIn: '1h' });
 
         } catch (error: any) {
-            throw new Error(`Error al logearse: ${error.message}`);
+            throw new Error(`Error during login: ${error.message}`);
         }
     }
 
-    public static async getEmployeeByFullName(personalId: string): Promise<Personal | null> {
+    public static async getPersonalByFullName(name: string): Promise<Personal | null> {
         try {
-            return await PersonalRepository.findByFullName(personalId);
+            return await PersonalRepository.findByFullName(name);
         } catch (error: any) {
-            throw new Error(`Error al encontrar personal: ${error.message}`);
+            throw new Error(`Error finding personal by name: ${error.message}`);
         }
     }
 }

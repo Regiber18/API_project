@@ -1,5 +1,5 @@
-export interface Group {
-    group_id: number |  null;
+export interface Class {
+    class_id: number |  null;
     personal_id: number | null; 
     name: String;
     grade: number;

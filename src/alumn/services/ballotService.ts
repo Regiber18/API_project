@@ -34,8 +34,8 @@ export class BallotService {
         try {
             const ballotFound = await BallotRepository.findById(ballotId);
             if (ballotFound) {
-                if (ballotData.pdf) {
-                    ballotFound.pdf = ballotData.pdf;
+                if (ballotData.content) {
+                    ballotFound.content = ballotData.content;
                 }
                 if (ballotData.deleted) {
                     ballotFound.deleted = ballotData.deleted;
