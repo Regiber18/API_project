@@ -20,6 +20,7 @@
     "typescript": "^5.4.5"
   },
   "dependencies": {
+    "@types/cors": "^2.8.17",
     "bcrypt": "^5.1.1",
     "cor": "^0.0.0",
     "cors": "^2.8.5",
