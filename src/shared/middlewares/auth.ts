@@ -1,7 +1,7 @@
 import { Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
-import { PersonalRepository } from '../../alumn/repositories/PersonalRepository';
+import { PersonalRepository } from '../../personal/repositories/PersonalRepository';
 import { PersonalPayload } from '../config/types/personalPayload';
 import { AuthRequest } from '../config/types/authRequest';
 
