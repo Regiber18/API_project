@@ -35,6 +35,7 @@ export class alumnService {
     public static async modifyAlumn(alumnId: number, alumnData: Alumns){
         try{
             const alumnFinded =  await AlumnRepository.findById(alumnId);
+    
             if(alumnFinded){
                 if(alumnData.name){
                     alumnFinded.name = alumnData.name;

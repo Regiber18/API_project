@@ -17,7 +17,7 @@ export const getClassAll = async (_req: Request, res: Response) => {
 
 export const getClassId = async (req: Request, res: Response) => {
   try {
-    const groups = await groupService.getClassId(parseInt(req.params.alumn_id, 10))
+    const groups = await groupService.getClassId(parseInt(req.params.class_id, 10))
 
     if(groups) {
       res.status(201).json(groups)
@@ -44,7 +44,7 @@ export const createClass = async (req: Request, res: Response) => {
 
 export const  updateClass = async (req: Request, res: Response) => {
   try {
-    const updatedEmployee = await groupService.modifyClass(parseInt(req.params.alumnId, 10), req.body);
+    const updatedEmployee = await groupService.modifyClass(parseInt(req.params.class_id, 10), req.body);
     if(updatedEmployee){
       res.status(201).json(updatedEmployee);
     }else{
@@ -57,7 +57,7 @@ export const  updateClass = async (req: Request, res: Response) => {
 
 export const deleteClass = async (req: Request, res: Response) => {
   try {
-    const deleted = await groupService.deleteClass(parseInt(req.params.alumn_id, 10));
+    const deleted = await groupService.deleteClass(parseInt(req.params.class_id, 10));
 
     if(deleted) {
       res.status(201).json({message: "salio bien"})
