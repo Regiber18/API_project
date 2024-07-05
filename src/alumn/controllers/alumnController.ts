@@ -44,7 +44,7 @@ export const createAlumn = async (req: Request, res: Response) => {
 
 export const  updateALumn = async (req: Request, res: Response) => {
   try {
-    const updatedEmployee = await alumnService.modifyAlumn(parseInt(req.params.alumnId, 10), req.body);
+    const updatedEmployee = await alumnService.modifyAlumn(parseInt(req.params.alumn_id, 10), req.body);
     if(updatedEmployee){
       res.status(201).json(updatedEmployee);
     }else{

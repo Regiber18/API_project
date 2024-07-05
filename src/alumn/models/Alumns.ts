@@ -3,9 +3,9 @@ export interface Alumns{
     class_id: number | null;
     name: string;
     age: number;
-    created_at: String;
+    created_at: string;
     created_by: string;
-    updated_at: String;
+    updated_at: string;
     updated_by: string;
     deleted: boolean;
 }

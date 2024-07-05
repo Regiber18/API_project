@@ -4,9 +4,9 @@ import dotenv from 'dotenv';
 
 // Importar rutas de módulos
 import alumnRoutes from './alumn/routes/alumnRoutes';
-import ballotsRoute from './alumn/routes/ballotRoutes';
-import personalRoute from "./alumn/routes/personalRoutes"; 
-import classRoutes from "./alumn/routes/classRoutes"
+import ballotsRoute from './ballot/routes/ballotRoutes';
+import personalRoute from "./personal/routes/personalRoutes"; 
+import classRoutes from "./class/routes/classRoutes"
 
 
 

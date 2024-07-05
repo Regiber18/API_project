@@ -18,7 +18,7 @@ export class groupService {
             return await GroupRepository.findById(classId);
 
         }catch (error: any){
-            throw new Error(`Error al encontrar grupo: ${error.message}`);
+            throw new Error(`Error al encontrar clase: ${error.message}`);
         }
     }
 
