@@ -1,12 +1,14 @@
 import express, { Application } from 'express';
 import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
+import cors from 'cors'
 
 // Importar rutas de módulos
 import alumnRoutes from './alumn/routes/alumnRoutes';
 import ballotsRoute from './ballot/routes/ballotRoutes';
 import personalRoute from "./personal/routes/personalRoutes"; 
 import classRoutes from "./class/routes/classRoutes"
+import roleRoutes from './role/routes/RoleRoutes';
 
 
 
@@ -24,13 +26,17 @@ const port: number = parseInt(process.env.PORT as string, 10);
 // Middleware de análisis del cuerpo
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
 // Rutas de los módulos
+
 app.use('/api/alumn', alumnRoutes);
 app.use('/api/ballot', ballotsRoute)
 app.use('/api/personal', personalRoute)
 app.use('/api/class', classRoutes)
+app.use('/role', roleRoutes)
 
+
+//cors
+app.use(cors())
 // Middleware para manejar rutas no encontradas
 app.use(notFoundHandler);
 
