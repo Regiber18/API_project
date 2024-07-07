@@ -7,7 +7,7 @@ import cors from 'cors';
 import alumnRoutes from './alumn/routes/alumnRoutes';
 import ballotsRoute from './ballot/routes/ballotRoutes';
 import personalRoute from "./personal/routes/personalRoutes"; 
-import classRoutes from "./class/routes/classRoutes"
+import classRoutes from "./class/routes/classRoutes";
 import roleRoutes from './role/routes/RoleRoutes';
 
 // Importar middlewares compartidos
@@ -27,10 +27,18 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // Configuración de CORS
 app.use(cors({
-    origin: 'http://localhost:5173', // Permitir solicitudes desde este origen
-    methods: 'GET,POST,PUT,DELETE',
-    allowedHeaders: 'Content-Type,Authorization',
-    credentials: true // Si necesitas enviar cookies o encabezados de autorización
+    origin: 'http://localhost:5173',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true
+}));
+
+// Configuración para manejar solicitudes de preflight
+app.options('*', cors({
+    origin: 'http://localhost:5173',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true
 }));
 
 // Rutas de los módulos
