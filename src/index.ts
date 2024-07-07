@@ -26,20 +26,15 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Configuración de CORS
-app.use(cors({
-    origin: 'http://localhost:5173',
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: true
-}));
 
-// Configuración para manejar solicitudes de preflight
-app.options('*', cors({
-    origin: 'http://localhost:5173',
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: true
-}));
+const corsOptions = {
+  origin: 'https://miapi.integrador.xyz', // Permitir solicitudes
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', // Métodos permitidos
+  credentials: true, // Permitir el envío de credenciales
+  optionsSuccessStatus: 204 // Estado para opciones exitosas
+  };
+
+app.use(cors(corsOptions));
 
 // Rutas de los módulos
 app.use('/api/alumn', alumnRoutes);
