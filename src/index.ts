@@ -8,6 +8,7 @@ import alumnRoutes from './alumn/routes/alumnRoutes';
 import ballotsRoute from './ballot/routes/ballotRoutes';
 import personalRoute from "./personal/routes/personalRoutes"; 
 import classRoutes from "./class/routes/classRoutes"
+import roleRoutes from './role/routes/RoleRoutes';
 
 
 
@@ -31,6 +32,7 @@ app.use('/api/alumn', alumnRoutes);
 app.use('/api/ballot', ballotsRoute)
 app.use('/api/personal', personalRoute)
 app.use('/api/class', classRoutes)
+app.use('/role', roleRoutes)
 
 
 //cors

@@ -21,7 +21,7 @@ export class PersonalRepository {
     public static async findById(personal_id: number): Promise<Personal | null> {
         return new Promise((resolve, reject) => {
             connection.query('SELECT * FROM Personal WHERE personal_id = ?', [personal_id], (error: any, results) => {
-                if(!error) {
+                if(error) {
                     reject("error")
                 }else {
                     const personalId: Personal[] = results as Personal[]; 
