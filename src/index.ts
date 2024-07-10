@@ -9,6 +9,9 @@ import ballotsRoute from './ballot/routes/ballotRoutes';
 import personalRoute from "./personal/routes/personalRoutes"; 
 import classRoutes from "./class/routes/classRoutes";
 import roleRoutes from './role/routes/RoleRoutes';
+import assistenceRoutes from './assistence/routes/assistenceRoutes';
+import reportRoutes from './report/routes/reportRoute';
+import subjectRoutes from './subject/routes/subjectRoutes';
 
 // Importar middlewares compartidos
 import { errorHandler } from './shared/middlewares/errorHandler';
@@ -27,14 +30,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // Configuración de CORS
 
-const corsOptions = {
-  origin: 'https://miapi.integrador.xyz', // Permitir solicitudes
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', // Métodos permitidos
-  credentials: true, // Permitir el envío de credenciales
-  optionsSuccessStatus: 204 // Estado para opciones exitosas
-  };
-
-app.use(cors(corsOptions));
+app.use(cors());
 
 // Rutas de los módulos
 app.use('/api/alumn', alumnRoutes);
@@ -42,6 +38,9 @@ app.use('/api/ballot', ballotsRoute);
 app.use('/api/personal', personalRoute);
 app.use('/api/class', classRoutes);
 app.use('/role', roleRoutes);
+app.use('/assistence', assistenceRoutes)
+app.use('/report', reportRoutes)
+app.use('/subject', subjectRoutes)
 
 // Middleware para manejar rutas no encontradas
 app.use(notFoundHandler);
