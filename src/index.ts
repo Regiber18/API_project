@@ -29,8 +29,14 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Configuración de CORS
+const corsOptions = {
+  origin: 'http://localhost:5173', // Reemplazar con el origen de tu frontend
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true, // Habilitar el envío de cookies y encabezados de autenticación HTTP
+  optionsSuccessStatus: 204
+};
 
-app.use(cors());
+app.use(cors(corsOptions));
 
 // Rutas de los módulos
 app.use('/api/alumn', alumnRoutes);
@@ -38,9 +44,9 @@ app.use('/api/ballot', ballotsRoute);
 app.use('/api/personal', personalRoute);
 app.use('/api/class', classRoutes);
 app.use('/role', roleRoutes);
-app.use('/assistence', assistenceRoutes)
-app.use('/report', reportRoutes)
-app.use('/subject', subjectRoutes)
+app.use('/assistence', assistenceRoutes);
+app.use('/report', reportRoutes);
+app.use('/subject', subjectRoutes);
 
 // Middleware para manejar rutas no encontradas
 app.use(notFoundHandler);
