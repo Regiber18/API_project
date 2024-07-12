@@ -9,7 +9,6 @@ import ballotsRoute from './ballot/routes/ballotRoutes';
 import personalRoute from "./personal/routes/personalRoutes"; 
 import classRoutes from "./class/routes/classRoutes";
 import roleRoutes from './role/routes/RoleRoutes';
-import assistenceRoutes from './assistence/routes/assistenceRoutes';
 import reportRoutes from './report/routes/reportRoute';
 import subjectRoutes from './subject/routes/subjectRoutes';
 
@@ -43,10 +42,9 @@ app.use('/api/alumn', alumnRoutes);
 app.use('/api/ballot', ballotsRoute);
 app.use('/api/personal', personalRoute);
 app.use('/api/class', classRoutes);
-app.use('/role', roleRoutes);
-app.use('/assistence', assistenceRoutes);
-app.use('/report', reportRoutes);
-app.use('/subject', subjectRoutes);
+app.use('/api/role', roleRoutes);
+app.use('/api/report', reportRoutes);
+app.use('/api/subject', subjectRoutes);
 
 // Middleware para manejar rutas no encontradas
 app.use(notFoundHandler);
