@@ -36,9 +36,9 @@ export class GroupRepository {
     }
 
     public static async createClass(clas: Class): Promise<Class> {
-        const query = 'INSERT INTO Class (name, grade, created_at, created_by, updated_at, updated_by, deleted) VALUES (?, ?, ?, ?, ?, ?, ?)';
+        const query = 'INSERT INTO Class (className, classGrade, created_at, created_by, updated_at, updated_by, deleted) VALUES (?, ?, ?, ?, ?, ?, ?)';
         return new Promise((resolve, reject) => {
-            connection.execute(query, [clas.name, clas.grade, clas.created_at, clas.created_by, clas.updated_at, clas.updated_by, clas.deleted], (error, result: ResultSetHeader) => {
+            connection.execute(query, [clas.className, clas.classGrade, clas.created_at, clas.created_by, clas.updated_at, clas.updated_by, clas.deleted], (error, result: ResultSetHeader) => {
                 if (error) {
                     reject(error); // Manejar error correctamente
                 } else {
@@ -51,9 +51,9 @@ export class GroupRepository {
     }
 
     public static async updateClass(class_id: number, classData: Class): Promise<Class | null> {
-        const query = 'UPDATE Class SET name = ?, grade = ?, updated_at = ?, updated_by = ?, deleted = ? WHERE class_id = ?';
+        const query = 'UPDATE Class SET className = ?, classGrade = ?, updated_at = ?, updated_by = ?, deleted = ? WHERE class_id = ?';
         return new Promise((resolve, reject) => {
-            connection.execute(query, [classData.name, classData.grade, classData.updated_at, classData.updated_by, classData.deleted, class_id], (error, result: ResultSetHeader) => {
+            connection.execute(query, [classData.className, classData.classGrade, classData.updated_at, classData.updated_by, classData.deleted, class_id], (error, result: ResultSetHeader) => {
                 if (error) {
                     reject(error); // Manejar error correctamente
                 } else {

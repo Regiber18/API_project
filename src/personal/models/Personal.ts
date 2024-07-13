@@ -1,6 +1,9 @@
 export interface Personal {
     personal_id: number;
+    class_id: number | null;
+    role_id: number | null;
     name: string;
+    lastName: string;
     password: string; 
     created_at: string;
     created_by: string;

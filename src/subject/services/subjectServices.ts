@@ -40,9 +40,6 @@ export class subjectService {
                 if(subjectData.name){
                     subjectFinded.name = subjectData.name;
                 }
-                if(subjectData.rating) {
-                    subjectFinded.rating = subjectData.rating;
-                }
                 if(subjectData.deleted){
                     subjectFinded.deleted = subjectData.deleted;
                 }

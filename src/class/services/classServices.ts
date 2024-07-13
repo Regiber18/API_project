@@ -36,11 +36,11 @@ export class groupService {
         try{
             const groupFinded =  await GroupRepository.findById(class_id);
             if(groupFinded){
-                if(groupData.name){
-                    groupFinded.name = groupData.name;
+                if(groupData.className){
+                    groupFinded.className = groupData.className;
                 }
-                if(groupData.grade) {
-                    groupFinded.grade = groupData.grade;
+                if(groupData.classGrade) {
+                    groupFinded.classGrade = groupData.classGrade;
                 }
                 if(groupData.deleted){
                     groupFinded.deleted = groupData.deleted;

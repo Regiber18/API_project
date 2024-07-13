@@ -37,11 +37,8 @@ export class roleService {
             const roleFinded =  await RoleRepository.findById(roleId);
     
             if(roleFinded){
-                if(roleData.management){
-                    roleFinded.management = roleData.management;
-                }
-                if(roleData.teacher){
-                    roleFinded.teacher = roleData.teacher;
+                if(roleData.description){
+                    roleFinded.description = roleData.description;
                 }
                 if(roleData.deleted){
                     roleFinded.deleted = roleData.deleted;

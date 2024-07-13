@@ -35,10 +35,10 @@ export class AlumnRepository {
   }
 
   public static async createAlumn(alumn: Alumns): Promise<Alumns> {
-    const query = 'INSERT INTO Alumn (name, age, created_at, created_by, updated_at, updated_by, deleted) VALUES (?, ?, ?, ?, ?, ?, ?)';
+    const query = 'INSERT INTO Alumn (name, lastName, created_at, created_by, updated_at, updated_by, deleted) VALUES (?, ?, ?, ?, ?, ?, ?)';
     console.log(alumn);
     return new Promise((resolve, reject) => {
-      connection.execute(query, [alumn.name,alumn.age, alumn.created_at, alumn.created_by, alumn.updated_at, alumn.updated_by, alumn.deleted],(error, result: ResultSetHeader) => {
+      connection.execute(query, [alumn.name,alumn.lastName, alumn.created_at, alumn.created_by, alumn.updated_at, alumn.updated_by, alumn.deleted],(error, result: ResultSetHeader) => {
         if (error) {
           reject(error);
         } else {
@@ -51,9 +51,9 @@ export class AlumnRepository {
   }
 
   public static async updateAlumn(alumn_id: number, alumnData: Alumns): Promise<Alumns | null> {
-    const query = 'UPDATE Alumn SET name = ?,age = ?, updated_at = ?, updated_by = ?, deleted = ? WHERE alumn_id = ?';
+    const query = 'UPDATE Alumn SET name = ?,lastName = ?, updated_at = ?, updated_by = ?, deleted = ? WHERE alumn_id = ?';
     return new Promise((resolve, reject) => {
-      connection.execute(query, [alumnData.name, alumnData.age, alumnData.updated_at, alumnData.updated_by,alumnData.deleted, alumn_id], (error, result: ResultSetHeader) => {
+      connection.execute(query, [alumnData.name, alumnData.lastName, alumnData.updated_at, alumnData.updated_by,alumnData.deleted, alumn_id], (error, result: ResultSetHeader) => {
         if (error) {
           reject(error);
         } else {
