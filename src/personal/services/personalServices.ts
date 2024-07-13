@@ -79,7 +79,7 @@ export class personalServices {
         }
     }
 
-    public static async login(name: string, password: string) {
+    public static async login(name: string, password: string): Promise<{ token: string, cookieOptions: any } | null> {
         try {
             const personal = await this.getPersonalByFullName(name);
             if (!personal) {
@@ -94,13 +94,23 @@ export class personalServices {
                 personal_id: personal.personal_id,
                 name: personal.name,
             };
-            return jwt.sign(payload, secretKey, { expiresIn: '1h' });
+            const token = jwt.sign(
+                payload, secretKey, { expiresIn: '1d' }
+            );
+
+            const cookieOptions = {
+                httpOnly: true,
+                expires: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000), // 1 día
+                path: "/",
+            };
+
+            return { token , cookieOptions };
 
         } catch (error: any) {
             throw new Error(`Error during login: ${error.message}`);
         }
     }
-
+    
     public static async getPersonalByFullName(name: string): Promise<Personal | null> {
         try {
             return await PersonalRepository.findByFullName(name);

@@ -69,19 +69,31 @@ export const deletePersonal = async (req: Request, res: Response) => {
   }
 }
 
-export const loginPersonal= async (req: Request, res: Response) => {
+export const loginPersonal = async (req: Request, res: Response) => {
   const { name, password } = req.body;
   try {
-    const token = await personalServices.login(name, password);
+    const result = await personalServices.login(name, password);
 
-    if (!token) {
-      res.status(401).json({ message: 'Invalid full name or password' });
-    }else{
-      res.status(200).json({ token });
+    if (!result) {
+      return res.status(401).json({ message: 'Invalid name or password' });
     }
 
-  } catch (error) {
+    const { token, cookieOptions } = result;
+
+    // Ejemplo de manejo de roles
+    if (name === "regiber" && password === "reg") {
+      res.cookie('role', result.token, cookieOptions); 
+      return res.status(200).json({ token, direction: "management/home" });
+    } else if (name === 'regio' && password === "hola") {
+      res.cookie('role', result.token, cookieOptions); 
+      return res.status(200).json({ token, direction: "teacher/attendance" });
+    }
+
+    // Manejar otros roles o permisos según sea necesario
+
+    res.status(200).json({ token });
+  } catch (error: any) {
     console.error('Login error:', error);
     res.status(500).json({ message: 'Internal server error' });
   }
-}
+};
