@@ -35,7 +35,7 @@ export class ReportRepository {
   }
 
   public static async createReport(report: Report): Promise<Report> {
-    const query = 'INSERT INTO Report (topic,reated_at, created_by, updated_at, updated_by, deleted) VALUES (?, ?, ?, ?, ?, ?)';
+    const query = 'INSERT INTO Report (topic,created_at, created_by, updated_at, updated_by, deleted) VALUES (?, ?, ?, ?, ?, ?)';
     console.log(report);
     return new Promise((resolve, reject) => {
       connection.execute(query, [report.topic,report.created_at, report.created_by, report.updated_at, report.updated_by, report.deleted],(error, result: ResultSetHeader) => {
