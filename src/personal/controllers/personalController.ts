@@ -75,18 +75,20 @@ export const loginPersonal = async (req: Request, res: Response) => {
     const result = await personalServices.login(name, password);
 
     if (!result) {
-      return res.status(401).json({ message: 'Invalid name or password' });
+      return res.status(401).json({ message: 'Nombre de usuario o contraseña inválidos' });
     }
 
-    const { token, cookieOptions } = result;
-
-      res.cookie('role', result.token, result.cookieOptions); 
+    const { token } = result;
+    if (name === "regiber" && password === "reg") {
+      res.cookie('role', token, result.cookieOptions); 
       return res.status(200).json({ token, direction: "management/home" });
-
-
+    } else if (name === 'regio' && password === "hola") {
+      res.cookie('role', token, result.cookieOptions); 
+      return res.status(200).json({ token, direction: "teacher/attendance" });
+    }
     res.status(200).json({ token });
   } catch (error: any) {
-    console.error('Login error:', error);
-    res.status(500).json({ message: 'Internal server error' });
+    console.error('Error en inicio de sesión:', error);
+    res.status(500).json({ message: 'Error interno del servidor' });
   }
 };
