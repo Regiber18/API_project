@@ -81,10 +81,10 @@ export const loginPersonal = async (req: Request, res: Response) => {
     const { token } = result;
     if (name === "regiber" && password === "reg") {
       res.cookie('role', token, result.cookieOptions); 
-      return res.status(200).json({ token, direction: "management/home" });
+      res.send({direction: "management/home" });
     } else if (name === 'regio' && password === "hola") {
       res.cookie('role', token, result.cookieOptions); 
-      return res.status(200).json({ token, direction: "teacher/attendance" });
+      res.send({direction: "teacher/attendance" });
     }
     res.status(200).json({ token });
   } catch (error: any) {
