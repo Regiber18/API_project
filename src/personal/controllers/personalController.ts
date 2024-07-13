@@ -80,16 +80,9 @@ export const loginPersonal = async (req: Request, res: Response) => {
 
     const { token, cookieOptions } = result;
 
-    // Ejemplo de manejo de roles
-    if (name === "regiber" && password === "reg") {
-      res.cookie('role', result.token, cookieOptions); 
+      res.cookie('role', result.token, result.cookieOptions); 
       return res.status(200).json({ token, direction: "management/home" });
-    } else if (name === 'regio' && password === "hola") {
-      res.cookie('role', result.token, cookieOptions); 
-      return res.status(200).json({ token, direction: "teacher/attendance" });
-    }
 
-    // Manejar otros roles o permisos según sea necesario
 
     res.status(200).json({ token });
   } catch (error: any) {
