@@ -40,8 +40,8 @@ export class alumnService {
                 if(alumnData.name){
                     alumnFinded.name = alumnData.name;
                 }
-                if(alumnData.age){
-                    alumnFinded.age = alumnData.age;
+                if(alumnData.lastName){
+                    alumnFinded.lastName = alumnData.lastName;
                 }
                 if(alumnData.deleted){
                     alumnFinded.deleted = alumnData.deleted;

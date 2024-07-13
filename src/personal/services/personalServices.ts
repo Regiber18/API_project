@@ -52,6 +52,9 @@ export class personalServices {
             if (personalData.name) {
                 personalFound.name = personalData.name;
             }
+            if(personalData.lastName) {
+                personalFound.lastName = personalData.lastName; 
+            }
             if (personalData.password) {  
                 personalFound.password = await bcrypt.hash(personalData.password, salt);  
             }

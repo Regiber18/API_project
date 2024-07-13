@@ -37,10 +37,10 @@ export class PersonalRepository {
     } 
 
     public static async createPersonal(personal: Personal): Promise<Personal> {
-        const query = 'INSERT INTO Personal(name, password, created_at, created_by, updated_at, updated_by, deleted) VALUES (?, ?, ?, ?, ?, ?, ?)';
+        const query = 'INSERT INTO Personal(name, lastName, password, created_at, created_by, updated_at, updated_by, deleted) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
         console.log(personal);
         return new Promise((resolve, reject) => {
-          connection.execute(query, [personal.name, personal.password , personal.created_at, personal.created_by, personal.updated_at, personal.updated_by, personal.deleted], (error, result: ResultSetHeader) => {
+          connection.execute(query, [personal.name, personal.lastName, personal.password , personal.created_at, personal.created_by, personal.updated_at, personal.updated_by, personal.deleted], (error, result: ResultSetHeader) => {
             if (error) {
                 reject(error);
             } else {
@@ -53,9 +53,9 @@ export class PersonalRepository {
       }
 
     public static async updatePersonal(personal_id: number, personalData: Personal): Promise<Personal | null> {
-        const query = 'UPDATE Personal SET name = ?, password = ?, updated_at = ?, updated_by = ?, deleted = ? WHERE personal_id = ?';
+        const query = 'UPDATE Personal SET name = ?, lastName = ?, password = ?, updated_at = ?, updated_by = ?, deleted = ? WHERE personal_id = ?';
         return new Promise((resolve, reject) => {
-          connection.execute(query, [personalData.name, personalData.password, personalData.updated_at, personalData.updated_by,personalData.deleted, personal_id], (error, result: ResultSetHeader) => {
+          connection.execute(query, [personalData.name, personalData.lastName, personalData.password, personalData.updated_at, personalData.updated_by,personalData.deleted, personal_id], (error, result: ResultSetHeader) => {
             if (error) {
               reject(error);
             } else {

@@ -1,6 +1,7 @@
-export interface Subject {
-    subject_id: number | null
-    name: string;
+export interface Rating {
+    rating_id: number | null;
+    ballot_id: number | null;
+    amount: number;
     created_at: string;
     created_by: string;
     updated_at: string;

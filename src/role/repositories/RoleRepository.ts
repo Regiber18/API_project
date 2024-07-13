@@ -37,10 +37,10 @@ export class RoleRepository {
     } 
 
     public static async createRole(role: Role): Promise<Role> {
-        const query = 'INSERT INTO Role(management, teacher, escolarControl, created_at, created_by, updated_at, updated_by, deleted) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+        const query = 'INSERT INTO Role(description, created_at, created_by, updated_at, updated_by, deleted) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
         console.log(role);
         return new Promise((resolve, reject) => {
-          connection.execute(query, [role.management, role.teacher, role.escolarControl,role.created_at, role.created_by, role.updated_at, role.updated_by, role.deleted], (error, result: ResultSetHeader) => {
+          connection.execute(query, [role.description, role.created_at, role.created_by, role.updated_at, role.updated_by, role.deleted], (error, result: ResultSetHeader) => {
             if (error) {
                 reject(error);
             } else {
@@ -53,9 +53,9 @@ export class RoleRepository {
       }
 
     public static async updateRole(role_id: number, roleData: Role): Promise<Role | null> {
-        const query = 'UPDATE Role SET management = ?, teacher = ?, escolarControl,updated_at = ?, updated_by = ?, deleted = ? WHERE role_id = ?';
+        const query = 'UPDATE Role SET description = ?, updated_at = ?, updated_by = ?, deleted = ? WHERE role_id = ?';
         return new Promise((resolve, reject) => {
-          connection.execute(query, [roleData.management, roleData.teacher, roleData.escolarControl ,roleData.updated_at, roleData.updated_by,roleData.deleted, role_id], (error, result: ResultSetHeader) => {
+          connection.execute(query, [roleData.description,roleData.updated_at, roleData.updated_by,roleData.deleted, role_id], (error, result: ResultSetHeader) => {
             if (error) {
               reject(error);
             } else {
