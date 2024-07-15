@@ -48,7 +48,7 @@ export class alumnService {
             }
             reportFinded.updated_by = reportData.updated_by
             reportFinded.updated_at = DateUtils.formatDate(new Date());
-            return await ReportRepository.updateAlumn(reportId, reportFinded);
+            return await ReportRepository.updateReport(reportId, reportFinded);
         }catch (error: any){
             throw new Error(`Error al modificar alumno: ${error.message}`);
         }
@@ -56,7 +56,7 @@ export class alumnService {
 
     public static async deletReport(report_id: number): Promise<boolean> {
         try{
-            return await ReportRepository.deleteAlumn(report_id);
+            return await ReportRepository.deleteReport(report_id);
 
         }catch (error: any){
             throw new Error(`Error al eliminar alumno: ${error.message}`);
