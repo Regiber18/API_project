@@ -35,7 +35,7 @@ export class RatingRepository {
     }
 
     public static async createBallot(rating: Rating): Promise<Rating> {
-        const query = 'INSERT INTO Rating (ballot_id, amount, created_at, created_by, updated_at, updated_by, deleted) VALUES (?, ?, ?, ?, ?, ?)';
+        const query = 'INSERT INTO Rating (ballot_id, amount, created_at, created_by, updated_at, updated_by, deleted) VALUES (?, ?, ?, ?, ?, ?, ?)';
         return new Promise((resolve, reject) => {
             connection.execute(query, [rating.ballot_id, rating.amount, rating.created_at, rating.created_by, rating.updated_at, rating.updated_by, rating.deleted], (error: any, result: ResultSetHeader) => {
                 if (error) {

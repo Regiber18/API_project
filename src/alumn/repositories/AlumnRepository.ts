@@ -35,7 +35,7 @@ export class AlumnRepository {
   }
 
   public static async createAlumn(alumn: Alumns): Promise<Alumns> {
-    const query = 'INSERT INTO Alumn (class_id, name, lastName, created_at, created_by, updated_at, updated_by, deleted) VALUES (?, ?, ?, ?, ?, ?, ?)';
+    const query = 'INSERT INTO Alumn (class_id, name, lastName, created_at, created_by, updated_at, updated_by, deleted) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
     console.log(alumn);
     return new Promise((resolve, reject) => {
       connection.execute(query, [alumn.class_id, alumn.name,alumn.lastName, alumn.created_at, alumn.created_by, alumn.updated_at, alumn.updated_by, alumn.deleted],(error, result: ResultSetHeader) => {
