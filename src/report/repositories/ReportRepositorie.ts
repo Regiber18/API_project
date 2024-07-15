@@ -35,10 +35,10 @@ export class ReportRepository {
   }
 
   public static async createReport(report: Report): Promise<Report> {
-    const query = 'INSERT INTO Report (topic,created_at, created_by, updated_at, updated_by, deleted) VALUES (?, ?, ?, ?, ?, ?)';
+    const query = 'INSERT INTO Report (personal_id, topic,created_at, created_by, updated_at, updated_by, deleted) VALUES (?, ?, ?, ?, ?, ?)';
     console.log(report);
     return new Promise((resolve, reject) => {
-      connection.execute(query, [report.topic,report.created_at, report.created_by, report.updated_at, report.updated_by, report.deleted],(error, result: ResultSetHeader) => {
+      connection.execute(query, [report.personal_id, report.topic,report.created_at, report.created_by, report.updated_at, report.updated_by, report.deleted],(error, result: ResultSetHeader) => {
         if (error) {
           reject(error);
         } else {
@@ -50,7 +50,7 @@ export class ReportRepository {
     });
   }
 
-  public static async updateAlumn(report_id: number, reportData: Report): Promise<Report | null> {
+  public static async updateReport(report_id: number, reportData: Report): Promise<Report | null> {
     const query = 'UPDATE Report SET topic = ?, updated_at = ?, updated_by = ?, deleted = ? WHERE report_id = ?';
     return new Promise((resolve, reject) => {
       connection.execute(query, [reportData.topic, reportData.updated_at, reportData.updated_by,reportData.deleted, report_id], (error, result: ResultSetHeader) => {
@@ -68,7 +68,7 @@ export class ReportRepository {
     });
   }
 
-  public static async deleteAlumn(report_id: number): Promise<boolean> {
+  public static async deleteReport(report_id: number): Promise<boolean> {
     const query = 'DELETE FROM Report WHERE report_id = ?';
     return new Promise((resolve, reject) => {
       connection.execute(query, [report_id], (error, result: ResultSetHeader) => {

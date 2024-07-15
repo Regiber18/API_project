@@ -36,9 +36,9 @@ export class GroupRepository {
     }
 
     public static async createClass(clas: Class): Promise<Class> {
-        const query = 'INSERT INTO Class (className, classGrade, created_at, created_by, updated_at, updated_by, deleted) VALUES (?, ?, ?, ?, ?, ?, ?)';
+        const query = 'INSERT INTO Class (personal_id, className, classGrade, created_at, created_by, updated_at, updated_by, deleted) VALUES (?, ?, ?, ?, ?, ?, ?)';
         return new Promise((resolve, reject) => {
-            connection.execute(query, [clas.className, clas.classGrade, clas.created_at, clas.created_by, clas.updated_at, clas.updated_by, clas.deleted], (error, result: ResultSetHeader) => {
+            connection.execute(query, [clas.personal_id, clas.className, clas.classGrade, clas.created_at, clas.created_by, clas.updated_at, clas.updated_by, clas.deleted], (error, result: ResultSetHeader) => {
                 if (error) {
                     reject(error); // Manejar error correctamente
                 } else {

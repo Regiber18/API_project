@@ -3,12 +3,12 @@ import { personalServices } from "../services/personalServices"
 
 export const getPersonalAll = async (_req: Request, res: Response) => {
   try {
-    const alumns = await personalServices.getAllPersonal()
+    const personal = await personalServices.getAllPersonal()
 
-    if(alumns) {
-      res.status(201).json(alumns)
+    if(personal) {
+      res.status(201).json(personal)
     }else {
-      res.status(404).json(alumns)
+      res.status(404).json(personal)
     }
   }catch(err: any) {
     res.status(500).json({erro: err.message})
@@ -17,12 +17,12 @@ export const getPersonalAll = async (_req: Request, res: Response) => {
 
 export const getPersonalId = async (req: Request, res: Response) => {
   try {
-    const alumns = await personalServices.getPersonalById(parseInt(req.params.personal_id, 10))
+    const personals = await personalServices.getPersonalById(parseInt(req.params.personal_id, 10))
 
-    if(alumns) {
-      res.status(201).json(alumns)
+    if(personals) {
+      res.status(201).json(personals)
     }else {
-      res.status(404).json(alumns)
+      res.status(404).json(personals)
     }
   }catch(err: any) {
     res.status(500).json({erro: err.message})
@@ -79,6 +79,7 @@ export const loginPersonal = async (req: Request, res: Response) => {
     }
 
     const { token } = result;
+
     if (name === "regiber" && password === "reg") {
       res.cookie('role', token, result.cookieOptions); 
       res.send({direction: "management/home" });
@@ -86,6 +87,7 @@ export const loginPersonal = async (req: Request, res: Response) => {
       res.cookie('role', token, result.cookieOptions); 
       res.send({direction: "teacher/attendance" });
     }
+
     res.status(200).json({ token });
   } catch (error: any) {
     console.error('Error en inicio de sesión:', error);

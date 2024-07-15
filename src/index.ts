@@ -11,6 +11,7 @@ import classRoutes from "./class/routes/classRoutes";
 import roleRoutes from './role/routes/RoleRoutes';
 import reportRoutes from './report/routes/reportRoute';
 import subjectRoutes from './subject/routes/subjectRoutes';
+import  ratingRoutes  from './rating/routes/ratingRoutes';
 
 // Importar middlewares compartidos
 import { errorHandler } from './shared/middlewares/errorHandler';
@@ -29,7 +30,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // Configuración de CORS
 const corsOptions = {
-  origin: 'http://localhost:5173', // Reemplazar con el origen de tu frontend
+  origin: 'http://localhost:5173', // Ahí va el de el dominio
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: true, // Habilitar el envío de cookies y encabezados de autenticación HTTP
   optionsSuccessStatus: 204
@@ -45,6 +46,7 @@ app.use('/api/class', classRoutes);
 app.use('/api/role', roleRoutes);
 app.use('/api/report', reportRoutes);
 app.use('/api/subject', subjectRoutes);
+app.use('/api/rating', ratingRoutes);
 
 // Middleware para manejar rutas no encontradas
 app.use(notFoundHandler);
