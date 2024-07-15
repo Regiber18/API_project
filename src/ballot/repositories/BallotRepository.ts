@@ -35,9 +35,9 @@ export class BallotRepository {
     }
 
     public static async createBallot(ballot: Ballot): Promise<Ballot> {
-        const query = 'INSERT INTO Ballot (content, created_at, created_by, updated_at, updated_by, deleted) VALUES (?, ?, ?, ?, ?, ?)';
+        const query = 'INSERT INTO Ballot (alumn_id, content, created_at, created_by, updated_at, updated_by, deleted) VALUES (?, ?, ?, ?, ?, ?)';
         return new Promise((resolve, reject) => {
-            connection.execute(query, [ballot.content, ballot.created_at, ballot.created_by, ballot.updated_at, ballot.updated_by, ballot.deleted], (error: any, result: ResultSetHeader) => {
+            connection.execute(query, [ballot.alum_id, ballot.content, ballot.created_at, ballot.created_by, ballot.updated_at, ballot.updated_by, ballot.deleted], (error: any, result: ResultSetHeader) => {
                 if (error) {
                     reject(new Error("Error creating ballot"));
                 } else {
