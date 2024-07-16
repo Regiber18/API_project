@@ -1,7 +1,7 @@
 export interface  Ballot{
     ballot_id: number | null;
     alumn_id: number | null; 
-    content: ByteLengthQueuingStrategy;
+    content: Buffer;
     created_at: string;
     created_by: string;
     updated_at: String;
