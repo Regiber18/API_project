@@ -37,7 +37,7 @@ export class PersonalRepository {
     } 
 
     public static async createPersonal(personal: Personal): Promise<Personal> {
-        const query = 'INSERT INTO Personal(class_id, role_id, name, lastName, password, created_at, created_by, updated_at, updated_by, deleted) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
+        const query = 'INSERT INTO Personal(class_id, role_id, name, lastName, password, created_at, created_by, updated_at, updated_by, deleted) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
         console.log(personal);
         return new Promise((resolve, reject) => {
           connection.execute(query, [personal.class_id, personal.role_id, personal.name, personal.lastName, personal.password , personal.created_at, personal.created_by, personal.updated_at, personal.updated_by, personal.deleted], (error, result: ResultSetHeader) => {
