@@ -1,6 +1,5 @@
 export interface Class {
     class_id: number |  null;
-    personal_id: number | null; 
     className: string;
     classGrade: number;
     created_at: string;
