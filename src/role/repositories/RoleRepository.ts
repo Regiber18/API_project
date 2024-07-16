@@ -37,7 +37,7 @@ export class RoleRepository {
     } 
 
     public static async createRole(role: Role): Promise<Role> {
-        const query = 'INSERT INTO Role(description, created_at, created_by, updated_at, updated_by, deleted) VALUES (?, ?, ?, ?, ?, ?, ?)';
+        const query = 'INSERT INTO Role(description, created_at, created_by, updated_at, updated_by, deleted) VALUES (?, ?, ?, ?, ?, ?)';
         console.log(role);
         return new Promise((resolve, reject) => {
           connection.execute(query, [role.description, role.created_at, role.created_by, role.updated_at, role.updated_by, role.deleted], (error, result: ResultSetHeader) => {
