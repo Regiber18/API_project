@@ -50,7 +50,7 @@ export class alumnService {
             reportFinded.updated_at = DateUtils.formatDate(new Date());
             return await ReportRepository.updateReport(reportId, reportFinded);
         }catch (error: any){
-            throw new Error(`Error al modificar alumno: ${error.message}`);
+            throw new Error(`Error al modificar reporte: ${error.message}`);
         }
     }
 

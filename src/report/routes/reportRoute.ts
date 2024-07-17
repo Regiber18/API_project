@@ -5,9 +5,9 @@ import { getReportAll , getReportId, createReport, updateReport, deleteReport,  
 const reportRoutes: Router = Router();
 
 reportRoutes.get('/', getReportAll)
-reportRoutes.get('/:alumn_id', getReportId,)
+reportRoutes.get('/:report_id', getReportId,)
 reportRoutes.post("/", createReport)
-reportRoutes.put("/:alumn_id", updateReport)
-reportRoutes.delete("/:alumn_id", deleteReport)
+reportRoutes.put("/:report_id", updateReport)
+reportRoutes.delete("/:report_id", deleteReport)
 
 export default reportRoutes;

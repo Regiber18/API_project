@@ -25,7 +25,6 @@ export class RoleRepository {
                     reject("error")
                 }else {
                     const RoleId: Role[] = results as Role[]; 
-
                     if(RoleId.length > 0) {
                         resolve(RoleId[0])
                     }else {
