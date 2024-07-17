@@ -35,7 +35,7 @@ export class SubjectRepository {
   }
 
   public static async createSubject(subject: Subject): Promise<Subject> {
-    const query = 'INSERT INTO Subject (name, created_at, created_by, updated_at, updated_by, deleted) VALUES (?, ?, ?, ?, ?, ?, ?)';
+    const query = 'INSERT INTO Subject (name, created_at, created_by, updated_at, updated_by, deleted) VALUES (?, ?, ?, ?, ?, ?)';
     console.log(subject);
     return new Promise((resolve, reject) => {
       connection.execute(query, [subject.name, subject.created_at, subject.created_by, subject.updated_at, subject.updated_by, subject.deleted],(error, result: ResultSetHeader) => {
@@ -51,7 +51,7 @@ export class SubjectRepository {
   }
 
   public static async updateSubject(subject_id: number, subjectData: Subject): Promise<Subject | null> {
-    const query = 'UPDATE Report SET name = ?, updated_at = ?, updated_by = ?, deleted = ? WHERE subject_id = ?';
+    const query = 'UPDATE Subject SET name = ?, updated_at = ?, updated_by = ?, deleted = ? WHERE subject_id = ?';
     return new Promise((resolve, reject) => {
       connection.execute(query, [subjectData.name, subjectData.updated_at, subjectData.updated_by,subjectData.deleted, subject_id], (error, result: ResultSetHeader) => {
         if (error) {

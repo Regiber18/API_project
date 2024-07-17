@@ -1,4 +1,5 @@
 import { PersonalRepository } from "../repositories/PersonalRepository";
+import { RoleRepository } from "../../role/repositories/RoleRepository";
 import { DateUtils } from "../../shared/utils/Date";
 import { Personal } from "../models/Personal";
 import bcrypt from "bcrypt";
@@ -79,20 +80,27 @@ export class personalServices {
         }
     }
 
+
     public static async login(name: string, password: string): Promise<{ token: string, cookieOptions: any } | null> {
         try {
             const personal = await this.getPersonalByFullName(name);
             if (!personal) {
                 return null;
             }
-            const passwordMatch = await bcrypt.compare(password, personal.password);  
+
+            const passwordMatch = await bcrypt.compare(password, personal.password);
             if (!passwordMatch) {
                 return null;
             }
 
+            const role = await RoleRepository.findById(personal.role_id); 
+
             const payload = {
                 personal_id: personal.personal_id,
                 name: personal.name,
+                lastName: personal.lastName, 
+                role: role?.description || 'Unknown', 
+                id: personal.personal_id
             };
             const token = jwt.sign(
                 payload, secretKey, { expiresIn: '1d' }
@@ -104,12 +112,13 @@ export class personalServices {
                 path: "/",
             };
 
-            return { token , cookieOptions };
+            return { token, cookieOptions };
 
         } catch (error: any) {
             throw new Error(`Error during login: ${error.message}`);
         }
     }
+
     
     public static async getPersonalByFullName(name: string): Promise<Personal | null> {
         try {
