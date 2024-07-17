@@ -20,7 +20,7 @@ export class RoleRepository {
 
     public static async findById(role_id: number): Promise<Role | null> {
         return new Promise((resolve, reject) => {
-            connection.query('SELECT * FROM Role WHERE role_id = ?', [role_id], (error: any, results) => {
+            connection.query('SELECT description FROM Role WHERE role_id = ?', [role_id], (error: any, results) => {
                 if(error) {
                     reject("error")
                 }else {
