@@ -27,19 +27,6 @@ export const authMiddleware = async (req: AuthRequest, res: Response, next: Next
     }
 
     req.personalData = payload;
-
-
-    let direction = '';
-    if (empleado.name === "regiber" && empleado.password === "reg") {
-      direction = 'management/home'; 
-    }
-
-
-    res.status(200).json({
-      message: 'Autenticación exitosa',
-      direction: direction,
-  
-    });
     next()
   } catch (error: any) {
     if (error.name === 'TokenExpiredError') {
