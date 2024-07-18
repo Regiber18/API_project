@@ -12,6 +12,7 @@ import roleRoutes from './role/routes/RoleRoutes';
 import reportRoutes from './report/routes/reportRoute';
 import subjectRoutes from './subject/routes/subjectRoutes';
 import  ratingRoutes  from './rating/routes/ratingRoutes';
+import subjectratingRoutes from './subjectrating/routes/SubjectRatingRoutes';
 
 // Importar middlewares compartidos
 import { errorHandler } from './shared/middlewares/errorHandler';
@@ -47,6 +48,7 @@ app.use('/api/role', roleRoutes);
 app.use('/api/report', reportRoutes);
 app.use('/api/subject', subjectRoutes);
 app.use('/api/rating', ratingRoutes);
+app.use('/api/subjectRating', subjectRoutes)
 
 // Middleware para manejar rutas no encontradas
 app.use(notFoundHandler);
