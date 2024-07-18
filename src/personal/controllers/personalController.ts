@@ -85,7 +85,8 @@ export const loginPersonal = async (req: Request, res: Response) => {
         const secretKey = process.env.SECRET || "";
 
         const decodedToken = jwt.verify(token, secretKey) as { [key: string]: any };
-
+        res.setHeader('Authorization', token); 
+        res.setHeader('Acces-Control-Expose-Headers', 'Authorization')
         const { name: userName, lastName, role, personal_id } = decodedToken;
 
         res.cookie('role', token, result.cookieOptions); 
