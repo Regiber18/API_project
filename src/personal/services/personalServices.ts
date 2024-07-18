@@ -110,7 +110,7 @@ export class personalServices {
                 httpOnly: true,
                 expires: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000), // 1 día
                 path: "/",
-            };
+            };  
 
             return { token, cookieOptions };
 

@@ -81,6 +81,7 @@ export const loginPersonal = async (req: Request, res: Response) => {
         }
 
         const { token } = result;
+        
         const secretKey = process.env.SECRET || "";
 
         const decodedToken = jwt.verify(token, secretKey) as { [key: string]: any };
