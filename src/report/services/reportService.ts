@@ -40,6 +40,9 @@ export class alumnService {
                 if(reportData.topic){
                     reportFinded.topic = reportData.topic;
                 }
+                if(reportData.status) {
+                    reportFinded.status = reportData.status;
+                }
                 if(reportData.deleted){
                     reportFinded.deleted = reportData.deleted;
                 }
