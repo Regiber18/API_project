@@ -36,10 +36,10 @@ export class ReportRepository {
 
 
   public static async createReport(report: Report): Promise<Report> {
-    const query = 'INSERT INTO Report (personal_id, topic, status,created_at, created_by, updated_at, updated_by, deleted) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+    const query = 'INSERT INTO Report (personal_id, topic, report_status,created_at, created_by, updated_at, updated_by, deleted) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
     console.log(report);
     return new Promise((resolve, reject) => {
-      connection.execute(query, [report.personal_id, report.topic, report.status,report.created_at, report.created_by, report.updated_at, report.updated_by, report.deleted],(error, result: ResultSetHeader) => {
+      connection.execute(query, [report.personal_id, report.topic, report.report_status,report.created_at, report.created_by, report.updated_at, report.updated_by, report.deleted],(error, result: ResultSetHeader) => {
         if (error) {
           reject(error);
         } else {
@@ -52,9 +52,9 @@ export class ReportRepository {
   }
 
   public static async updateReport(report_id: number, reportData: Report): Promise<Report | null> {
-    const query = 'UPDATE Report SET topic = ?, status = ?, updated_at = ?, updated_by = ?, deleted = ? WHERE report_id = ? AND deleted = 0';
+    const query = 'UPDATE Report SET topic = ?, report_status = ?, updated_at = ?, updated_by = ?, deleted = ? WHERE report_id = ? AND deleted = 0';
     return new Promise((resolve, reject) => {
-      connection.execute(query, [reportData.topic, reportData.status,reportData.updated_at, reportData.updated_by,reportData.deleted, report_id], (error, result: ResultSetHeader) => {
+      connection.execute(query, [reportData.topic, reportData.report_status,reportData.updated_at, reportData.updated_by,reportData.deleted, report_id], (error, result: ResultSetHeader) => {
         if (error) {
           reject(error);
         } else {
