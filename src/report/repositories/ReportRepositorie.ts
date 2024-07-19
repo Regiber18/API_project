@@ -52,7 +52,7 @@ export class ReportRepository {
   }
 
   public static async updateReport(report_id: number, reportData: Report): Promise<Report | null> {
-    const query = 'UPDATE Report SET topic = ?, status = ?, updated_at = ?, updated_by = ?, deleted = ? WHERE report_id = ?';
+    const query = 'UPDATE Report SET topic = ?, status = ?, updated_at = ?, updated_by = ?, deleted = ? WHERE report_id = ? AND deleted = 0';
     return new Promise((resolve, reject) => {
       connection.execute(query, [reportData.topic, reportData.status,reportData.updated_at, reportData.updated_by,reportData.deleted, report_id], (error, result: ResultSetHeader) => {
         if (error) {
