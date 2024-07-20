@@ -1,6 +1,8 @@
 import { Response, Request } from "express"
 import { personalServices } from "../services/personalServices"
 import jwt from 'jsonwebtoken';
+const secretKey = process.env.SECRET || "";
+import { PersonalPayload } from '../../shared/config/types/personalPayload';
 
 
 export const getPersonalAll = async (_req: Request, res: Response) => {
@@ -78,20 +80,13 @@ export const loginPersonal = async (req: Request, res: Response) => {
 
         if (!result) {
             return res.status(401).json({ message: 'Nombre de usuario o contraseña inválidos' });
+        }else {
+          const personal = jwt.verify(result, secretKey) as PersonalPayload;
+          res.setHeader("Authorization", result);
+          res.setHeader("Access-Control-Expose-Headers","Authorization");
+          res.status(200).json({ message: 'Inicio de sesión exitoso', personal});
         }
-
-        const { token } = result;
         
-        const secretKey = process.env.SECRET || "";
-
-        const decodedToken = jwt.verify(token, secretKey) as { [key: string]: any };
-        res.setHeader('Authorization', token); 
-        res.setHeader('Acces-Control-Expose-Headers', 'Authorization')
-        const { name: userName, lastName, role, personal_id } = decodedToken;
-
-        res.cookie('role', token, result.cookieOptions); 
-        res.status(200).json({ name: userName, lastName, role, id: personal_id });
-
     } catch (error: any) {
         console.error('Error en inicio de sesión:', error);
         res.status(500).json({ message: 'Error interno del servidor' });

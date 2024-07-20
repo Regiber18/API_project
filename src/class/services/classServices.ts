@@ -9,7 +9,7 @@ export class groupService {
         try{
             return await GroupRepository.findAll();
         }catch (error: any){
-            throw new Error(`Error al obtener grupos: ${error.message}`);
+            throw new Error(`Error al obtener clases: ${error.message}`);
         }
     }
 
@@ -28,7 +28,7 @@ export class groupService {
             clas.updated_at = DateUtils.formatDate(new Date());
             return await GroupRepository.createClass(clas);
         } catch (error: any) {
-            throw new Error(`Error al crear grupo: ${error.message}`);
+            throw new Error(`Error al crear clase: ${error.message}`);
         }
     }
 
@@ -52,7 +52,7 @@ export class groupService {
             groupFinded.updated_at = DateUtils.formatDate(new Date());
             return await GroupRepository.updateClass(class_id, groupFinded);
         }catch (error: any){
-            throw new Error(`Error al modificar grupo: ${error.message}`);
+            throw new Error(`Error al modificar clase: ${error.message}`);
         }
     }
 
@@ -61,7 +61,7 @@ export class groupService {
             return await GroupRepository.deleteClass(class_id);
 
         }catch (error: any){
-            throw new Error(`Error al eliminar grupo: ${error.message}`);
+            throw new Error(`Error al eliminar clase: ${error.message}`);
         }
     }
 

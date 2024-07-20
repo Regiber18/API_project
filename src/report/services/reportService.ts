@@ -62,7 +62,7 @@ export class alumnService {
             return await ReportRepository.deleteReport(report_id);
 
         }catch (error: any){
-            throw new Error(`Error al eliminar alumno: ${error.message}`);
+            throw new Error(`Error al eliminar reporte: ${error.message}`);
         }
     }
 

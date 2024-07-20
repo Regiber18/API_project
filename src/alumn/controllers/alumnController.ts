@@ -69,24 +69,3 @@ export const deleteAlumn = async (req: Request, res: Response) => {
   }
 
 }
-
-export const createpdf = async () => {
-    try {
-    const { PDFDocument, rgb } = require('pdf-lib');
-    const pdfDoc = await PDFDocument.create();
-    const alumn = "hola";
-    const page = pdfDoc.addPage();
-
-    page.drawText(`${alumn}`, {
-      x: 50,
-      y: 500,
-      size: 50,
-      color: rgb(0, 0.5, 0.75),
-    });
-    const pdfBytes = await pdfDoc.save();
-
-    return pdfBytes;
-    }catch(error: any) {
-        console.log("erro")
-    } 
-  }

@@ -3,12 +3,12 @@ import { alumnService } from "../services/reportService"
 
 export const getReportAll = async (_req: Request, res: Response) => {
   try {
-    const alumns = await alumnService.getAllReports()
+    const reports = await alumnService.getAllReports()
 
-    if(alumns) {
-      res.status(201).json(alumns)
+    if(reports) {
+      res.status(201).json(reports)
     }else {
-      res.status(404).json(alumns)
+      res.status(404).json(reports)
     }
   }catch(err: any) {
     res.status(500).json({erro: err.message})
@@ -17,12 +17,12 @@ export const getReportAll = async (_req: Request, res: Response) => {
 
 export const getReportId = async (req: Request, res: Response) => {
   try {
-    const alumns = await alumnService.getReportId(parseInt(req.params.report_id, 10))
+    const reports = await alumnService.getReportId(parseInt(req.params.report_id, 10))
 
-    if(alumns) {
-      res.status(201).json(alumns)
+    if(reports) {
+      res.status(201).json(reports)
     }else {
-      res.status(404).json(alumns)
+      res.status(404).json(reports)
     }
   }catch(err: any) {
     res.status(500).json({erro: err.message})
@@ -31,9 +31,10 @@ export const getReportId = async (req: Request, res: Response) => {
 
 export const createReport = async (req: Request, res: Response) => {
   try {
-    const newEmployee = await alumnService.addReport(req.body);
-    if(newEmployee){
-      res.status(201).json(newEmployee);
+    const newReport = await alumnService.addReport(req.body);
+
+    if(newReport){
+      res.status(201).json(newReport);
     }else{
       res.status(404).json({ message: 'Algo salio mal' });
     }
@@ -44,9 +45,10 @@ export const createReport = async (req: Request, res: Response) => {
 
 export const  updateReport = async (req: Request, res: Response) => {
   try {
-    const updatedEmployee = await alumnService.modifyReport(parseInt(req.params.report_id, 10), req.body);
-    if(updatedEmployee){
-      res.status(201).json(updatedEmployee);
+    const updatedReport = await alumnService.modifyReport(parseInt(req.params.report_id, 10), req.body);
+
+    if(updatedReport){
+      res.status(201).json(updatedReport);
     }else{
       res.status(404).json({ message: 'Algo salio mal' });
     }

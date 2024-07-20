@@ -9,7 +9,7 @@ export class roleService {
         try{
             return await RoleRepository.findAll();
         }catch (error: any){
-            throw new Error(`Error al obtener alumnos: ${error.message}`);
+            throw new Error(`Error al obtener roles: ${error.message}`);
         }
     }
 
@@ -18,7 +18,7 @@ export class roleService {
             return await RoleRepository.findById(roleId);
 
         }catch (error: any){
-            throw new Error(`Error al encontrar alumno: ${error.message}`);
+            throw new Error(`Error al encontrar role: ${error.message}`);
         }
     }
 
@@ -28,7 +28,7 @@ export class roleService {
             role.updated_at = DateUtils.formatDate(new Date());
             return await RoleRepository.createRole(role);
         } catch (error: any) {
-            throw new Error(`Error al crear alumno: ${error.message}`);
+            throw new Error(`Error al crear role: ${error.message}`);
         }
     }
 
@@ -50,7 +50,7 @@ export class roleService {
             roleFinded.updated_at = DateUtils.formatDate(new Date());
             return await RoleRepository.updateRole(roleId, roleFinded);
         }catch (error: any){
-            throw new Error(`Error al modificar alumno: ${error.message}`);
+            throw new Error(`Error al modificar role: ${error.message}`);
         }
     }
 
@@ -59,7 +59,7 @@ export class roleService {
             return await RoleRepository.deletePersonal(role_id);
 
         }catch (error: any){
-            throw new Error(`Error al eliminar alumno: ${error.message}`);
+            throw new Error(`Error al eliminar role: ${error.message}`);
         }
     }
 

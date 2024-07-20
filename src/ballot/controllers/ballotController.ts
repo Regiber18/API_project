@@ -3,12 +3,12 @@ import { BallotService } from "../services/ballotService"
 
 export const getAllBallots = async (_req: Request, res: Response) => {
   try {
-    const alumns = await BallotService.getAllBallots()
+    const ballots = await BallotService.getAllBallots()
 
-    if(alumns) {
-      res.status(201).json(alumns) 
+    if(ballots) {
+      res.status(201).json(ballots) 
     }else {
-      res.status(404).json(alumns)
+      res.status(404).json(ballots)
     }
   }catch(err: any) {
     res.status(500).json({erro: err.message})
@@ -17,12 +17,12 @@ export const getAllBallots = async (_req: Request, res: Response) => {
 
 export const getBallotId = async (req: Request, res: Response) => {
   try {
-    const alumns = await BallotService.getBallotById(parseInt(req.params.ballot_id, 10))
+    const ballots = await BallotService.getBallotById(parseInt(req.params.ballot_id, 10))
 
-    if(alumns) {
-      res.status(201).json(alumns)
+    if(ballots) {
+      res.status(201).json(ballots)
     }else {
-      res.status(404).json(alumns)
+      res.status(404).json(ballots)
     }
   }catch(err: any) {
     res.status(500).json({erro: err.message})
@@ -31,9 +31,9 @@ export const getBallotId = async (req: Request, res: Response) => {
 
 export const createBallot = async (req: Request, res: Response) => {
   try {
-    const newEmployee = await BallotService.addBallot(req.body);
-    if(newEmployee){
-      res.status(201).json(newEmployee);
+    const newBallot = await BallotService.addBallot(req.body);
+    if(newBallot){
+      res.status(201).json(newBallot);
     }else{
       res.status(404).json({ message: 'Algo salio mal' });
     }
@@ -44,9 +44,9 @@ export const createBallot = async (req: Request, res: Response) => {
 
 export const  updateBallot = async (req: Request, res: Response) => {
   try {
-    const updatedEmployee = await BallotService.modifyBallot(parseInt(req.params.ballot_id, 10), req.body);
-    if(updatedEmployee){
-      res.status(201).json(updatedEmployee);
+    const updatedBallot = await BallotService.modifyBallot(parseInt(req.params.ballot_id, 10), req.body);
+    if(updatedBallot){
+      res.status(201).json(updatedBallot);
     }else{
       res.status(404).json({ message: 'Algo salio mal' });
     }

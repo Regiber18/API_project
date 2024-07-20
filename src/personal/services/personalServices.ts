@@ -1,5 +1,4 @@
 import { PersonalRepository } from "../repositories/PersonalRepository";
-import { RoleRepository } from "../../role/repositories/RoleRepository";
 import { DateUtils } from "../../shared/utils/Date";
 import { Personal } from "../models/Personal";
 import bcrypt from "bcrypt";
@@ -81,7 +80,7 @@ export class personalServices {
     }
 
 
-    public static async login(name: string, password: string): Promise<{ token: string, cookieOptions: any } | null> {
+    public static async login(name: string, password: string){
         try {
             const personal = await this.getPersonalByFullName(name);
             if (!personal) {
@@ -93,26 +92,17 @@ export class personalServices {
                 return null;
             }
 
-            const role = await RoleRepository.findById(personal.role_id); 
 
             const payload = {
                 personal_id: personal.personal_id,
                 name: personal.name,
                 lastName: personal.lastName, 
-                role: role?.description || 'Unknown', 
+                role: personal.role_id, 
                 id: personal.personal_id
             };
-            const token = jwt.sign(
-                payload, secretKey, { expiresIn: '1d' }
-            );
+            
+            return await jwt.sign(payload, secretKey, { expiresIn: '1h' });
 
-            const cookieOptions = {
-                httpOnly: true,
-                expires: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000), // 1 día
-                path: "/",
-            };  
-
-            return { token, cookieOptions };
 
         } catch (error: any) {
             throw new Error(`Error during login: ${error.message}`);
