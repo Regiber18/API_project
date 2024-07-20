@@ -38,7 +38,7 @@ export class SubjectRepository {
     const query = 'INSERT INTO SubjectRating (subject_id, rating_id) VALUES (?, ?)';
     console.log(subjectrating);
     return new Promise((resolve, reject) => {
-      connection.execute(query, [subjectrating.subject_id, subjectrating.rating_id],(error, result: ResultSetHeader) => {
+      connection.execute(query, [subjectrating.all_ids, subjectrating.all_ids],(error, result: ResultSetHeader) => {
         if (error) {
           reject(error);
         } else {
@@ -53,7 +53,7 @@ export class SubjectRepository {
   public static async updateSubjectRating(subjectrating_id: number, subjectData: SubjectRating): Promise<SubjectRating | null> {
     const query = 'UPDATE SubjectRating SET subject_id = ?, rating_id WHERE subjectrating_id = ?';
     return new Promise((resolve, reject) => {
-      connection.execute(query, [subjectData.subject_id, subjectData.rating_id,subjectrating_id], (error, result: ResultSetHeader) => {
+      connection.execute(query, [subjectData.all_ids, subjectData.all_ids,subjectrating_id], (error, result: ResultSetHeader) => {
         if (error) {
           reject(error);
         } else {

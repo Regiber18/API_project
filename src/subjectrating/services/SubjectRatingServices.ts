@@ -34,11 +34,8 @@ export class subjectRatingService {
             const subjectFinded =  await SubjectRepository.findById(subjectratingId);
     
             if(subjectFinded){
-                if(subjectData.subject_id){
-                    subjectFinded.subject_id = subjectData.subject_id;
-                }
-                if(subjectData.rating_id){
-                    subjectFinded.rating_id = subjectData.rating_id;
+                if(subjectData.all_ids){
+                    subjectFinded.all_ids = subjectData.all_ids;
                 }
             }else{
                 return null;
