@@ -34,6 +34,7 @@ export const getSubjectRatingId = async (req: Request, res: Response) => {
 export const createSubjectRating = async (req: Request, res: Response) => {
   try {
     const Subject = require("../../subject/models/Subject")
+    const Rating = require("../../rating/models/Rating")
 
     await new Promise<void>((resolve, reject) => {
       connection.beginTransaction((err) => {
@@ -51,6 +52,11 @@ export const createSubjectRating = async (req: Request, res: Response) => {
     for (let id of req.body.subjects) {
       const subject = new Subject({ role, ... id}); // Ajusta según tu esquema
       await subject.save();
+    };
+
+    for(let id_new of req.body.rating) {
+      const rating = new Rating({role, ...id_new})
+      await rating.save()
     }
 
    
