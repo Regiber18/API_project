@@ -1,5 +1,6 @@
 import { Response, Request } from "express"
 import { subjectRatingService } from "../services/SubjectRatingServices"
+import connection from "../../shared/config/database"
 
 export const getSubjectRatingAll = async (_req: Request, res: Response) => {
   try {
@@ -29,19 +30,56 @@ export const getSubjectRatingId = async (req: Request, res: Response) => {
   }
 }
 
+
 export const createSubjectRating = async (req: Request, res: Response) => {
   try {
-    const role = await subjectRatingService.addSubjectRating(req.body);
+    const Subject = require("../../subject/models/Subject")
 
-    if(role){
+    await new Promise<void>((resolve, reject) => {
+      connection.beginTransaction((err) => {
+        if (err) {
+          reject(err); 
+        } else {
+          resolve(); 
+        }
+      });
+    });
+
+    const role = await subjectRatingService.addSubjectRating(req.body);
+    
+
+    for (let id of req.body.subjects) {
+      const subject = new Subject({ role, ... id}); // Ajusta según tu esquema
+      await subject.save();
+    }
+
+   
+
+    await new Promise<void>((resolve, reject) => {
+      connection.commit((err) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(); 
+        }
+      });
+    });
+
+    if (role) {
       res.status(201).json(role);
-    }else{
-      res.status(404).json({ message: 'Algo salio mal' });
+      await connection.commit();
+    } else {
+      res.status(404).json({ message: "Algo salió mal" });
     }
   } catch (error: any) {
+    await new Promise<void>((resolve) => {
+      connection.rollback(() => {
+        resolve(); 
+      });
+    });
     res.status(500).json({ error: error.message });
   }
-}
+};
 
 export const  updateSubjectRating = async (req: Request, res: Response) => {
   try {
