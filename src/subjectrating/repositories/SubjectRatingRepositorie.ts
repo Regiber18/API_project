@@ -3,6 +3,7 @@ import connection from "../../shared/config/database";
 import { SubjectRating } from "../models/SubjectRating";
 export class SubjectRepository {
 
+
   public static async findAll(): Promise<SubjectRating[]> {
     return new Promise((resolve, reject) => {
       connection.query('SELECT * FROM SubjectRating', (error: any, results) => {
@@ -33,11 +34,17 @@ export class SubjectRepository {
     });
   }
 
-  public static async createSubjectRating(subjectrating: SubjectRating): Promise<SubjectRating> {
+
+  public static async createSubjectRating(subjectrating: SubjectRating): Promise<SubjectRating>{
+    const ID = [
+      {rating_id: 1, subject_id: 2}, // prueba xD
+      {ratig_id: 1, subject_id: 3}
+    ]
     const query = 'INSERT INTO SubjectRating (rating_id, subject_id) VALUES (?, ?)';
     console.log(subjectrating);
     return new Promise((resolve, reject) => {
-      connection.execute(query, [subjectrating.all_ids.rating_id, subjectrating.all_ids.subject_id],(error, result: ResultSetHeader) => {
+      ID.forEach(item => {
+       connection.execute(query, [item.rating_id,item.subject_id],(error, result: ResultSetHeader) => {
         if (error) {
           reject(error);
         } else {
@@ -45,7 +52,10 @@ export class SubjectRepository {
           const createSubject: SubjectRating = { ...subjectrating, subjectrating_id: createSubjectId};
           resolve(createSubject);
         }
-      });
+      });       
+      })
+
+
     });
   }
 

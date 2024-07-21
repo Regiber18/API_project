@@ -52,7 +52,7 @@ export const createSubjectRating = async (req: Request, res: Response) => {
           reject(err);
         } else {
           resolve(); 
-          res.send({message: "se añadio"})
+          res.send({message: "se añadio, se hizo el commit"})
         }
       });
     });
@@ -63,9 +63,11 @@ export const createSubjectRating = async (req: Request, res: Response) => {
     } else {
       res.status(404).json({ message: "Algo salió mal" });
     }
+
   } catch (error: any) {
     await new Promise<void>((resolve) => {
       connection.rollback(() => {
+        res.send("erro se pasa al rollback")
         resolve(); 
       });
     });
