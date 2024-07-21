@@ -12,7 +12,7 @@ import roleRoutes from './role/routes/RoleRoutes';
 import reportRoutes from './report/routes/reportRoute';
 import subjectRoutes from './subject/routes/subjectRoutes';
 import  ratingRoutes  from './rating/routes/ratingRoutes';
-import subjectRatingRoutes from './subject/routes/subjectRoutes';
+import subjectRatingRoutes from './subjectrating/routes/SubjectRatingRoutes';
 
 // Importar middlewares compartidos
 import { errorHandler } from './shared/middlewares/errorHandler';
