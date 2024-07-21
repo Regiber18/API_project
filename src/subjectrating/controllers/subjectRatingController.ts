@@ -34,8 +34,6 @@ export const getSubjectRatingId = async (req: Request, res: Response) => {
 export const createSubjectRating = async (req: Request, res: Response) => {
   try {
   
-
-
     await new Promise<void>((resolve, reject) => {
       connection.beginTransaction((err) => {
         if (err) {

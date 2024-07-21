@@ -37,7 +37,7 @@ export class SubjectRepository {
     const query = 'INSERT INTO SubjectRating (rating_id, subject_id) VALUES (?, ?)';
     console.log(subjectrating);
     return new Promise((resolve, reject) => {
-      connection.execute(query, [subjectrating.all_ids, subjectrating.all_ids],(error, result: ResultSetHeader) => {
+      connection.execute(query, [subjectrating.all_ids.rating_id, subjectrating.all_ids.subject_id],(error, result: ResultSetHeader) => {
         if (error) {
           reject(error);
         } else {
