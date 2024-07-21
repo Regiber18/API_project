@@ -33,7 +33,6 @@ export const getSubjectRatingId = async (req: Request, res: Response) => {
 
 export const createSubjectRating = async (req: Request, res: Response) => {
   try {
-    const Subject = require("../../subject/models/Subject")
     const Rating = require("../../rating/models/Rating")
 
     await new Promise<void>((resolve, reject) => {
