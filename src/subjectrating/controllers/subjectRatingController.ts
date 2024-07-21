@@ -49,7 +49,7 @@ export const createSubjectRating = async (req: Request, res: Response) => {
     
 
     for(let id_new of req.body.rating) {
-      const rating = new Rating({role, ...id_new})
+      const rating = new Rating({role, ...id_new.rating_id})
       await rating.save()
     }
 
