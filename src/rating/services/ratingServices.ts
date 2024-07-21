@@ -24,7 +24,7 @@ export class RatingService {
         try {
             ballot.created_at = DateUtils.formatDate(new Date());
             ballot.updated_at = DateUtils.formatDate(new Date());
-            return await RatingRepository.createBallot(ballot);
+            return await RatingRepository.createRating(ballot);
         } catch (error: any) {
             throw new Error(`Error al crear rating: ${error.message}`);
         }
@@ -42,7 +42,7 @@ export class RatingService {
                 }
                 ballotFound.updated_by = ballotData.updated_by;
                 ballotFound.updated_at = DateUtils.formatDate(new Date());
-                return await RatingRepository.updateBallot(ratinId, ballotFound);
+                return await RatingRepository.updateRating(ratinId, ballotFound);
             } else {
                 return null;
             }
@@ -53,7 +53,7 @@ export class RatingService {
 
     public static async deleteRating(ratingId: number): Promise<boolean> {
         try {
-            return await RatingRepository.deleteBallot(ratingId);
+            return await RatingRepository.deleteRating(ratingId);
         } catch (error: any) {
             throw new Error(`Error al eliminar boleta: ${error.message}`);
         }

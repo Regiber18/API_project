@@ -33,7 +33,7 @@ export const getSubjectRatingId = async (req: Request, res: Response) => {
 
 export const createSubjectRating = async (req: Request, res: Response) => {
   try {
-    const Rating = require("../../rating/models/Rating")
+    const Rating = require("../../rating/repositories/RatingRepositorie")
 
     await new Promise<void>((resolve, reject) => {
       connection.beginTransaction((err) => {
@@ -49,8 +49,8 @@ export const createSubjectRating = async (req: Request, res: Response) => {
     
 
     for(let id_new of req.body.rating) {
-      const rating = new Rating({role, ...id_new.rating_id})
-      await rating.save()
+      const rating = new Rating({role, ...id_new})
+      await rating.createRating(connection); 
     }
 
    
@@ -61,13 +61,13 @@ export const createSubjectRating = async (req: Request, res: Response) => {
           reject(err);
         } else {
           resolve(); 
+          res.send({message: "se añadio"})
         }
       });
     });
 
     if (role) {
       res.status(201).json(role);
-      await connection.commit();
     } else {
       res.status(404).json({ message: "Algo salió mal" });
     }

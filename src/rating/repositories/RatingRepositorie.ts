@@ -34,7 +34,7 @@ export class RatingRepository {
         });
     }
 
-    public static async createBallot(rating: Rating): Promise<Rating> {
+    public static async createRating(rating: Rating): Promise<Rating> {
         const query = 'INSERT INTO Rating (ballot_id, amount, created_at, created_by, updated_at, updated_by, deleted) VALUES (?, ?, ?, ?, ?, ?, ?)';
         return new Promise((resolve, reject) => {
             connection.execute(query, [rating.ballot_id, rating.amount, rating.created_at, rating.created_by, rating.updated_at, rating.updated_by, rating.deleted], (error: any, result: ResultSetHeader) => {
@@ -49,7 +49,7 @@ export class RatingRepository {
         });
     }
 
-    public static async updateBallot(rating_id: number, ballotRating: Rating): Promise<Rating | null> {
+    public static async updateRating(rating_id: number, ballotRating: Rating): Promise<Rating | null> {
         const query = 'UPDATE Rating SET amount = ?, updated_at = ?, updated_by = ?, deleted = ? WHERE rating_id = ?';
         return new Promise((resolve, reject) => {
             connection.execute(query, [ballotRating.amount, ballotRating.updated_at, ballotRating.updated_by, ballotRating.deleted, rating_id], (error: any, result: ResultSetHeader) => {
@@ -67,7 +67,7 @@ export class RatingRepository {
         });
     }
 
-    public static async deleteBallot(rating_id: number): Promise<boolean> {
+    public static async deleteRating(rating_id: number): Promise<boolean> {
         const query = 'DELETE FROM Rating WHERE rating_id = ?';
         return new Promise((resolve, reject) => {
             connection.execute(query, [rating_id], (error: any, result: ResultSetHeader) => {
