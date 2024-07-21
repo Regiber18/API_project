@@ -49,11 +49,6 @@ export const createSubjectRating = async (req: Request, res: Response) => {
     const role = await subjectRatingService.addSubjectRating(req.body);
     
 
-    for (let id of req.body.subjects) {
-      const subject = new Subject({ role, ... id}); // Ajusta según tu esquema
-      await subject.save();
-    };
-
     for(let id_new of req.body.rating) {
       const rating = new Rating({role, ...id_new})
       await rating.save()
