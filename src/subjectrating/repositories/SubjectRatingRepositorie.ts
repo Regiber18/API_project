@@ -38,7 +38,7 @@ export class SubjectRepository {
   public static async createSubjectRating(subjectrating: SubjectRating): Promise<SubjectRating>{
     const ID = [
       {rating_id: 1, subject_id: 2}, // prueba xD
-      {ratig_id: 1, subject_id: 3}
+      {rating_id: 1, subject_id: 3} // no jalo xD
     ]
     const query = 'INSERT INTO SubjectRating (rating_id, subject_id) VALUES (?, ?)';
     console.log(subjectrating);
