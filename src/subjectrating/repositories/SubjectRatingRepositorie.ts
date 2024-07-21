@@ -1,7 +1,6 @@
 import { ResultSetHeader } from "mysql2";
 import connection from "../../shared/config/database";
 import { SubjectRating } from "../models/SubjectRating";
-
 export class SubjectRepository {
 
   public static async findAll(): Promise<SubjectRating[]> {
@@ -35,7 +34,7 @@ export class SubjectRepository {
   }
 
   public static async createSubjectRating(subjectrating: SubjectRating): Promise<SubjectRating> {
-    const query = 'INSERT INTO SubjectRating (subject_id, rating_id) VALUES (?, ?)';
+    const query = 'INSERT INTO SubjectRating (rating_id, subject_id) VALUES (?, ?)';
     console.log(subjectrating);
     return new Promise((resolve, reject) => {
       connection.execute(query, [subjectrating.all_ids, subjectrating.all_ids],(error, result: ResultSetHeader) => {
@@ -51,9 +50,9 @@ export class SubjectRepository {
   }
 
   public static async updateSubjectRating(subjectrating_id: number, subjectData: SubjectRating): Promise<SubjectRating | null> {
-    const query = 'UPDATE SubjectRating SET subject_id = ?, rating_id WHERE subjectrating_id = ?';
+    const query = 'UPDATE SubjectRating SET rating_id = ?, subject_id WHERE subjectrating_id = ?';
     return new Promise((resolve, reject) => {
-      connection.execute(query, [subjectData.all_ids, subjectData.all_ids,subjectrating_id], (error, result: ResultSetHeader) => {
+      connection.execute(query, [subjectData.all_ids.rating_id, subjectData.all_ids.subject_id,subjectrating_id], (error, result: ResultSetHeader) => {
         if (error) {
           reject(error);
         } else {
