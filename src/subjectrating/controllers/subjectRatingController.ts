@@ -33,6 +33,7 @@ export const getSubjectRatingId = async (req: Request, res: Response) => {
 
 export const createSubjectRating = async (req: Request, res: Response) => {
   try {
+    const Subject = require("../../subject/repositories/subjectRepositorie")
     const Rating = require("../../rating/repositories/RatingRepositorie")
 
     await new Promise<void>((resolve, reject) => {
@@ -47,7 +48,10 @@ export const createSubjectRating = async (req: Request, res: Response) => {
 
     const role = await subjectRatingService.addSubjectRating(req.body);
     
-
+    for(let id of req.body.subject) {
+      const subject = new Subject({role, ...id})
+      await subject.createSubject(connection)
+    }
     for(let id_new of req.body.rating) {
       const rating = new Rating({role, ...id_new})
       await rating.createRating(connection); 

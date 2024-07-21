@@ -45,6 +45,8 @@ export class SubjectRepository {
           const createSubjectId = result.insertId;
           const createSubject: Subject = { ...subject, subject_id: createSubjectId};
           resolve(createSubject);
+
+           return this.createSubject;
         }
       });
     });
