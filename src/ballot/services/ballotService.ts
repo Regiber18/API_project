@@ -25,7 +25,7 @@ export class BallotService {
         const portProject = process.env.PORT; 
 
         try {
-            ballot.url = `${urlProject}: ${portProject}/uploads/${file.filename}`;
+            ballot.url = `${urlProject}: ${portProject}/pdfs/${file.filename}`;
             ballot.created_at = DateUtils.formatDate(new Date());
             ballot.updated_at = DateUtils.formatDate(new Date());
             return await BallotRepository.createBallot(ballot);
