@@ -20,9 +20,12 @@ export class BallotService {
         }
     }
 
-    public static async addBallot(ballot: Ballot): Promise<Ballot> {
+    public static async addBallot(ballot: Ballot, file: Express.Multer.File): Promise<Ballot> {
+        const urlProject = process.env.URL; 
+        const portProject = process.env.DB_PORT; 
 
         try {
+            ballot.url = `${urlProject}: ${portProject}/uploads/${file.filename}`
             ballot.created_at = DateUtils.formatDate(new Date());
             ballot.updated_at = DateUtils.formatDate(new Date());
             return await BallotRepository.createBallot(ballot);
