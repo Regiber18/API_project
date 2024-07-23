@@ -50,7 +50,10 @@ app.use('/api/report', reportRoutes);
 app.use('/api/subject', subjectRoutes);
 app.use('/api/rating', ratingRoutes);
 app.use('/api/subjectRating', subjectRatingRoutes)
-app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
+//ruta de los pdfs
+app.use('/uploads', express.static(path.join(__dirname, '/uploads')));
+
+
 
 
 // Middleware para manejar rutas no encontradas
