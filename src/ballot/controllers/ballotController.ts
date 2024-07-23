@@ -31,7 +31,7 @@ export const getBallotId = async (req: Request, res: Response) => {
 
 export const createBallot = async (req: Request, res: Response) => {
   try {
-    const newBallot = await BallotService.addBallot(req.body);
+    const newBallot = await BallotService.addBallot(req.body, req.body.url);
     if(newBallot){
       res.status(201).json(newBallot);
     }else{

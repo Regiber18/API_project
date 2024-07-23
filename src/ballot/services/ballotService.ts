@@ -20,8 +20,12 @@ export class BallotService {
         }
     }
 
-    public static async addBallot(ballot: Ballot): Promise<Ballot> {
+    public static async addBallot(ballot: Ballot, file: Express.Multer.File): Promise<Ballot> {
+        const urlProject = process.env.URL; 
+        const portProject = process.env.DB_PORT; 
+
         try {
+            ballot.url = `${urlProject}: ${portProject}/uploads/${file.filename}`
             ballot.created_at = DateUtils.formatDate(new Date());
             ballot.updated_at = DateUtils.formatDate(new Date());
             return await BallotRepository.createBallot(ballot);
@@ -34,12 +38,16 @@ export class BallotService {
         try {
             const ballotFound = await BallotRepository.findById(ballotId);
             if (ballotFound) {
-                if (ballotData.content) {
-                    ballotFound.content = ballotData.content;
+                if (ballotData.name) {
+                    ballotFound.name = ballotData.name;
+                }
+                if(ballotData.url) {
+                    ballotFound.url = ballotData.url; 
                 }
                 if (ballotData.deleted) {
                     ballotFound.deleted = ballotData.deleted;
                 }
+
                 ballotFound.updated_by = ballotData.updated_by;
                 ballotFound.updated_at = DateUtils.formatDate(new Date());
                 return await BallotRepository.updateBallot(ballotId, ballotFound);

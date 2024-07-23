@@ -51,7 +51,7 @@ export class GroupRepository {
     }
 
     public static async updateClass(class_id: number, classData: Class): Promise<Class | null> {
-        const query = 'UPDATE Class SET className = ?, classGrade = ?, updated_at = ?, updated_by = ?, deleted = ? WHERE class_id = ?';
+        const query = 'UPDATE Class SET className = ?, classGrade = ?, updated_at = ?, updated_by = ?, deleted = ? WHERE class_id = ? AND deleted = 0';
         return new Promise((resolve, reject) => {
             connection.execute(query, [classData.className, classData.classGrade, classData.updated_at, classData.updated_by, classData.deleted, class_id], (error, result: ResultSetHeader) => {
                 if (error) {

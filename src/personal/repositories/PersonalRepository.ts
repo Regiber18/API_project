@@ -53,7 +53,7 @@ export class PersonalRepository {
       }
 
     public static async updatePersonal(personal_id: number, personalData: Personal): Promise<Personal | null> {
-        const query = 'UPDATE Personal SET name = ?, lastName = ?, password = ?, updated_at = ?, updated_by = ?, deleted = ? WHERE personal_id = ?';
+        const query = 'UPDATE Personal SET name = ?, lastName = ?, password = ?, updated_at = ?, updated_by = ?, deleted = ? WHERE personal_id = ? AND deleted = 0';
         return new Promise((resolve, reject) => {
           connection.execute(query, [personalData.name, personalData.lastName, personalData.password, personalData.updated_at, personalData.updated_by,personalData.deleted, personal_id], (error, result: ResultSetHeader) => {
             if (error) {

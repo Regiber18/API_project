@@ -38,13 +38,13 @@ export class SubjectRepository {
   public static async createSubjectRating(subjectrating: SubjectRating): Promise<SubjectRating>{
     const ID = [
       {rating_id: 1, subject_id: 2}, // prueba xD
-      {rating_id: 1, subject_id: 3} // no jalo xD
+      {rating_id: 1, subject_id: 3} 
     ]
     const query = 'INSERT INTO SubjectRating (rating_id, subject_id) VALUES (?, ?)';
     console.log(subjectrating);
     return new Promise((resolve, reject) => {
       ID.forEach(item => {
-       connection.execute(query, [item.rating_id,item.subject_id],(error, result: ResultSetHeader) => {
+       connection.execute(query, [item.subject_id,item.subject_id],(error, result: ResultSetHeader) => {
         if (error) {
           reject(error);
         } else {
@@ -60,7 +60,7 @@ export class SubjectRepository {
   }
 
   public static async updateSubjectRating(subjectrating_id: number, subjectData: SubjectRating): Promise<SubjectRating | null> {
-    const query = 'UPDATE SubjectRating SET rating_id = ?, subject_id WHERE subjectrating_id = ?';
+    const query = 'UPDATE SubjectRating SET rating_id = ?, subject_id WHERE subjectrating_id = ? AND deleted = 0';
     return new Promise((resolve, reject) => {
       connection.execute(query, [subjectData.all_ids.rating_id, subjectData.all_ids.subject_id,subjectrating_id], (error, result: ResultSetHeader) => {
         if (error) {

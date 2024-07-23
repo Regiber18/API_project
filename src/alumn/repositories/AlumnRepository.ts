@@ -51,7 +51,7 @@ export class AlumnRepository {
   }
 
   public static async updateAlumn(alumn_id: number, alumnData: Alumns): Promise<Alumns | null> {
-    const query = 'UPDATE Alumn SET name = ?,lastName = ?, updated_at = ?, updated_by = ?, deleted = ? WHERE alumn_id = ?';
+    const query = 'UPDATE Alumn SET name = ?,lastName = ?, updated_at = ?, updated_by = ?, deleted = ? WHERE alumn_id = ? AND deleted = 0';
     return new Promise((resolve, reject) => {
       connection.execute(query, [alumnData.name, alumnData.lastName, alumnData.updated_at, alumnData.updated_by,alumnData.deleted, alumn_id], (error, result: ResultSetHeader) => {
         if (error) {

@@ -4,12 +4,12 @@ import connection from "../../shared/config/database"
 
 export const getSubjectRatingAll = async (_req: Request, res: Response) => {
   try {
-    const role = await subjectRatingService.getAllSubjectsRating()
+    const subjectRating = await subjectRatingService.getAllSubjectsRating()
 
-    if(role) {
-      res.status(201).json(role)
+    if(subjectRating) {
+      res.status(201).json(subjectRating)
     }else {
-      res.status(404).json(role)
+      res.status(404).json(subjectRating)
     }
   }catch(err: any) {
     res.status(500).json({erro: err.message})
@@ -18,12 +18,12 @@ export const getSubjectRatingAll = async (_req: Request, res: Response) => {
 
 export const getSubjectRatingId = async (req: Request, res: Response) => {
   try {
-    const role = await subjectRatingService.getSubjectRatingId(parseInt(req.params.subject_id, 10))
+    const subjectRating = await subjectRatingService.getSubjectRatingId(parseInt(req.params.subject_id, 10))
 
-    if(role) {
-      res.status(201).json(role)
+    if(subjectRating) {
+      res.status(201).json(subjectRating)
     }else {
-      res.status(404).json(role)
+      res.status(404).json(subjectRating)
     }
   }catch(err: any) {
     res.status(500).json({erro: err.message})

@@ -50,7 +50,7 @@ export class RatingRepository {
     }
 
     public static async updateRating(rating_id: number, ballotRating: Rating): Promise<Rating | null> {
-        const query = 'UPDATE Rating SET amount = ?, updated_at = ?, updated_by = ?, deleted = ? WHERE rating_id = ?';
+        const query = 'UPDATE Rating SET amount = ?, updated_at = ?, updated_by = ?, deleted = ? WHERE rating_id = ? AND deleted = 0';
         return new Promise((resolve, reject) => {
             connection.execute(query, [ballotRating.amount, ballotRating.updated_at, ballotRating.updated_by, ballotRating.deleted, rating_id], (error: any, result: ResultSetHeader) => {
                 if (error) {
