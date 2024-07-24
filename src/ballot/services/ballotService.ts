@@ -2,6 +2,7 @@ import { BallotRepository } from "../repositories/BallotRepository";
 import { DateUtils } from "../../shared/utils/Date";
 import { Ballot } from "../models/Ballot";
 import * as dotenv from 'dotenv';
+import  {  jsPDF  }  from  "jspdf" ;
 dotenv.config();
 
 export class BallotService {
@@ -22,14 +23,24 @@ export class BallotService {
         }
     }
 
-    public static async addBallot(ballot: Ballot, file: Express.Multer.File) {
+    public static async addBallot(ballot: Ballot) {
         const urlProject = process.env.URL; 
         const portProject = process.env.PORT; 
 
         try {
-            ballot.url = `${urlProject}: ${portProject}/pdfs/${file.filename}`;
+            
+            const  doc  =  new  jsPDF ({ 
+                orientation : "landscape" , 
+                unit : "in" , 
+                format : [ 4 ,  2 ] 
+              } ) ;
+              doc . text ( `${ballot.rating}` ,  1 ,  1 ) ; 
+              doc . save ( `pdf alumno_${ballot.alumn_id}` ) ;
+
+            const url = `${urlProject}: ${portProject}/pdfs/${doc.save}`;  
             ballot.created_at = DateUtils.formatDate(new Date());
             ballot.updated_at = DateUtils.formatDate(new Date());
+            ballot.url = url; 
             return await BallotRepository.createBallot(ballot);
         } catch (error: any) {
             throw new Error(`Error al crear boleta: ${error.message}`);
@@ -43,8 +54,8 @@ export class BallotService {
                 if (ballotData.name) {
                     ballotFound.name = ballotData.name;
                 }
-                if(ballotData.url) {
-                    ballotFound.url = ballotData.url; 
+                if(ballotData.rating) {
+                    ballotFound.rating = ballotData.rating; 
                 }
                 if (ballotData.deleted) {
                     ballotFound.deleted = ballotData.deleted;

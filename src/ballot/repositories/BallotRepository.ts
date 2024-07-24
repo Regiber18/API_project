@@ -35,9 +35,9 @@ export class BallotRepository {
     }
 
     public static async createBallot(ballot: Ballot): Promise<Ballot> {
-        const query = 'INSERT INTO Ballot (alumn_id, name, url,created_at, created_by, updated_at, updated_by, deleted) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+        const query = 'INSERT INTO Ballot (alumn_id, name, data,created_at, created_by, updated_at, updated_by, deleted) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
         return new Promise((resolve, reject) => {
-            connection.execute(query, [ballot.alumn_id, ballot.name, ballot.url, ballot.created_at, ballot.created_by, ballot.updated_at, ballot.updated_by, ballot.deleted], (error: any, result: ResultSetHeader) => {
+            connection.execute(query, [ballot.alumn_id, ballot.name, ballot.rating, ballot.created_at, ballot.created_by, ballot.updated_at, ballot.updated_by, ballot.deleted], (error: any, result: ResultSetHeader) => {
                 if (error) {
                     reject(new Error("Error creating ballot"));
                 } else {
@@ -50,9 +50,9 @@ export class BallotRepository {
     }
 
     public static async updateBallot(ballot_id: number, ballotData: Ballot): Promise<Ballot | null> {
-        const query = 'UPDATE Ballot SET name = ?, url = ?,updated_at = ?, updated_by = ?, deleted = ? WHERE ballot_id = ? AND deleted = 0';
+        const query = 'UPDATE Ballot SET name = ?, rating = ?,updated_at = ?, updated_by = ?, deleted = ? WHERE ballot_id = ? AND deleted = 0';
         return new Promise((resolve, reject) => {
-            connection.execute(query, [ballotData.name, ballotData.url,ballotData.updated_at, ballotData.updated_by, ballotData.deleted, ballot_id], (error: any, result: ResultSetHeader) => {
+            connection.execute(query, [ballotData.name, ballotData.rating,ballotData.updated_at, ballotData.updated_by, ballotData.deleted, ballot_id], (error: any, result: ResultSetHeader) => {
                 if (error) {
                     reject(new Error("Error updating ballot"));
                 } else {

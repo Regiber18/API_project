@@ -31,11 +31,8 @@ export const getBallotId = async (req: Request, res: Response) => {
 
 export const createBallot = async (req: Request, res: Response) => {
   try {
-    if (!req.file) {
-      throw new Error('No se proporcionó ningún archivo');
-    }
 
-    const newBallot = await BallotService.addBallot(req.body, req.file);
+    const newBallot = await BallotService.addBallot(req.body);
 
     if (newBallot) {
       res.status(201).json(newBallot);
