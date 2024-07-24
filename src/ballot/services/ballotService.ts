@@ -35,7 +35,7 @@ export class BallotService {
                 format : [ 4 ,  2 ] 
               } ) ;
               doc . text ( `${ballot.rating}` ,  1 ,  1 ) ; 
-              doc . save ( `pdf alumno_${ballot.alumn_id}` ) ;
+              doc . save ( `pdf alumno_${ballot.alumn_id}.pdf` ) ;
 
             const url = `${urlProject}: ${portProject}/pdfs/${doc.save}`;  
             ballot.created_at = DateUtils.formatDate(new Date());
