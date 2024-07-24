@@ -24,7 +24,7 @@ export class BallotService {
 
     public static async addBallot(ballot: Ballot, file: Express.Multer.File) {
         const urlProject = process.env.URL; 
-        const portProject = process.env.DB_PORT; 
+        const portProject = process.env.PORT; 
 
         try {
             ballot.url = `${urlProject}: ${portProject}/pdfs/${file.filename}`;

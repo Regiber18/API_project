@@ -4,7 +4,7 @@ import multer from 'multer';
 const storage = multer.diskStorage({
   destination: (_req, _file, cb) => {
     // Ruta donde se guardarán los archivos subidos
-    cb(null, 'uploads/');
+    cb(null, 'pdfs/');
   },
   filename: (_req, file, cb) => {
     // Nombre del archivo guardado (se recomienda que sea único, por el Date.now().)
