@@ -33,11 +33,11 @@ export class BallotService {
                 orientation : "landscape" , 
                 unit : "in" , 
                 format : [ 4 ,  2 ] 
-              } ) ;
+              });
               doc . text ( `${ballot.rating}` ,  1 ,  1 ) ; 
-              doc . save ( `pdf alumno_${ballot.alumn_id}.pdf` ) ;
+             const  save =  doc.save ( `pdf alumno_${ballot.alumn_id}.pdf` ) ;
 
-            const url = `${urlProject}: ${portProject}/pdfs/${doc.save}`;  
+            const url = `${urlProject}: ${portProject}/pdfs/${save}`;  
             ballot.created_at = DateUtils.formatDate(new Date());
             ballot.updated_at = DateUtils.formatDate(new Date());
             ballot.url = url; 
