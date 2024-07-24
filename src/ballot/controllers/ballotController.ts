@@ -31,19 +31,25 @@ export const getBallotId = async (req: Request, res: Response) => {
 
 export const createBallot = async (req: Request, res: Response) => {
   try {
-    const newBallot = await BallotService.addBallot(req.body, req.body.file);
-    if(newBallot){
+    if (!req.file) {
+      throw new Error('No se proporcionó ningún archivo');
+    }
+
+    const newBallot = await BallotService.addBallot(req.body, req.file);
+
+    if (newBallot) {
       res.status(201).json(newBallot);
-    }else{
-      res.status(404).json({ message: 'Algo salio mal' });
+    } else {
+      res.status(404).json({ message: 'Algo salió mal' });
     }
   } catch (error: any) {
     res.status(500).json({ error: error.message });
   }
-}
+};
+
 
 export const  updateBallot = async (req: Request, res: Response) => {
-  try {
+  try {   
     const updatedBallot = await BallotService.modifyBallot(parseInt(req.params.ballot_id, 10), req.body);
     if(updatedBallot){
       res.status(201).json(updatedBallot);

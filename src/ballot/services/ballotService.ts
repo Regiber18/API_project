@@ -1,6 +1,8 @@
 import { BallotRepository } from "../repositories/BallotRepository";
 import { DateUtils } from "../../shared/utils/Date";
 import { Ballot } from "../models/Ballot";
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 export class BallotService {
 
@@ -20,7 +22,7 @@ export class BallotService {
         }
     }
 
-    public static async addBallot(ballot: Ballot, file: Express.Multer.File): Promise<Ballot> {
+    public static async addBallot(ballot: Ballot, file: Express.Multer.File) {
         const urlProject = process.env.URL; 
         const portProject = process.env.PORT; 
 
