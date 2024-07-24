@@ -1,7 +1,7 @@
 export interface  Ballot{
     ballot_id: number | null;
     alumn_id: number | null; 
-    name: string; 
+    observations: string; 
     rating: number | null; 
     url: string;
     created_at: string;

@@ -51,8 +51,8 @@ export class BallotService {
         try {
             const ballotFound = await BallotRepository.findById(ballotId);
             if (ballotFound) {
-                if (ballotData.name) {
-                    ballotFound.name = ballotData.name;
+                if (ballotData.observations) {
+                    ballotFound.observations = ballotData.observations;
                 }
                 if(ballotData.rating) {
                     ballotFound.rating = ballotData.rating; 
