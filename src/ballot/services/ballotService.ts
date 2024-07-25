@@ -57,31 +57,34 @@ export class BallotService {
               // Tabla de Calificaciones
               doc.setFontSize(10);
               doc.setLineWidth(0.1);
-              doc.rect(20, 50, 170, 10); // Encabezado de la tabla
+              doc.rect(20, 50, 170, 10); 
               doc.text("Periodo", 25, 55);
               doc.text("Asignatura", 70, 55);
               doc.text("Calificación", 120, 55);
               doc.text("Observaciones", 160, 55);
             
-              doc.rect(20, 60, 170, 10); // Primera fila de datos
-              doc.text("",25, 65); // Calificación final
-
-            
+              doc.rect(20, 60, 170, 10); 
+              doc.text("",25, 65); 
               // Observaciones
               doc.text("Sugerencias de los aprendizajes", 25, 85);
-              doc.rect(20, 90, 170, 10); // Primera fila de observaciones
-              // Aquí puedes continuar añadiendo más observaciones
-            
-              // Footer
+              doc.rect(20, 90, 170, 10);
               doc.setFontSize(8);
               doc.text("Firma del docente", 20, 280);
               doc.text("Nombre y firma de la directora o director", 70, 280);
               doc.text("Lugar de expedición", 120, 280);
               doc.text("Fecha de expedición", 160, 280);
               doc.text("Folio", 20, 285);
-             const  save =  doc.save ( `pdf alumno_${ballot.alumn_id}.pdf` ) ; 
+              doc.save ( `pdf alumno_${ballot.alumn_id}.pdf` ) ; 
 
-            const url = `${urlProject}: ${portProject}/pdfs/${save}`;  
+            const url = `${urlProject}: ${portProject}/pdfs/${doc.save(`pdf alumno_${ballot.alumn_id}.pdf`)}`;  
+            await new Promise<void>((reject, resolve) => {
+                if(url) {
+                    resolve(url)
+                }else {
+                    reject.arguments("error")
+                }
+            })
+            
             ballot.created_at = DateUtils.formatDate(new Date());
             ballot.updated_at = DateUtils.formatDate(new Date());
             ballot.url = url; 

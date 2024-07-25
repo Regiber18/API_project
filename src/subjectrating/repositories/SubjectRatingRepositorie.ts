@@ -44,7 +44,7 @@ export class SubjectRepository {
     console.log(subjectrating);
     return new Promise((resolve, reject) => {
       ID.forEach(item => {
-       connection.execute(query, [item.subject_id,item.subject_id],(error, result: ResultSetHeader) => {
+       connection.execute(query, [item.rating_id,item.subject_id],(error, result: ResultSetHeader) => {
         if (error) {
           reject(error);
         } else {

@@ -52,6 +52,8 @@ app.use('/api/rating', ratingRoutes);
 app.use('/api/subjectRating', subjectRatingRoutes)
 //ruta de los pdfs
 app.use('/pdfs', express.static(path.join(__dirname, '/pdfs')));
+console.log(__dirname);
+
 
 
 

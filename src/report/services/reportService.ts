@@ -7,7 +7,7 @@ export class alumnService {
 
     public static async getAllReports(): Promise<Report[]> {
         try{
-            return await ReportRepository.findAllReports();
+            return await ReportRepository.findAll();
         }catch (error: any){
             throw new Error(`Error al obtener reportes: ${error.message}`);
         }
@@ -15,7 +15,7 @@ export class alumnService {
 
     public static async getTopicsReport(): Promise<Report[]> {
         try{
-            return await ReportRepository.findAll();
+            return await ReportRepository.findAllReports();
         }catch (error: any){
             throw new Error(`Error al obtener reportes: ${error.message}`);
         }
