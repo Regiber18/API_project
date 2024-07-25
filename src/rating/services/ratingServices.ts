@@ -12,6 +12,24 @@ export class RatingService {
         }
     }
 
+    public static async getRatingId(): Promise<Rating[]> {
+        try {
+            return await RatingRepository.findRatingId();
+        } catch (error: any) {
+            throw new Error(`Error al obtener boletas: ${error.message}`);
+        }
+    }
+
+    public static async getAmountRating(): Promise<Rating[]> {
+        try {
+            return await RatingRepository.findAmountRating();
+        } catch (error: any) {
+            throw new Error(`Error al obtener boletas: ${error.message}`);
+        }
+    }
+
+
+
     public static async getRatingtById(ratingId: number): Promise<Rating | null> {
         try {
             return await RatingRepository.findById(ratingId);

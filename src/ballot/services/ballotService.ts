@@ -15,6 +15,14 @@ export class BallotService {
         }
     }
 
+    public static async getUrlBallot(): Promise<Ballot[]> {
+        try {
+            return await BallotRepository.findUrlBallot();
+        } catch (error: any) {
+            throw new Error(`Error al obtener boletas: ${error.message}`);
+        }
+    }
+
     public static async getBallotById(ballotId: number): Promise<Ballot | null> {
         try {
             return await BallotRepository.findById(ballotId);

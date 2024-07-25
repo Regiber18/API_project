@@ -13,6 +13,15 @@ export class alumnService {
         }
     }
 
+    public static async getNameComplete(): Promise<Alumns[]> {
+        try{
+            return await AlumnRepository.findName();
+        }catch (error: any){
+            throw new Error(`Error al obtener alumnos: ${error.message}`);
+        }
+    }
+
+
     public static async getAlumnId(employeeId: number): Promise<Alumns | null> {
         try{
             return await AlumnRepository.findById(employeeId);

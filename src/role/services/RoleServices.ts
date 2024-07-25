@@ -13,6 +13,14 @@ export class roleService {
         }
     }
 
+    public static async getRolesAct(): Promise<Role[]> {
+        try{
+            return await RoleRepository.findAllRolesAct();
+        }catch (error: any){
+            throw new Error(`Error al obtener roles: ${error.message}`);
+        }
+    }
+
     public static async getRoleId(roleId: number): Promise<Role | null> {
         try{
             return await RoleRepository.findById(roleId);

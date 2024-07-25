@@ -15,6 +15,20 @@ export const getRoleAll = async (_req: Request, res: Response) => {
   }
 }
 
+export const getRoles = async (_req: Request, res: Response) => {
+  try {
+    const role = await roleService.getRolesAct()
+
+    if(role) {
+      res.status(201).json(role)
+    }else {
+      res.status(404).json(role)
+    }
+  }catch(err: any) {
+    res.status(500).json({erro: err.message})
+  }
+}
+
 export const getRoleId = async (req: Request, res: Response) => {
   try {
     const role = await roleService.getRoleId(parseInt(req.params.personal_id, 10))

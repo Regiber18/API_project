@@ -18,6 +18,20 @@ export class RoleRepository {
         })
     }
 
+    public static async findAllRolesAct(): Promise<Role[]> {
+      return new Promise((resolve, reject) => {
+          connection.query('SELECT description FROM Role', (error: any, results)  => {
+              if(error) {
+                  reject("error")
+              }else {
+                  const personal: Role[] =  results as Role[]; 
+                  resolve(personal)
+              }
+          })
+
+      })
+  }
+
     public static async findById(role_id: number): Promise<Role | null> {
         return new Promise((resolve, reject) => {
             connection.query('SELECT description FROM Role WHERE role_id = ?', [role_id], (error: any, results) => {

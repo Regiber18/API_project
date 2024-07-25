@@ -17,6 +17,19 @@ export class GroupRepository {
         });
     }
 
+    public static async findClass(): Promise<Class[]> {
+        return new Promise((resolve, reject) => {
+            connection.query('SELECT className, classGrade FROM Class', (error: any, results: any[])  => {
+                if(error) {
+                    reject(error); // Manejar error correctamente
+                } else {
+                    const classes: Class[] = results as Class[]; // Convertir resultados a objetos Class
+                    resolve(classes); // Resolver con los datos obtenidos
+                }
+            });
+        });
+    }
+
     public static async findById(class_id: number): Promise<Class | null> {
         return new Promise((resolve, reject) => {
             connection.query('SELECT * FROM Class WHERE class_id = ?', [class_id], (error: any, results: any[]) => {

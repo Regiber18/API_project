@@ -7,18 +7,27 @@ export class alumnService {
 
     public static async getAllReports(): Promise<Report[]> {
         try{
-            return await ReportRepository.findAll();
+            return await ReportRepository.findAllReports();
         }catch (error: any){
-            throw new Error(`Error al obtener alumnos: ${error.message}`);
+            throw new Error(`Error al obtener reportes: ${error.message}`);
         }
     }
+
+    public static async getTopicsReport(): Promise<Report[]> {
+        try{
+            return await ReportRepository.findAll();
+        }catch (error: any){
+            throw new Error(`Error al obtener reportes: ${error.message}`);
+        }
+    }
+
 
     public static async getReportId(employeeId: number): Promise<Report | null> {
         try{
             return await ReportRepository.findById(employeeId);
 
         }catch (error: any){
-            throw new Error(`Error al encontrar alumno: ${error.message}`);
+            throw new Error(`Error al encontrar reportes: ${error.message}`);
         }
     }
 
@@ -28,7 +37,7 @@ export class alumnService {
             report.updated_at = DateUtils.formatDate(new Date());
             return await ReportRepository.createReport(report);
         } catch (error: any) {
-            throw new Error(`Error al crear alumno: ${error.message}`);
+            throw new Error(`Error al crear reportes: ${error.message}`);
         }
     }
 

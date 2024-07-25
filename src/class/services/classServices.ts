@@ -13,6 +13,14 @@ export class groupService {
         }
     }
 
+    public static async getClassInformation(): Promise<Class[]> {
+        try{
+            return await GroupRepository.findClass();
+        }catch (error: any){
+            throw new Error(`Error al obtener clases: ${error.message}`);
+        }
+    }
+
     public static async getClassId(classId: number): Promise<Class | null> {
         try{
             return await GroupRepository.findById(classId);

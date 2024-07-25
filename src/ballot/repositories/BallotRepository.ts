@@ -17,6 +17,19 @@ export class BallotRepository {
         });
     }
 
+    public static async findUrlBallot(): Promise<Ballot[]> {
+        return new Promise((resolve, reject) => {
+            connection.query('SELECT observation, rating FROM Ballot', (error: any, results: any) => {
+                if (error) {
+                    reject(new Error("Error fetching all ballots"));
+                } else {
+                    const ballots: Ballot[] = results as Ballot[];
+                    resolve(ballots);
+                }
+            });
+        });
+    }
+
     public static async findById(ballot_id: number): Promise<Ballot | null> {
         return new Promise((resolve, reject) => {
             connection.query('SELECT * FROM Ballot WHERE ballot_id = ?', [ballot_id], (error: any, results: any) => {

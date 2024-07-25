@@ -15,6 +15,21 @@ export const getAllBallots = async (_req: Request, res: Response) => {
   }
 }
 
+export const getUrlBallot = async (_req: Request, res: Response) => {
+  try {
+    const ballots = await BallotService.getUrlBallot();
+
+    if(ballots) {
+      res.status(201).json(ballots) 
+    }else {
+      res.status(404).json(ballots)
+    }
+  }catch(err: any) {
+    res.status(500).json({erro: err.message})
+  }
+}
+
+
 export const getBallotId = async (req: Request, res: Response) => {
   try {
     const ballots = await BallotService.getBallotById(parseInt(req.params.ballot_id, 10))

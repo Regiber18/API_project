@@ -17,6 +17,32 @@ export class RatingRepository {
         });
     }
 
+    public static async findRatingId(): Promise<Rating[]> {
+        return new Promise((resolve, reject) => {
+            connection.query('SELECT rating_id FROM Rating', (error: any, results: any) => {
+                if (error) {
+                    reject(new Error("Error fetching all rating"));
+                } else {
+                    const ballots: Rating[] = results as Rating[];
+                    resolve(ballots);
+                }
+            });
+        });
+    }
+
+    public static async findAmountRating(): Promise<Rating[]> {
+        return new Promise((resolve, reject) => {
+            connection.query('SELECT amount FROM Rating', (error: any, results: any) => {
+                if (error) {
+                    reject(new Error("Error fetching all rating"));
+                } else {
+                    const ballots: Rating[] = results as Rating[];
+                    resolve(ballots);
+                }
+            });
+        });
+    }
+
     public static async findById(rating_id: number): Promise<Rating | null> {
         return new Promise((resolve, reject) => {
             connection.query('SELECT * FROM Rating WHERE rating_id = ?', [rating_id], (error: any, results: any) => {

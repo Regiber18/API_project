@@ -3,6 +3,20 @@ import { groupService } from "../services/classServices"
 
 export const getClassAll = async (_req: Request, res: Response) => {
   try {
+    const groups = await groupService.getClassInformation()
+
+    if(groups) {
+      res.status(201).json(groups)
+    }else {
+      res.status(404).json(groups)
+    }
+  }catch(err: any) {
+    res.status(500).json({erro: err.message})
+  }
+}
+
+export const getClassInformation = async (_req: Request, res: Response) => {
+  try {
     const groups = await groupService.getAllClass()
 
     if(groups) {

@@ -15,6 +15,20 @@ export const getReportAll = async (_req: Request, res: Response) => {
   }
 }
 
+export const getTopics = async (_req: Request, res: Response) => {
+  try {
+    const reports = await alumnService.getTopicsReport()
+
+    if(reports) {
+      res.status(201).json(reports)
+    }else {
+      res.status(404).json(reports)
+    }
+  }catch(err: any) {
+    res.status(500).json({erro: err.message})
+  }
+}
+
 export const getReportId = async (req: Request, res: Response) => {
   try {
     const reports = await alumnService.getReportId(parseInt(req.params.report_id, 10))

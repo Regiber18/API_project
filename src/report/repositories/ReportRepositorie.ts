@@ -17,6 +17,19 @@ export class ReportRepository {
     });
   }
 
+  public static async findAllReports(): Promise<Report[]> {
+    return new Promise((resolve, reject) => {
+      connection.query('SELECT topic FROM Report', (error: any, results) => {
+        if (error) {
+          reject(error);
+        } else {
+          const reports: Report[] = results as Report[];
+          resolve(reports);
+        }
+      });
+    });
+  }
+
   public static async findById(report_id: number): Promise<Report | null> {
     return new Promise((resolve, reject) => {
       connection.query('SELECT * FROM Report WHERE report_id = ?', [report_id], (error: any, results) => {

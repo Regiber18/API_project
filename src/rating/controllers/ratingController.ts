@@ -15,6 +15,34 @@ export const getAllRating = async (_req: Request, res: Response) => {
   }
 }
 
+export const getRatingId = async (_req: Request, res: Response) => {
+  try {
+    const alumns = await RatingService.getRatingId()
+
+    if(alumns) {
+      res.status(201).json(alumns) 
+    }else {
+      res.status(404).json(alumns)
+    }
+  }catch(err: any) {
+    res.status(500).json({erro: err.message})
+  }
+}
+
+export const getAmountRating = async (_req: Request, res: Response) => {
+  try {
+    const alumns = await RatingService.getAmountRating()
+
+    if(alumns) {
+      res.status(201).json(alumns) 
+    }else {
+      res.status(404).json(alumns)
+    }
+  }catch(err: any) {
+    res.status(500).json({erro: err.message})
+  }
+}
+
 export const getRatingtId = async (req: Request, res: Response) => {
   try {
     const alumns = await RatingService.getRatingtById(parseInt(req.params.ballot_id, 10))
