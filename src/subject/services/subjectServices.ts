@@ -1,6 +1,7 @@
 import { SubjectRepository } from "../repositories/subjectRepositorie";
 import { DateUtils } from "../../shared/utils/Date";
 import { Subject } from "../models/Subject";
+import { subjectRating } from "../models/subjectRating";
 
 
 export class subjectService {
@@ -27,6 +28,17 @@ export class subjectService {
             subject.created_at = DateUtils.formatDate(new Date());
             subject.updated_at = DateUtils.formatDate(new Date());
             return await SubjectRepository.createSubject(subject);
+        } catch (error: any) {
+            throw new Error(`Error al crear subject: ${error.message}`);
+        }
+    }
+
+    public static async addSubjectRating(subjectRating: subjectRating) {
+        try {
+
+            return await SubjectRepository.createsubjectRating(subjectRating);
+            console.log(subjectRating);
+            
         } catch (error: any) {
             throw new Error(`Error al crear subject: ${error.message}`);
         }

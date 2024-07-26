@@ -43,6 +43,20 @@ export const createSubject = async (req: Request, res: Response) => {
   }
 }
 
+export const createSubjectRating = async (req: Request, res: Response) => {
+  try {
+    const role = await subjectService.addSubjectRating(req.body);
+
+    if(role){
+      res.status(201).json(role);
+    }else{
+      res.status(404).json({ message: 'Algo salio mal' });
+    }
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+}
+
 export const  updateSubject = async (req: Request, res: Response) => {
   try {
     const role = await subjectService.modifySubject(parseInt(req.params.subject_id, 10), req.body);

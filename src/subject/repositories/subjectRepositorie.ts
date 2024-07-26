@@ -1,6 +1,7 @@
 import { ResultSetHeader } from "mysql2";
 import connection from "../../shared/config/database";
 import { Subject } from "../models/Subject";
+import { subjectRating } from "../models/subjectRating";
 
 export class SubjectRepository {
 
@@ -32,6 +33,24 @@ export class SubjectRepository {
         }
       });
     });
+  }
+
+  public static async createsubjectRating(subjectRating: subjectRating): Promise<subjectRating> { //se supone relación muchos a muchos
+    const query = 'INSERT INTO subjectRating (subject_id, rating_id) VALUES (?, ?)';
+    console.log(subjectRating);
+    return new Promise((resolve, reject) => {
+      connection.execute(query, [subjectRating.subject_id, subjectRating.rating_id],(error, result: ResultSetHeader) => {
+        if (error) {
+          reject(error);
+        } else {
+          const createSubjectRatingId = result.insertId;
+          const createSubjectRating: subjectRating = { ...subjectRating, subject_id: createSubjectRatingId};
+          resolve(createSubjectRating);
+
+           return this.createSubject;
+        }
+      });
+    });   
   }
 
   public static async createSubject(subject: Subject): Promise<Subject> {

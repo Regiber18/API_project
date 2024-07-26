@@ -57,7 +57,7 @@ export class BallotService {
             doc.text(`observaciones: ${ballot.observations}`, 1, 7)
 
             const uniqueId = uuidv4(); // uuid para nombre
-            const pdfPath = `boleta_alumno_${ballot.alumn_id}_${uniqueId}.pdf`;
+            const pdfPath = `pdfs/boleta_alumno_${ballot.alumn_id}_${uniqueId}.pdf`;
 
             // Guardar PDF
             doc.save(pdfPath);
@@ -65,9 +65,8 @@ export class BallotService {
             // Generar la URL para el PDF guardado
             ballot.created_at = DateUtils.formatDate(new Date());
             ballot.updated_at = DateUtils.formatDate(new Date());
-            ballot.url = `${urlProject}:${portProject}/pdfs/${pdfPath}`;
+            ballot.url = `${urlProject}:${portProject}/${pdfPath}`;
 
-            // Guardar la boleta en la base de datos
             return await BallotRepository.createBallot(ballot);
         } catch (error: any) {
             throw new Error(`Error al crear boleta: ${error.message}`);
