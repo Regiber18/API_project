@@ -2,6 +2,7 @@ import { BallotRepository } from "../repositories/BallotRepository";
 import { DateUtils } from "../../shared/utils/Date";
 import { Ballot } from "../models/Ballot";
 import * as dotenv from 'dotenv';
+import { v4 as uuidv4 } from 'uuid';
 import  {  jsPDF  }  from  "jspdf" ;
 dotenv.config();
 
@@ -32,67 +33,47 @@ export class BallotService {
     }
 
     public static async addBallot(ballot: Ballot) {
-        const urlProject = process.env.URL; 
-        const portProject = process.env.PORT; 
-
+        const urlProject = process.env.URL;
+        const portProject = process.env.PORT;
         try {
-            
-            const  doc  =  new  jsPDF ({ 
-                orientation : "landscape" , 
-                unit : "in" , 
-                format : [ 4 ,  2 ] 
-              });
-              doc.setFontSize(18);
-              doc.text("SISTEMA EDUCATIVO NACIONAL", 20, 20);
-              doc.text("BOLETA DE EVALUACIÓN", 160, 20);
-            
-              // Nombre del alumno y Nombre de la Escuela
-              doc.setFontSize(12);
-              doc.text(`Nombre del alumno: `, 20, 30);
-              doc.text(`Nombre de la Escuela:`, 160, 30);
-            
-              // Periodo de Evaluación Anual
-              doc.text("Periodo de Evaluación Anual", 20, 40);
-            
-              // Tabla de Calificaciones
-              doc.setFontSize(10);
-              doc.setLineWidth(0.1);
-              doc.rect(20, 50, 170, 10); 
-              doc.text("Periodo", 25, 55);
-              doc.text("Asignatura", 70, 55);
-              doc.text("Calificación", 120, 55);
-              doc.text("Observaciones", 160, 55);
-            
-              doc.rect(20, 60, 170, 10); 
-              doc.text("",25, 65); 
-              // Observaciones
-              doc.text("Sugerencias de los aprendizajes", 25, 85);
-              doc.rect(20, 90, 170, 10);
-              doc.setFontSize(8);
-              doc.text("Firma del docente", 20, 280);
-              doc.text("Nombre y firma de la directora o director", 70, 280);
-              doc.text("Lugar de expedición", 120, 280);
-              doc.text("Fecha de expedición", 160, 280);
-              doc.text("Folio", 20, 285);
-              doc.save ( `pdf alumno_${ballot.alumn_id}.pdf` ) ; 
+            const doc = new jsPDF({
+                orientation: 'portrait',
+                unit: 'in',
+                format: 'letter' // Usa tamaño carta para pruebas
+            });
 
-            const url = `${urlProject}: ${portProject}/pdfs/${doc.save(`pdf alumno_${ballot.alumn_id}.pdf`)}`;  
-            await new Promise<void>((reject, resolve) => {
-                if(url) {
-                    resolve(url)
-                }else {
-                    reject.arguments("error")
-                }
-            })
-            
+            // Texto de prueba
+            doc.setFontSize(18);
+            doc.text("SISTEMA EDUCATIVO NACIONAL", 1, 1);
+            doc.text("BOLETA DE EVALUACIÓN", 1, 2);
+
+            doc.setFontSize(12);
+            doc.text(`Id del alumno: ${ballot.alumn_id} `, 1, 3);
+            doc.text(`Nombre de la Escuela:`, 1, 4);
+
+            doc.text("Periodo de Evaluación Anual", 1, 5);
+            doc.text(`calificción final: ${ballot.rating}`, 1, 6)
+
+            doc.text(`observaciones: ${ballot.observations}`, 1, 7)
+
+            const uniqueId = uuidv4(); // uuid para nombre
+            const pdfPath = `boleta_alumno_${ballot.alumn_id}_${uniqueId}.pdf`;
+
+            // Guardar PDF
+            doc.save(pdfPath);
+
+            // Generar la URL para el PDF guardado
             ballot.created_at = DateUtils.formatDate(new Date());
             ballot.updated_at = DateUtils.formatDate(new Date());
-            ballot.url = url; 
+            ballot.url = `${urlProject}:${portProject}/pdfs/${pdfPath}`;
+
+            // Guardar la boleta en la base de datos
             return await BallotRepository.createBallot(ballot);
         } catch (error: any) {
             throw new Error(`Error al crear boleta: ${error.message}`);
         }
     }
+    
 
     public static async modifyBallot(ballotId: number, ballotData: Ballot): Promise<Ballot | null> {
         try {

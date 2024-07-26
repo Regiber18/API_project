@@ -4,9 +4,10 @@ import { BallotService } from "../services/ballotService"
 export const getAllBallots = async (_req: Request, res: Response) => {
   try {
     const ballots = await BallotService.getAllBallots()
+    
 
     if(ballots) {
-      res.status(201).json(ballots) 
+      res.status(201).json(ballots)
     }else {
       res.status(404).json(ballots)
     }
