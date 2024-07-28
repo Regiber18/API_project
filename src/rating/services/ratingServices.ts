@@ -50,18 +50,41 @@ export class RatingService {
 
     public static async addRating(ballot: Rating): Promise<Rating> {
         try {
+            if(ballot.gradePertenence > 6 || ballot.gradePertenence < 0) {
+                throw new Error("Debe ingrsar un grado valido")
+            }
+
+            if(ballot.amount > 10 || ballot.amount < 0) {
+                throw new Error("Debe se una calificación validad")
+            }
+
             ballot.created_at = DateUtils.formatDate(new Date());
             ballot.updated_at = DateUtils.formatDate(new Date());
     
             const subjectID = await RatingRepository.getIDSUbjectSpanish();
+            const subjectIDMath = await RatingRepository.getIDSUbjectMath()
+            const subjectIDCience = await RatingRepository.getIDSUbjectCience()
+
             const newRating = await RatingRepository.createRating(ballot);
             if (!subjectID) {
                 throw new Error('No se encontró el subject con el nombre "Español".');
             }else {
                 await RatingRepository.createsubjectRating(subjectID, newRating.rating_id);
             }
-            
-            
+
+            if(!subjectIDMath) {
+                throw new Error('No se encontró el subject con el nombre "Matematicas"')
+            }else {
+                await RatingRepository.createsubjectRating(subjectIDMath, newRating.rating_id)
+            }
+
+            if(!subjectIDCience) {
+                console.log("no se encontro");
+                
+            }else {
+
+            }
+
             return newRating;
             
         } catch (error: any) {

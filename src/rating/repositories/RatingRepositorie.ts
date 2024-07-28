@@ -93,6 +93,46 @@ export class RatingRepository {
             );
         });
     }
+
+    public static async getIDSUbjectMath(): Promise<number> {
+        return new Promise((resolve, reject) => {
+            connection.query(
+                'SELECT subject_id FROM Subject WHERE name = "Math" AND deleted = FALSE',
+                (error: any, results: any) => {
+                    if (error) {
+                        reject(new Error("Error fetching subject ID for 'Math': " + error.message));
+                    } else {
+                        if (results.length === 0) {
+                            reject(new Error("No subject found with name 'Math'"));
+                        } else {
+                            const subject_id = (results as any)[0].subject_id;
+                            resolve(subject_id);
+                        }
+                    }
+                }
+            );
+        });
+    }
+
+    public static async getIDSUbjectCience(): Promise<number> {
+        return new Promise((resolve, reject) => {
+            connection.query(
+                'SELECT subject_id FROM Subject WHERE name = "Cience" AND deleted = FALSE',
+                (error: any, results: any) => {
+                    if (error) {
+                        reject(new Error("Error fetching subject ID for 'Spanish': " + error.message));
+                    } else {
+                        if (results.length === 0) {
+                            reject(new Error("No subject found with name 'Cience'"));
+                        } else {
+                            const subject_id = (results as any)[0].subject_id;
+                            resolve(subject_id);
+                        }
+                    }
+                }
+            );
+        });
+    }
     
 
 

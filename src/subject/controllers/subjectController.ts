@@ -48,6 +48,42 @@ export const getSubjectRatingEspañol = async (_req: Request, res: Response) => 
   }
 }
 
+export const getSubjectRatingMath = async (_req: Request, res: Response) => {
+  try {
+    const subjectRatings = await subjectService.getSubjectRatinMath()
+
+    if(subjectRatings) {
+      console.log(subjectRatings);
+      
+      res.status(201).json(subjectRatings)
+    }else {
+      console.log("no");
+      
+      res.status(404).json(subjectRatings)
+    }
+  }catch(err: any) {
+    res.status(500).json({erro: err.message})
+  }
+}
+
+export const getSubjectRatingCience = async (_req: Request, res: Response) => {
+  try {
+    const subjectRatings = await subjectService.getSubjectRatinCience()
+
+    if(subjectRatings) {
+      console.log(subjectRatings);
+      
+      res.status(201).json(subjectRatings)
+    }else {
+      console.log("no");
+      
+      res.status(404).json(subjectRatings)
+    }
+  }catch(err: any) {
+    res.status(500).json({erro: err.message})
+  }
+}
+
 export const getSubjectId = async (req: Request, res: Response) => {
   try {
     const role = await subjectService.getSubjectId(parseInt(req.params.subject_id, 10))
@@ -64,12 +100,9 @@ export const getSubjectId = async (req: Request, res: Response) => {
 
 export const createSubject = async (req: Request, res: Response) => {
   try {
-    const { relations } = req.body; 
-
     const newSubject  = await subjectService.addSubject(req.body as Subject);
 
-      const createSubjectRating = await subjectService.addSubjectRating(newSubject.subject_id, relations)
-    if(newSubject && createSubjectRating){
+    if(newSubject){
       res.status(201).json(newSubject);
     }else{
       res.status(404).json({ message: 'Algo salio mal' });

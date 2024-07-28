@@ -3,7 +3,6 @@ import { DateUtils } from "../../shared/utils/Date";
 import { Subject } from "../models/Subject";
 import { subjectRating } from "../models/subjectRating";
 import { subjectRatingEspañol } from "../models/subjectsRatingEspañol";
-import { ratingIDS } from "../models/ratingIDS";
 
 
 
@@ -33,6 +32,22 @@ export class subjectService {
         }
     }
 
+    public static async getSubjectRatinMath(): Promise<subjectRatingEspañol[]> {
+        try{
+            return await SubjectRepository.getSubjectRatingMath();
+        }catch (error: any){
+            throw new Error(`Error al obtener subject rating matematícas: ${error.message}`);
+        }
+    }
+
+    public static async getSubjectRatinCience(): Promise<subjectRatingEspañol[]> {
+        try{
+            return await SubjectRepository.getSubjectRatingCience();
+        }catch (error: any){
+            throw new Error(`Error al obtener subject rating ciencia: ${error.message}`);
+        }
+    }
+
     public static async getSubjectId(employeeId: number): Promise<Subject | null> {
         try{
             return await SubjectRepository.findById(employeeId);
@@ -47,28 +62,6 @@ export class subjectService {
             subject.created_at = DateUtils.formatDate(new Date());
             subject.updated_at = DateUtils.formatDate(new Date());
             return await SubjectRepository.createSubject(subject);
-        } catch (error: any) {
-            throw new Error(`Error al crear subject: ${error.message}`);
-        }
-    }
-
-    public static async addSubjectRating(subject_id: number, ids: Array<ratingIDS>) {
-        console.log(ids);
-        
-        if (!Array.isArray(ids)) {
-            throw new Error('El parámetro "ids" debe ser un array.');
-        }
-        try {
-            const dates = ids.map(rating => {
-                const subjectRating: subjectRating = {
-                    subject_id : subject_id,
-                    rating_id : rating.rating_id,
-                }
-             
-                 return SubjectRepository.createsubjectRating(subjectRating)
-            })
-            const results = await Promise.all(dates);
-            return results;   
         } catch (error: any) {
             throw new Error(`Error al crear subject: ${error.message}`);
         }

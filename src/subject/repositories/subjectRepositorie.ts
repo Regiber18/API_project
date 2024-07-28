@@ -94,24 +94,6 @@ export class SubjectRepository {
     });
   }
 
-  
-
-  public static async createsubjectRating(subjectRating: subjectRating): Promise<subjectRating> { //se supone relación muchos a muchos
-    const query = 'INSERT INTO SubjectRating (subject_id, rating_id) VALUES (?, ?)';
-    console.log(subjectRating);
-    return new Promise((resolve, reject) => {
-      connection.execute(query, [subjectRating.subject_id, subjectRating.rating_id],(error, result: ResultSetHeader) => {
-        if (error) {
-          reject(error);
-        } else {
-          const createSubjectRatingId = result.insertId;
-          const createSubjectRating: subjectRating = { ...subjectRating, subject_id: createSubjectRatingId};
-          resolve(createSubjectRating);
-        }
-      });
-    });   
-  }
-
   public static async createSubject(subject: Subject): Promise<Subject> {
     const query = 'INSERT INTO Subject (name, created_at, created_by, updated_at, updated_by, deleted) VALUES (?, ?, ?, ?, ?, ?)';
     console.log(subject);
