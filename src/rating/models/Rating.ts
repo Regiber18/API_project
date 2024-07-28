@@ -1,7 +1,9 @@
 export interface Rating {
-    rating_id: number | null;
-    ballot_id: number | null;
+    rating_id: number;
+    ballot_id: number;
     amount: number;
+    pertenence: string;
+    gradePertenence: number,
     created_at: string;
     created_by: string;
     updated_at: string;

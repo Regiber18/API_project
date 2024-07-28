@@ -1,6 +1,7 @@
 import { ResultSetHeader } from "mysql2";
 import connection from "../../shared/config/database";
 import { Rating } from "../models/Rating";
+import { subjectRating } from "../../subject/models/subjectRating";
 
 export class RatingRepository {
 
@@ -60,10 +61,45 @@ export class RatingRepository {
         });
     }
 
-    public static async createRating(rating: Rating): Promise<Rating> {
-        const query = 'INSERT INTO Rating (ballot_id, amount, created_at, created_by, updated_at, updated_by, deleted) VALUES (?, ?, ?, ?, ?, ?, ?)';
+    public static async findSR(): Promise<subjectRating[]> {
         return new Promise((resolve, reject) => {
-            connection.execute(query, [rating.ballot_id, rating.amount, rating.created_at, rating.created_by, rating.updated_at, rating.updated_by, rating.deleted], (error: any, result: ResultSetHeader) => {
+            connection.query('SELECT * FROM SubjectRating', (error: any, results: any) => {
+                if (error) {
+                    reject(new Error("Error fetching all rating"));
+                } else {
+                    const sr: subjectRating[] = results as subjectRating[];
+                    resolve(sr);
+                }
+            });
+        });
+    }
+
+    public static async getIDSUbjectSpanish(): Promise<number> {
+        return new Promise((resolve, reject) => {
+            connection.query(
+                'SELECT subject_id FROM Subject WHERE name = "Spanish" AND deleted = FALSE',
+                (error: any, results: any) => {
+                    if (error) {
+                        reject(new Error("Error fetching subject ID for 'Spanish': " + error.message));
+                    } else {
+                        if (results.length === 0) {
+                            reject(new Error("No subject found with name 'Spanish'"));
+                        } else {
+                            const subject_id = (results as any)[0].subject_id;
+                            resolve(subject_id);
+                        }
+                    }
+                }
+            );
+        });
+    }
+    
+
+
+    public static async createRating(rating: Rating): Promise<Rating> {
+        const query = 'INSERT INTO Rating (ballot_id, amount, pertenence, gradePertenence, created_at, created_by, updated_at, updated_by, deleted) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
+        return new Promise((resolve, reject) => {
+            connection.execute(query, [rating.ballot_id, rating.amount,rating.pertenence, rating.gradePertenence,rating.created_at, rating.created_by, rating.updated_at, rating.updated_by, rating.deleted], (error: any, result: ResultSetHeader) => {
                 if (error) {
                     reject(new Error("Error creating ballot"));
                 } else {
@@ -74,6 +110,24 @@ export class RatingRepository {
             });
         });
     }
+
+
+    public static async createsubjectRating(subject_id: number, rating_id: number): Promise<subjectRating> {
+        const query = 'INSERT INTO SubjectRating (subject_id, rating_id) VALUES (?, ?)';
+        
+        return new Promise((resolve, reject) => {
+            connection.execute(query, [subject_id, rating_id], (error) => {
+                if (error) {
+                    reject(error);
+                } else {
+                    const createSubjectRating: subjectRating = { subject_id, rating_id };
+                    resolve(createSubjectRating);
+                }
+            });
+        });
+    }
+
+  
 
     public static async updateRating(rating_id: number, ballotRating: Rating): Promise<Rating | null> {
         const query = 'UPDATE Rating SET amount = ?, updated_at = ?, updated_by = ?, deleted = ? WHERE rating_id = ? AND deleted = 0';

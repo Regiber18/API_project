@@ -1,12 +1,22 @@
 import { RatingRepository } from "../repositories/RatingRepositorie";
 import { DateUtils } from "../../shared/utils/Date";
 import { Rating } from "../models/Rating";
+import { subjectRating } from "../../subject/models/subjectRating";
 
 export class RatingService {
 
     public static async getAllRating(): Promise<Rating[]> {
         try {
             return await RatingRepository.findAll();
+        } catch (error: any) {
+            throw new Error(`Error al obtener boletas: ${error.message}`);
+        }
+    }
+
+
+    public static async getAllSR(): Promise<subjectRating[]> {
+        try {
+            return await RatingRepository.findSR();
         } catch (error: any) {
             throw new Error(`Error al obtener boletas: ${error.message}`);
         }
@@ -42,12 +52,23 @@ export class RatingService {
         try {
             ballot.created_at = DateUtils.formatDate(new Date());
             ballot.updated_at = DateUtils.formatDate(new Date());
-            return await RatingRepository.createRating(ballot);
+    
+            const subjectID = await RatingRepository.getIDSUbjectSpanish();
+            const newRating = await RatingRepository.createRating(ballot);
+            if (!subjectID) {
+                throw new Error('No se encontró el subject con el nombre "Español".');
+            }else {
+                await RatingRepository.createsubjectRating(subjectID, newRating.rating_id);
+            }
+            
+            
+            return newRating;
+            
         } catch (error: any) {
             throw new Error(`Error al crear rating: ${error.message}`);
         }
     }
-
+    
     public static async modifyRating(ratinId: number, ballotData: Rating): Promise<Rating | null> {
         try {
             const ballotFound = await RatingRepository.findById(ratinId);

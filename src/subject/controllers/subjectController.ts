@@ -1,5 +1,6 @@
 import { Response, Request } from "express"
 import { subjectService } from "../services/subjectServices"
+import { Subject } from "../models/Subject"
 
 export const getSubjectAll = async (_req: Request, res: Response) => {
   try {
@@ -9,6 +10,38 @@ export const getSubjectAll = async (_req: Request, res: Response) => {
       res.status(201).json(role)
     }else {
       res.status(404).json(role)
+    }
+  }catch(err: any) {
+    res.status(500).json({erro: err.message})
+  }
+}
+
+export const getSubjectAllSubjectRating = async (_req: Request, res: Response) => {
+  try {
+    const subjectRating = await subjectService.getAllSubjectRating()
+
+    if(subjectRating) {
+      res.status(201).json(subjectRating)
+    }else {
+      res.status(404).json(subjectRating)
+    }
+  }catch(err: any) {
+    res.status(500).json({erro: err.message})
+  }
+}
+
+export const getSubjectRatingEspañol = async (_req: Request, res: Response) => {
+  try {
+    const subjectRatings = await subjectService.getSubjectRatinSpanish()
+
+    if(subjectRatings) {
+      console.log(subjectRatings);
+      
+      res.status(201).json(subjectRatings)
+    }else {
+      console.log("no");
+      
+      res.status(404).json(subjectRatings)
     }
   }catch(err: any) {
     res.status(500).json({erro: err.message})
@@ -31,24 +64,13 @@ export const getSubjectId = async (req: Request, res: Response) => {
 
 export const createSubject = async (req: Request, res: Response) => {
   try {
-    const role = await subjectService.addSubject(req.body);
+    const { relations } = req.body; 
 
-    if(role){
-      res.status(201).json(role);
-    }else{
-      res.status(404).json({ message: 'Algo salio mal' });
-    }
-  } catch (error: any) {
-    res.status(500).json({ error: error.message });
-  }
-}
+    const newSubject  = await subjectService.addSubject(req.body as Subject);
 
-export const createSubjectRating = async (req: Request, res: Response) => {
-  try {
-    const role = await subjectService.addSubjectRating(req.body);
-
-    if(role){
-      res.status(201).json(role);
+      const createSubjectRating = await subjectService.addSubjectRating(newSubject.subject_id, relations)
+    if(newSubject && createSubjectRating){
+      res.status(201).json(newSubject);
     }else{
       res.status(404).json({ message: 'Algo salio mal' });
     }

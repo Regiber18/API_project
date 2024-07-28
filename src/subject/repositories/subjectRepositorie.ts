@@ -2,6 +2,9 @@ import { ResultSetHeader } from "mysql2";
 import connection from "../../shared/config/database";
 import { Subject } from "../models/Subject";
 import { subjectRating } from "../models/subjectRating";
+import { subjectRatingEspañol } from "../models/subjectsRatingEspañol";
+import { subjectRatingMath } from "../models/subjectRatingMatematicas";
+
 
 export class SubjectRepository {
 
@@ -12,6 +15,19 @@ export class SubjectRepository {
           reject(error);
         } else {
           const subjects: Subject[] = results as Subject[];
+          resolve(subjects);
+        }
+      });
+    });
+  }
+
+  public static async findAllSubjectRating(): Promise<subjectRating[]> {
+    return new Promise((resolve, reject) => {
+      connection.query('SELECT * FROM SubjectRating', (error: any, results) => {
+        if (error) {
+          reject(error);
+        } else {
+          const subjects: subjectRating[] = results as subjectRating[];
           resolve(subjects);
         }
       });
@@ -34,9 +50,54 @@ export class SubjectRepository {
       });
     });
   }
+  //iner de calificaciones por materia
+
+  public static async getSubjectRatingSpanish(): Promise<subjectRatingEspañol[]> {
+    return new Promise((resolve, reject) => {
+      connection.query('SELECT r.rating_id, r.amount, r.pertenence, r.gradePertenence, sr.subject_id, s.name AS subject_name FROM Rating r JOIN SubjectRating sr ON r.rating_id = sr.rating_id JOIN Subject s ON sr.subject_id = s.subject_id WHERE r.pertenence = "Spanish"'
+        , (error: any, results) => {
+        if (error) {
+          reject(error);
+        } else {
+          const ratings: subjectRatingEspañol[] = results as subjectRatingEspañol[];
+          resolve(ratings);
+        }
+      });
+    });
+  }
+
+  public static async getSubjectRatingMath(): Promise<subjectRatingMath[]> {
+    return new Promise((resolve, reject) => {
+      connection.query('SELECT r.rating_id, r.amount, r.pertenence, r.gradePertenence, sr.subject_id, s.name AS subject_name FROM Rating r JOIN SubjectRating sr ON r.rating_id = sr.rating_id JOIN Subject s ON sr.subject_id = s.subject_id WHERE r.pertenence = "Math" AND r.deleted = 0'
+        , (error: any, results) => {
+        if (error) {
+          reject(error);
+        } else {
+          const ratings: subjectRatingMath[] = results as subjectRatingMath[];
+          resolve(ratings);
+        }
+      });
+    });
+  }
+
+  public static async getSubjectRatingCience(): Promise<subjectRatingMath[]> {
+    return new Promise((resolve, reject) => {
+      connection.query('SELECT r.rating_id, r.amount, r.pertenence, r.gradePertenence, sr.subject_id, s.name AS subject_name FROM Rating r JOIN SubjectRating sr ON r.rating_id = sr.rating_id JOIN Subject s ON sr.subject_id = s.subject_id WHERE r.pertenence = "Cience" AND r.deleted = 0'
+        , (error: any, results) => {
+        if (error) {
+          reject(error);
+        } else {
+          const ratings: subjectRatingMath[] = results as subjectRatingMath[];
+          resolve(ratings);
+        }
+      });
+    });
+  }
+
+  
 
   public static async createsubjectRating(subjectRating: subjectRating): Promise<subjectRating> { //se supone relación muchos a muchos
-    const query = 'INSERT INTO subjectRating (subject_id, rating_id) VALUES (?, ?)';
+    const query = 'INSERT INTO SubjectRating (subject_id, rating_id) VALUES (?, ?)';
     console.log(subjectRating);
     return new Promise((resolve, reject) => {
       connection.execute(query, [subjectRating.subject_id, subjectRating.rating_id],(error, result: ResultSetHeader) => {
@@ -46,8 +107,6 @@ export class SubjectRepository {
           const createSubjectRatingId = result.insertId;
           const createSubjectRating: subjectRating = { ...subjectRating, subject_id: createSubjectRatingId};
           resolve(createSubjectRating);
-
-           return this.createSubject;
         }
       });
     });   
