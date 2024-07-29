@@ -141,10 +141,10 @@ export class RatingRepository {
                 'SELECT subject_id FROM Subject WHERE name = "Science" AND deleted = FALSE',
                 (error: any, results: any) => {
                     if (error) {
-                        reject(new Error("Error fetching subject ID for 'Spanish': " + error.message));
+                        reject(new Error("Error fetching subject ID for 'Science': " + error.message));
                     } else {
                         if (results.length === 0) {
-                            reject(new Error("No subject found with name 'Cience'"));
+                            reject(new Error("No subject found with name 'Science'"));
                         } else {
                             const subject_id = (results as any)[0].subject_id;
                             resolve(subject_id);

@@ -91,7 +91,7 @@ export class RatingService {
             }
 
             if(!subjectIDCience) {
-                console.log("no se encontro");
+                throw new Error("no se encontro")
                 
             }else {
                 await RatingRepository.createsubjectRating(subjectIDCience, newRating.rating_id)
