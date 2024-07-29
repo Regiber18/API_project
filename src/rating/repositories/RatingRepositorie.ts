@@ -158,9 +158,9 @@ export class RatingRepository {
 
 
     public static async createRating(rating: Rating): Promise<Rating> {
-        const query = 'INSERT INTO Rating ( amount, pertenence, gradePertenence, created_at, created_by, updated_at, updated_by, deleted) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+        const query = 'INSERT INTO Rating (alumn_id, amount, pertenence, gradePertenence, created_at, created_by, updated_at, updated_by, deleted) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
         return new Promise((resolve, reject) => {
-            connection.execute(query, [ rating.amount,rating.pertenence, rating.gradePertenence,rating.created_at, rating.created_by, rating.updated_at, rating.updated_by, rating.deleted], (error: any, result: ResultSetHeader) => {
+            connection.execute(query, [ rating.alumn_id,rating.amount,rating.pertenence, rating.gradePertenence,rating.created_at, rating.created_by, rating.updated_at, rating.updated_by, rating.deleted], (error: any, result: ResultSetHeader) => {
                 if (error) {
                     reject(new Error("Error creating ballot"));
                 } else {
@@ -191,9 +191,9 @@ export class RatingRepository {
   
 
     public static async updateRating(rating_id: number, ballotRating: Rating): Promise<Rating | null> {
-        const query = 'UPDATE Rating SET amount = ?, updated_at = ?, updated_by = ?, deleted = ? WHERE rating_id = ? AND deleted = 0';
+        const query = 'UPDATE Rating SET alumn_id = ?, amount = ?, updated_at = ?, updated_by = ?, deleted = ? WHERE rating_id = ? AND deleted = 0';
         return new Promise((resolve, reject) => {
-            connection.execute(query, [ballotRating.amount, ballotRating.updated_at, ballotRating.updated_by, ballotRating.deleted, rating_id], (error: any, result: ResultSetHeader) => {
+            connection.execute(query, [ballotRating.alumn_id ,ballotRating.amount, ballotRating.updated_at, ballotRating.updated_by, ballotRating.deleted, rating_id], (error: any, result: ResultSetHeader) => {
                 if (error) {
                     reject(new Error("Error updating ballot"));
                 } else {

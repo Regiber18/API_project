@@ -1,9 +1,9 @@
 import { Router } from "express";
-import {    getAllMount ,getRatingId, getAmountRating, getRatingtId, getAllsr,createRating, updateRating, deleteRating  } from "../controllers/ratingController";
+import {    getAllRating,getAllMount ,getRatingId, getAmountRating, getRatingtId, getAllsr,createRating, updateRating, deleteRating  } from "../controllers/ratingController";
 /*import { authMiddleware } from "../../shared/middlewares/auth";*/
 const ratingRoutes: Router = Router();
 
-ratingRoutes.get('/', getAllMount); 
+ratingRoutes.get('/', getAllRating); 
 ratingRoutes.get('/:rating_id', getRatingtId); 
 ratingRoutes.get('/getRatingId', getRatingId)
 ratingRoutes.get('/getAmount', getAmountRating)

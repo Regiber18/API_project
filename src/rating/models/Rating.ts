@@ -1,5 +1,6 @@
 export interface Rating {
     rating_id: number;
+    alumn_id: number; 
     amount: number;
     pertenence: string;
     gradePertenence: number,
