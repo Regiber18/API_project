@@ -138,7 +138,7 @@ export class RatingRepository {
     public static async getIDSUbjectCience(): Promise<number> {
         return new Promise((resolve, reject) => {
             connection.query(
-                'SELECT subject_id FROM Subject WHERE name = "Cience" AND deleted = FALSE',
+                'SELECT subject_id FROM Subject WHERE name = "Science" AND deleted = FALSE',
                 (error: any, results: any) => {
                     if (error) {
                         reject(new Error("Error fetching subject ID for 'Spanish': " + error.message));
