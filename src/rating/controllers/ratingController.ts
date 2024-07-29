@@ -72,6 +72,20 @@ export const getRatingtId = async (req: Request, res: Response) => {
   }
 }
 
+export const getAllMount = async (_req: Request, res: Response) => {
+  try {
+    const ratingsAmount = await RatingService.getAllSpanishMount()
+
+    if(ratingsAmount) {
+      res.status(201).json(ratingsAmount) 
+    }else {
+      res.status(404).json(ratingsAmount)
+    }
+  }catch(err: any) {
+    res.status(500).json({erro: err.message})
+  }
+}
+
 export const createRating = async (req: Request, res: Response) => {
   try {
     const newEmployee = await RatingService.addRating(req.body);

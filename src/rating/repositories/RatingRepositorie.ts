@@ -2,6 +2,7 @@ import { ResultSetHeader } from "mysql2";
 import connection from "../../shared/config/database";
 import { Rating } from "../models/Rating";
 import { subjectRating } from "../../subject/models/subjectRating";
+import { AmountSpanish } from "../models/AmountSpanish";
 
 export class RatingRepository {
 
@@ -74,6 +75,26 @@ export class RatingRepository {
         });
     }
 
+    public static async getDataSpanish(): Promise<AmountSpanish[]> {
+        return new Promise((resolve, reject) => {
+            connection.query(
+                'SELECT r.amount  FROM Rating r JOIN SubjectRating sr ON r.rating_id = sr.rating_id JOIN Subject s ON sr.subject_id = s.subject_id WHERE r.pertenence = "Spanish" AND r.deleted = 0 AND s.name = "Spanish"',
+                (error: any, results: any) => {
+                    if (error) {
+                        reject(new Error("Error fetching subject ID for 'Spanish': " + error.message));
+                    } else {
+                        if (results.length === 0) {
+                            reject(new Error("No subject found with name 'Spanish'"));
+                        } else {
+                            const ballots: AmountSpanish[] = results as AmountSpanish[];
+                            resolve(ballots);
+                        }
+                    }
+                }
+            );
+        });  
+    }
+
     public static async getIDSUbjectSpanish(): Promise<number> {
         return new Promise((resolve, reject) => {
             connection.query(
@@ -137,9 +158,9 @@ export class RatingRepository {
 
 
     public static async createRating(rating: Rating): Promise<Rating> {
-        const query = 'INSERT INTO Rating (ballot_id, amount, pertenence, gradePertenence, created_at, created_by, updated_at, updated_by, deleted) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
+        const query = 'INSERT INTO Rating ( amount, pertenence, gradePertenence, created_at, created_by, updated_at, updated_by, deleted) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
         return new Promise((resolve, reject) => {
-            connection.execute(query, [rating.ballot_id, rating.amount,rating.pertenence, rating.gradePertenence,rating.created_at, rating.created_by, rating.updated_at, rating.updated_by, rating.deleted], (error: any, result: ResultSetHeader) => {
+            connection.execute(query, [ rating.amount,rating.pertenence, rating.gradePertenence,rating.created_at, rating.created_by, rating.updated_at, rating.updated_by, rating.deleted], (error: any, result: ResultSetHeader) => {
                 if (error) {
                     reject(new Error("Error creating ballot"));
                 } else {

@@ -1,6 +1,5 @@
 export interface Rating {
     rating_id: number;
-    ballot_id: number;
     amount: number;
     pertenence: string;
     gradePertenence: number,

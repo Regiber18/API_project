@@ -2,6 +2,7 @@ import { RatingRepository } from "../repositories/RatingRepositorie";
 import { DateUtils } from "../../shared/utils/Date";
 import { Rating } from "../models/Rating";
 import { subjectRating } from "../../subject/models/subjectRating";
+import { AmountSpanish } from "../models/AmountSpanish";
 
 export class RatingService {
 
@@ -9,7 +10,7 @@ export class RatingService {
         try {
             return await RatingRepository.findAll();
         } catch (error: any) {
-            throw new Error(`Error al obtener boletas: ${error.message}`);
+            throw new Error(`Error al obtener ratings: ${error.message}`);
         }
     }
 
@@ -18,7 +19,7 @@ export class RatingService {
         try {
             return await RatingRepository.findSR();
         } catch (error: any) {
-            throw new Error(`Error al obtener boletas: ${error.message}`);
+            throw new Error(`Error al obtener subjectRating: ${error.message}`);
         }
     }
 
@@ -48,6 +49,16 @@ export class RatingService {
         }
     }
 
+    public static async getAllSpanishMount(): Promise<AmountSpanish[]> {
+        try {
+            return await RatingRepository.getDataSpanish();
+        } catch (error: any) {
+            throw new Error(`Error al obtener al obtener el amount: ${error.message}`);
+        }
+    }
+
+
+
     public static async addRating(ballot: Rating): Promise<Rating> {
         try {
             if(ballot.gradePertenence > 6 || ballot.gradePertenence < 0) {
@@ -64,6 +75,7 @@ export class RatingService {
             const subjectID = await RatingRepository.getIDSUbjectSpanish();
             const subjectIDMath = await RatingRepository.getIDSUbjectMath()
             const subjectIDCience = await RatingRepository.getIDSUbjectCience()
+
 
             const newRating = await RatingRepository.createRating(ballot);
             if (!subjectID) {
@@ -82,7 +94,7 @@ export class RatingService {
                 console.log("no se encontro");
                 
             }else {
-
+                await RatingRepository.createsubjectRating(subjectIDCience, newRating.rating_id)
             }
 
             return newRating;
