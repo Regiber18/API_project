@@ -4,6 +4,7 @@ import { Subject } from "../models/Subject";
 import { subjectRating } from "../models/subjectRating";
 import { subjectRatingEspañol } from "../models/subjectsRatingEspañol";
 import { subjectRatingMath } from "../models/subjectRatingMatematicas";
+import { subjectRatingCience } from "../models/subjectRatingCience";
 
 
 export class SubjectRepository {
@@ -80,14 +81,14 @@ export class SubjectRepository {
     });
   }
 
-  public static async getSubjectRatingCience(): Promise<subjectRatingMath[]> {
+  public static async getSubjectRatingCience(): Promise<subjectRatingCience[]> {
     return new Promise((resolve, reject) => {
       connection.query('SELECT r.rating_id, r.alumn_id,r.amount, r.pertenence, r.gradePertenence, sr.subject_id, s.name AS subject_name FROM Rating r JOIN SubjectRating sr ON r.rating_id = sr.rating_id JOIN Subject s ON sr.subject_id = s.subject_id WHERE r.pertenence = "Science" AND r.deleted = 0 AND s.name = "Science"'
         , (error: any, results) => {
         if (error) {
           reject(error);
         } else {
-          const ratings: subjectRatingMath[] = results as subjectRatingMath[];
+          const ratings: subjectRatingCience[] = results as subjectRatingCience[];
           resolve(ratings);
         }
       });
