@@ -68,7 +68,7 @@ export class SubjectRepository {
 
   public static async getSubjectRatingMath(): Promise<subjectRatingMath[]> {
     return new Promise((resolve, reject) => {
-      connection.query('SELECT r.rating_id, r.alumn-id,r.amount, r.pertenence, r.gradePertenence, sr.subject_id, s.name AS subject_name FROM Rating r JOIN SubjectRating sr ON r.rating_id = sr.rating_id JOIN Subject s ON sr.subject_id = s.subject_id WHERE r.pertenence = "Math" AND r.deleted = 0 AND s.name = "Math"'
+      connection.query('SELECT r.rating_id, r.alumn_id,r.amount, r.pertenence, r.gradePertenence, sr.subject_id, s.name AS subject_name FROM Rating r JOIN SubjectRating sr ON r.rating_id = sr.rating_id JOIN Subject s ON sr.subject_id = s.subject_id WHERE r.pertenence = "Math" AND r.deleted = 0 AND s.name = "Math"'
         , (error: any, results) => {
         if (error) {
           reject(error);
@@ -82,7 +82,7 @@ export class SubjectRepository {
 
   public static async getSubjectRatingCience(): Promise<subjectRatingMath[]> {
     return new Promise((resolve, reject) => {
-      connection.query('SELECT r.rating_id, r.alumn_id,r.amount, r.pertenence, r.gradePertenence, sr.subject_id, s.name AS subject_name FROM Rating r JOIN SubjectRating sr ON r.rating_id = sr.rating_id JOIN Subject s ON sr.subject_id = s.subject_id WHERE r.pertenence = "Cience" AND r.deleted = 0 AND s.name = "Cience"'
+      connection.query('SELECT r.rating_id, r.alumn_id,r.amount, r.pertenence, r.gradePertenence, sr.subject_id, s.name AS subject_name FROM Rating r JOIN SubjectRating sr ON r.rating_id = sr.rating_id JOIN Subject s ON sr.subject_id = s.subject_id WHERE r.pertenence = "Science" AND r.deleted = 0 AND s.name = "Science"'
         , (error: any, results) => {
         if (error) {
           reject(error);
