@@ -31,6 +31,7 @@ export class BallotService {
             throw new Error(`Error al encontrar boleta: ${error.message}`);
         }
     }
+    
 
     public static async addBallot(ballot: Ballot) {
         const urlProject = process.env.URL;
@@ -48,18 +49,16 @@ export class BallotService {
             doc.text("BOLETA DE EVALUACIÓN", 1, 2);
 
             doc.setFontSize(12);
-            doc.text(`Id del alumno: ${ballot.alumn_id} `, 1, 3);
-            doc.text(`Nombre de la Escuela:`, 1, 4);
+            doc.text(`Numero de lista del alumno: ${ballot.alumn_id} `, 1, 3);
+            doc.text(`Nombre de la Escuela: Chiapa Unida`, 1, 4);
 
-            doc.text("Periodo de Evaluación Anual", 1, 5);
+            doc.text("Periodo de Evaluación Anual: ", 1, 5);
             doc.text(`calificción final: ${ballot.rating}`, 1, 6)
 
             doc.text(`observaciones: ${ballot.observations}`, 1, 7)
 
             const uniqueId = uuidv4(); // uuid para nombre
             const pdfPath = `pdfs/boleta_alumno_${ballot.alumn_id}_${uniqueId}.pdf`;
-
-            // Guardar PDF
             doc.save(pdfPath);
 
             // Generar la URL para el PDF guardado

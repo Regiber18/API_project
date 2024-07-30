@@ -21,7 +21,6 @@ export class alumnService {
         }
     }
 
-
     public static async getAlumnId(employeeId: number): Promise<Alumns | null> {
         try{
             return await AlumnRepository.findById(employeeId);

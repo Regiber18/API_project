@@ -4,7 +4,8 @@ export interface Personal {
     role_id: number;
     name: string;
     lastName: string;
-    password: string; 
+    password: string;
+    url: string;    
     created_at: string;
     created_by: string;
     updated_at: string;
