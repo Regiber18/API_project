@@ -44,6 +44,9 @@ export class personalServices {
 
     public static async modifyPersonal(personalId: number, personalData: Personal, alumnos: AlumnData[]) {
         try {
+            const urlProject = process.env.URL;
+            const portProject = process.env.PORT;
+
             // Buscar el registro personal
             const personalFound = await PersonalRepository.findById(personalId);
 
@@ -72,7 +75,7 @@ export class personalServices {
                 if (!alumnos || alumnos.length === 0) {
                     throw new Error('No se encontraron alumnos');
                 }
-                
+
                 const doc = new jsPDF({
                     orientation: 'portrait',
                     unit: 'in',
@@ -129,7 +132,8 @@ export class personalServices {
         
                 const pdfPath = `pdfs/lista_asistencia_Grupo${personalData.class_id || 'unknown'}A_maestro_${personalData.name}${personalData.lastName}.pdf`;
                 doc.save(pdfPath); 
-                personalFound.url = pdfPath;
+
+                personalFound.url = `${urlProject}:${portProject}/${pdfPath}`;
             } else {
                 throw new Error("No se le puede agregar una lista de asistencia");
             }
