@@ -131,32 +131,51 @@ export class personalServices {
         
                 const pdfPath = `pdfs/lista_asistencia_Grupo${personalData.class_id || 'unknown'}A_maestro_${personalData.name}${personalData.lastName}.pdf`;
                 doc.save(pdfPath); 
+                const url = `${urlProject}:${portProject}/${pdfPath}`;
+                personalFound.url = url;
 
-                personalData.url = `${urlProject}:${portProject}/${pdfPath}`;
-                console.log(personalFound.url);
-                
+                const salt = await bcrypt.genSalt(saltRounds);
+        
+                if (personalData.name) {
+                    personalFound.name = personalData.name;
+                }
+                if (personalData.lastName) {
+                    personalFound.lastName = personalData.lastName;
+                }
+                if (personalData.password) {
+                    personalFound.password = await bcrypt.hash(personalData.password, salt);
+                }
+                if (personalData.deleted !== undefined) {
+                    personalFound.deleted = personalData.deleted;
+                }
+            
+                personalFound.updated_by = personalData.updated_by;
+                personalFound.updated_at = DateUtils.formatDate(new Date());
+            
+                return await PersonalRepository.updatePersonal(personalId, personalFound);
+
             } else {
-                throw new Error("No se le puede agregar una lista de asistencia");
-            }
-            const salt = await bcrypt.genSalt(saltRounds);
+                const salt = await bcrypt.genSalt(saltRounds);
         
-            if (personalData.name) {
-                personalFound.name = personalData.name;
+                if (personalData.name) {
+                    personalFound.name = personalData.name;
+                }
+                if (personalData.lastName) {
+                    personalFound.lastName = personalData.lastName;
+                }
+                if (personalData.password) {
+                    personalFound.password = await bcrypt.hash(personalData.password, salt);
+                }
+                if (personalData.deleted !== undefined) {
+                    personalFound.deleted = personalData.deleted;
+                }
+            
+                personalFound.updated_by = personalData.updated_by;
+                personalFound.updated_at = DateUtils.formatDate(new Date());
+            
+                return await PersonalRepository.updatePersonal(personalId, personalFound);
             }
-            if (personalData.lastName) {
-                personalFound.lastName = personalData.lastName;
-            }
-            if (personalData.password) {
-                personalFound.password = await bcrypt.hash(personalData.password, salt);
-            }
-            if (personalData.deleted !== undefined) {
-                personalFound.deleted = personalData.deleted;
-            }
-        
-            personalFound.updated_by = personalData.updated_by;
-            personalFound.updated_at = DateUtils.formatDate(new Date());
-        
-            return await PersonalRepository.updatePersonal(personalId, personalFound);
+
         } catch (error: any) {
             throw new Error(`Error al actualizar el registro personal: ${error.message}`);
         }
