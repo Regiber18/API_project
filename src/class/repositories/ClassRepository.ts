@@ -19,7 +19,7 @@ export class GroupRepository {
 
     public static async findClass(): Promise<Class[]> {
         return new Promise((resolve, reject) => {
-            connection.query('SELECT className, classGrade FROM Class', (error: any, results: any[])  => {
+            connection.query('SELECT className, classGrade, class_id FROM Class', (error: any, results: any[])  => {
                 if(error) {
                     reject(error); // Manejar error correctamente
                 } else {

@@ -1,3 +1,5 @@
+import { AlumnData } from "./AlumnData";
+
 export interface Personal {
     personal_id: number | null;
     class_id: number | null;
@@ -5,6 +7,7 @@ export interface Personal {
     name: string;
     lastName: string;
     password: string;
+    alumns: AlumnData[]
     url?: string;    
     created_at: string;
     created_by: string;

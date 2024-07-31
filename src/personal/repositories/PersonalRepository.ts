@@ -6,7 +6,7 @@ export class PersonalRepository {
 
     public static async findAll(): Promise<Personal[]> {
         return new Promise((resolve, reject) => {
-            connection.query('SELECT personal_id, name, url FROM Personal', (error: any, results)  => {
+            connection.query('SELECT personal_id, name, url, alumns FROM Personal', (error: any, results)  => {
                 if(error) {
                     reject("error")
                 }else {
@@ -37,10 +37,10 @@ export class PersonalRepository {
     } 
 
     public static async createPersonal(personal: Personal): Promise<Personal> {
-        const query = 'INSERT INTO Personal(class_id, role_id, name, lastName, url, password, created_at, created_by, updated_at, updated_by, deleted) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+        const query = 'INSERT INTO Personal(class_id, role_id, name, lastName, url, password,alumns, created_at, created_by, updated_at, updated_by, deleted) VALUES (?, ?,?, ?, ?, ?, ?, ?, ?, ?, ?,?)';
         console.log(personal);
         return new Promise((resolve, reject) => {
-          connection.execute(query, [personal.class_id, personal.role_id, personal.name, personal.lastName, personal.url,personal.password , personal.created_at, personal.created_by, personal.updated_at, personal.updated_by, personal.deleted], (error, result: ResultSetHeader) => {
+          connection.execute(query, [personal.class_id, personal.role_id, personal.name, personal.lastName, personal.url,personal.password ,personal.alumns ,personal.created_at, personal.created_by, personal.updated_at, personal.updated_by, personal.deleted], (error, result: ResultSetHeader) => {
             if (error) {
                 reject(error);
             } else {
@@ -52,23 +52,19 @@ export class PersonalRepository {
         });
       }
 
-    public static async updatePersonal(personal_id: number, personalData: Personal): Promise<Personal | null> {
-        const query = 'UPDATE Personal SET name = ?, lastName = ?, password = ?, url = ?, updated_at = ?, updated_by = ?, deleted = ? WHERE personal_id = ? AND deleted = 0';
+      public static async updatePersonal(personalData: Personal): Promise<Personal | null> {
+        const query = 'UPDATE Personal SET name = ?, lastName = ?, alumns = ?, password = ?, url = ?, updated_at = ?, updated_by = ?, deleted = ? WHERE name = ? AND lastName = ? AND deleted = 0';
         return new Promise((resolve, reject) => {
-          connection.execute(query, [personalData.name, personalData.lastName ,personalData.password,personalData.url ,personalData.updated_at, personalData.updated_by,personalData.deleted, personal_id], (error, result: ResultSetHeader) => {
-            if (error) {
-              reject(error);
-            } else {
-              if (result.affectedRows > 0) {
-                const updatePersonal: Personal = { ...personalData, personal_id: personal_id };
-                resolve(updatePersonal);
-              } else {
-                resolve(null);
-              }
-            }
-          });
+            connection.execute(query, [personalData.name, personalData.lastName, personalData.alumns, personalData.password, personalData.url, personalData.updated_at, personalData.updated_by, personalData.deleted, personalData.name, personalData.lastName], (error, result: ResultSetHeader) => {
+                if (error) {
+                    reject(error);
+                } else {
+                    resolve(result.affectedRows > 0 ? { ...personalData } : null);
+                }
+            });
         });
-      }
+    }
+    
 
       public static async deletePersonal(personal_id: number): Promise<boolean> {
         const query = 'DELETE FROM Personal WHERE personal_id = ?';
