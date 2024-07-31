@@ -88,7 +88,7 @@ export class personalServices {
                 doc.text('Lista de Alumnos', 0.5, 1);
                 doc.setFontSize(14);
                 doc.text(`Escuela Chiapa Unida - Clase ${personalFound.class_id}A`, 0.5, 1.5);
-                doc.text(`Maestro: ${personalData.name || 'Desconocido'}`, 0.5, 2); 
+                doc.text(`Maestro: ${personalData.name || 'Desconocido'} ${personalData.lastName}`, 0.5, 2); 
         
                 const startX = 0.5; 
                 const startY = 2.25;
@@ -127,13 +127,14 @@ export class personalServices {
                 //     return acc + width;
                 // }, 0);
         
-                // Línea vertical al final de la tabla (opcional)
                 // doc.line(startX + columnWidths.reduce((a, b) => a + b, 0) + 0.1, startY - 0.1, startX + columnWidths.reduce((a, b) => a + b, 0) + 0.1, currentY);
         
                 const pdfPath = `pdfs/lista_asistencia_Grupo${personalData.class_id || 'unknown'}A_maestro_${personalData.name}${personalData.lastName}.pdf`;
                 doc.save(pdfPath); 
 
                 personalFound.url = `${urlProject}:${portProject}/${pdfPath}`;
+                console.log(personalFound.url);
+                
             } else {
                 throw new Error("No se le puede agregar una lista de asistencia");
             }
