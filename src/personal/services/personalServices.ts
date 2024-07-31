@@ -132,7 +132,7 @@ export class personalServices {
                 const pdfPath = `pdfs/lista_asistencia_Grupo${personalData.class_id || 'unknown'}A_maestro_${personalData.name}${personalData.lastName}.pdf`;
                 doc.save(pdfPath); 
 
-                personalFound.url = `${urlProject}:${portProject}/${pdfPath}`;
+                personalData.url = `${urlProject}:${portProject}/${pdfPath}`;
                 console.log(personalFound.url);
                 
             } else {
