@@ -9,7 +9,7 @@ routePersonal.post('/login', loginPersonal)
 routePersonal.get('/', getPersonalAll);
 routePersonal.post('/', createPersonal);
 routePersonal.get('/:personal_id', authMiddleware, getPersonalId);
-routePersonal.put('/:personal_id', upload.single('productImage'), updatePersonal)
+routePersonal.put('/:personal_id', upload.single('pdfs'), updatePersonal)
 routePersonal.delete('/:personal_id', deletePersonal)
 
 export default routePersonal; 
