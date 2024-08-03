@@ -1,5 +1,5 @@
 import { Response, Request } from "express"
-import { personalServices } from "../services/personalServices"
+import { PersonalServices } from "../services/personalServices"
 import jwt from 'jsonwebtoken';
 const secretKey = process.env.SECRET || "";
 import { PersonalPayload } from '../../shared/config/types/personalPayload';
@@ -8,7 +8,7 @@ import { AlumnData } from "../models/AlumnData";
 
 export const getPersonalAll = async (_req: Request, res: Response) => {
   try {
-    const personal = await personalServices.getAllPersonal()
+    const personal = await PersonalServices.getAllPersonal()
 
     if(personal) {
       res.status(201).json(personal)
@@ -22,7 +22,7 @@ export const getPersonalAll = async (_req: Request, res: Response) => {
 
 export const getPersonalId = async (req: Request, res: Response) => {
   try {
-    const personals = await personalServices.getPersonalById(parseInt(req.params.personal_name, 10))
+    const personals = await PersonalServices.getPersonalById(parseInt(req.params.personal_name, 10))
 
     if(personals) {
       res.status(201).json(personals)
@@ -36,7 +36,7 @@ export const getPersonalId = async (req: Request, res: Response) => {
 
 export const createPersonal = async (req: Request, res: Response) => {
   try {
-    const newEmployee = await personalServices.addPersonal(req.body);
+    const newEmployee = await PersonalServices.addPersonal(req.body);
     if(newEmployee){
       res.status(201).json(newEmployee);
     }else{
@@ -47,26 +47,33 @@ export const createPersonal = async (req: Request, res: Response) => {
   }
 }
 
+
+
 export const updatePersonal = async (req: Request, res: Response) => {
   try {
-    const personalId = parseInt(req.params.personal_id, 10);
-    const personalData = req.body.personalData;
-    const alumnos: AlumnData[] = req.body.alumnos || [];
-    const updatedEmployee = await personalServices.modifyPersonal(personalId, personalData, alumnos);
-    
-    if (updatedEmployee) {
-      res.status(200).json(updatedEmployee);
-    } else {
-      res.status(404).json({ message: 'Algo salió mal' });
+    if (!req.file) {
+      return res.status(400).send('No file uploaded.');
     }
+    
+      const personalId = parseInt(req.params.personal_id, 10);
+      const personalData = req.body.personalData;
+      const alumnos: AlumnData[] = req.body.alumnos || [];
+      const updatedEmployee = await PersonalServices.modifyPersonal(personalId, personalData, alumnos, req.file);
+
+      if (updatedEmployee) {
+          res.status(200).json(updatedEmployee);
+      } else {
+          res.status(404).json({ message: 'Record not found' });
+      }
   } catch (error: any) {
-    res.status(500).json({ error: error.message });
+      res.status(500).json({ error: error.message });
   }
 };
 
+
 export const deletePersonal = async (req: Request, res: Response) => {
   try {
-    const deleted = await personalServices.deletePersonal(parseInt(req.params.personal_id, 10));
+    const deleted = await PersonalServices.deletePersonal(parseInt(req.params.personal_id, 10));
 
     if(deleted) {
       res.status(201).json({message: "salio bien"})
@@ -81,7 +88,7 @@ export const deletePersonal = async (req: Request, res: Response) => {
 export const loginPersonal = async (req: Request, res: Response) => {
     const { name, password } = req.body;
     try {
-        const result = await personalServices.login(name, password);  
+        const result = await PersonalServices.login(name, password);  
 
         if (!result) {
             return res.status(401).json({ message: 'Nombre de usuario o contraseña inválidos' });

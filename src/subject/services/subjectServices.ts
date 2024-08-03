@@ -48,6 +48,14 @@ export class subjectService {
         }
     }
 
+    public static async getAMountFinal() {
+        try{
+
+        }catch(error: any) {
+            throw new Error(error)
+        }
+    }
+
     public static async getSubjectId(employeeId: number): Promise<Subject | null> {
         try{
             return await SubjectRepository.findById(employeeId);

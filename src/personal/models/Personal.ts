@@ -7,8 +7,8 @@ export interface Personal {
     name: string;
     lastName: string;
     password: string;
-    alumns: AlumnData[]
-    url?: string;    
+    alumns: AlumnData[] //no está bien
+    url?: string[];    
     created_at: string;
     created_by: string;
     updated_at: string;
