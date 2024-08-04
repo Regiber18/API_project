@@ -2,6 +2,7 @@ import { Response, Request } from "express";
 import { PersonalServices } from "../services/personalServices";
 import jwt from 'jsonwebtoken';
 import path from 'path';
+import fs from 'fs';
 import { PersonalPayload } from '../../shared/config/types/personalPayload';
 import { AlumnData } from "../models/AlumnData";
 import { Personal } from "../models/Personal";
@@ -10,7 +11,7 @@ import puppeteer from 'puppeteer';
 const secretKey = process.env.SECRET || "";
 const generateScreenshot = async (url: string, outputPath: string) => {
     const browser = await puppeteer.launch({
-        executablePath: '/usr/bin/chromium-browser', // Actualiza la ruta si es necesario
+        executablePath: '/usr/bin/chromium-browser', 
         args: ['--no-sandbox', '--disable-setuid-sandbox']
     });
     const page = await browser.newPage();
@@ -64,26 +65,30 @@ export const updatePersonal = async (req: Request, res: Response) => {
         const personalData: Personal = req.body.personalData;
         const alumnos: AlumnData[] = req.body.alumnos || [];
         const asistencia: { alumn_id: number, attended: boolean }[] = req.body.asistencia || [];
-        const urlString = personalData.url;
-
-        if (!urlString) {
-            throw new Error('La URL no está definida en los datos personales.');
+        const urlStrings: string[] = personalData.url || [];  
+        if (!Array.isArray(urlStrings) || urlStrings.some(url => typeof url !== 'string')) {
+            throw new Error('La URL debe ser una lista de cadenas.');
+        }
+        const screenshotPaths: string[] = [];
+        for (const url of urlStrings) {
+            const screenshotPath = path.join(__dirname, `output-${Date.now()}.png`);
+            await generateScreenshot(url, screenshotPath);
+            screenshotPaths.push(screenshotPath);
         }
 
-
-        let url: string;
-
-        if (Array.isArray(urlString)) {
-            url = urlString.join('');
-        } else if (typeof urlString === 'string') {
-            url = urlString;
-        } else {
-            throw new Error('La URL no es una cadena o un array de cadenas.');
+        // Convertir imágenes en PDFs
+        const pdfUrls: string[] = [];
+        for (const screenshotPath of screenshotPaths) {
+            const count = pdfUrls.length + 1;
+            const pdfPath = path.join(`pdfs/pase de lista ${count}.pdf`);
+            await PersonalServices.createPDFFromImage(screenshotPath, pdfPath);
+            fs.unlinkSync(screenshotPath);  // Eliminar imagen temporal
+            const pdfUrl = `${process.env.URL}:${process.env.PORT}/${pdfPath}`;
+            pdfUrls.push(pdfUrl);
         }
 
-        const screenshotPath = path.join(__dirname, 'output.png');
-        await generateScreenshot(url, screenshotPath);
-        const updatedEmployee = await PersonalServices.modifyPersonal(personalId, personalData, alumnos, asistencia);
+        // Actualizar los datos personales
+        const updatedEmployee = await PersonalServices.modifyPersonal(personalId, { ...personalData, url: pdfUrls }, alumnos, asistencia);
 
         if (updatedEmployee) {
             res.status(200).json(updatedEmployee);
@@ -94,6 +99,7 @@ export const updatePersonal = async (req: Request, res: Response) => {
         res.status(500).json({ error: error.message });
     }
 };
+
 
 export const deletePersonal = async (req: Request, res: Response) => {
     try {

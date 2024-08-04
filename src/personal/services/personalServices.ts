@@ -85,39 +85,43 @@ export class PersonalServices {
                 </body>
                 </html>
             `;
-
+    
             const imagePath = path.join(__dirname, 'output.png');
             await PersonalServices.generateImageFromHTML(htmlContent, imagePath);
-
+    
             const date = new Date();
             const localString = date.toLocaleString();
             console.log(localString); // Ejemplo: "8/3/2024, 6:30:00 PM"
             let count = 1;  
-
+    
             const pdfPath = path.join(`pdfs/pase de lista ${count}.pdf`);
             await PersonalServices.createPDFFromImage(imagePath, pdfPath);
-
+    
             // Eliminar archivo de imagen temporal
             fs.unlinkSync(imagePath);
-
-            const pdfUrl = `${urlProject}:${portProject}/${(pdfPath)}`;
+    
+            // Crear URL
+            const pdfUrl = `${urlProject}:${portProject}/${pdfPath}`;
+            
+            // Agregar la nueva URL a la lista existente
             personalFound.url = [...(personalFound.url || []), pdfUrl];
             personalFound.alumns = alumnos;
-
+    
             const salt = await bcrypt.genSalt(saltRounds);
             if (personalData.name) personalFound.name = personalData.name;
             if (personalData.lastName) personalFound.lastName = personalData.lastName;
             if (personalData.password) personalFound.password = await bcrypt.hash(personalData.password, salt);
             if (personalData.deleted !== undefined) personalFound.deleted = personalData.deleted;
-
+    
             personalFound.updated_by = personalData.updated_by;
             personalFound.updated_at = DateUtils.formatDate(new Date());
-
+    
             return await PersonalRepository.updatePersonal(personalFound);
         } catch (error: any) {
             throw new Error(`Error updating personal record: ${error.message}`);
         }
     }
+    
 
     public static async generateImageFromHTML(htmlContent: string, outputPath: string) {
         // Aquí se configura el navegador de Puppeteer
