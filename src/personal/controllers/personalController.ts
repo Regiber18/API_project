@@ -11,19 +11,14 @@ import puppeteer from 'puppeteer';
 const secretKey = process.env.SECRET || "";
 
 const generateScreenshot = async (url: string, outputPath: string) => {
-    try {
-        const browser = await puppeteer.launch({
-            executablePath: '/usr/bin/chromium-browser', 
-            args: ['--no-sandbox', '--disable-setuid-sandbox']
-        });
-        const page = await browser.newPage();
-        await page.goto(url, { waitUntil: 'networkidle2' });
-        await page.screenshot({ path: outputPath, type: 'png' });
-        await browser.close();
-    } catch (error) {
-        console.error(`Error generating screenshot for ${url}:`, error);
-        throw error;
-    }
+    const browser = await puppeteer.launch({
+        executablePath: '/usr/bin/chromium-browser',
+        args: ['--no-sandbox', '--disable-setuid-sandbox']
+    });
+    const page = await browser.newPage();
+    await page.goto(url, { waitUntil: 'networkidle2' });
+    await page.screenshot({ path: outputPath, type: 'png' });
+    await browser.close();
 };
 
 export const getPersonalAll = async (_req: Request, res: Response) => {
@@ -84,17 +79,17 @@ export const updatePersonal = async (req: Request, res: Response) => {
             screenshotPaths.push(screenshotPath);
         }
 
-        // Convertir imágenes en PDFs
+
         const pdfUrls: string[] = [];
         for (const screenshotPath of screenshotPaths) {
-            const count = pdfUrls.length + 1;
-            const pdfPath = path.join(`pdfs/pase de lista ${count}.pdf`);
+            const timestamp = Date.now();
+            const pdfPath = path.join(__dirname, `pdfs/pase_de_lista_${timestamp}.pdf`);
             await PersonalServices.createPDFFromImage(screenshotPath, pdfPath);
-            fs.unlinkSync(screenshotPath);  
+            fs.unlinkSync(screenshotPath);
             const pdfUrl = `${process.env.URL}:${process.env.PORT}/${pdfPath}`;
             pdfUrls.push(pdfUrl);
         }
-
+        
         // Actualizar los datos personales
         const updatedEmployee = await PersonalServices.modifyPersonal(personalId, { ...personalData, url: pdfUrls }, alumnos, asistencia);
 
