@@ -120,10 +120,14 @@ export class PersonalServices {
     }
 
     public static async generateImageFromHTML(htmlContent: string, outputPath: string) {
-        const browser = await puppeteer.launch();
+        // Aquí se configura el navegador de Puppeteer
+        const browser = await puppeteer.launch({
+            executablePath: '/usr/bin/chromium-browser', // Actualiza la ruta si es necesario
+            args: ['--no-sandbox', '--disable-setuid-sandbox']
+        });
         const page = await browser.newPage();
         await page.setContent(htmlContent);
-        const element = await page.$('body'); 
+        const element = await page.$('body');
         if (element) {
             await element.screenshot({ path: outputPath, type: 'png' });
         } else {
