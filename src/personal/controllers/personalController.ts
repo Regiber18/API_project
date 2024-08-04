@@ -1,112 +1,129 @@
 import { Response, Request } from "express";
 import { PersonalServices } from "../services/personalServices";
 import jwt from 'jsonwebtoken';
-import { generateScreenshot } from '../services/puppeterService'; // Asegúrate de que el nombre del archivo es correcto
 import path from 'path';
-
-const secretKey = process.env.SECRET || "";
 import { PersonalPayload } from '../../shared/config/types/personalPayload';
 import { AlumnData } from "../models/AlumnData";
 import { Personal } from "../models/Personal";
+import puppeteer from 'puppeteer';
 
-// Obtener todos los registros de personal
+const secretKey = process.env.SECRET || "";
+const generateScreenshot = async (url: string, outputPath: string) => {
+    const browser = await puppeteer.launch({
+        executablePath: '/usr/bin/chromium-browser', // Actualiza la ruta si es necesario
+        args: ['--no-sandbox', '--disable-setuid-sandbox']
+    });
+    const page = await browser.newPage();
+    await page.goto(url, { waitUntil: 'networkidle2' });
+    await page.screenshot({ path: outputPath, type: 'png' });
+    await browser.close();
+};
+
 export const getPersonalAll = async (_req: Request, res: Response) => {
-  try {
-    const personal = await PersonalServices.getAllPersonal();
-    if (personal) {
-      res.status(200).json(personal); // Cambiado a 200 para éxito en obtención de datos
-    } else {
-      res.status(404).json({ message: 'No se encontraron registros de personal' });
+    try {
+        const personal = await PersonalServices.getAllPersonal();
+        if (personal) {
+            res.status(200).json(personal);
+        } else {
+            res.status(404).json({ message: 'No se encontraron registros' });
+        }
+    } catch (err: any) {
+        res.status(500).json({ error: err.message });
     }
-  } catch (err: any) {
-    res.status(500).json({ error: err.message });
-  }
 };
 
-// Obtener un registro de personal por ID
 export const getPersonalId = async (req: Request, res: Response) => {
-  try {
-    const personal = await PersonalServices.getPersonalById(parseInt(req.params.personal_id, 10));
-    if (personal) {
-      res.status(200).json(personal); // Cambiado a 200 para éxito en obtención de datos
-    } else {
-      res.status(404).json({ message: 'Registro de personal no encontrado' });
+    try {
+        const personals = await PersonalServices.getPersonalById(parseInt(req.params.personal_id, 10));
+        if (personals) {
+            res.status(200).json(personals);
+        } else {
+            res.status(404).json({ message: 'Registro no encontrado' });
+        }
+    } catch (err: any) {
+        res.status(500).json({ error: err.message });
     }
-  } catch (err: any) {
-    res.status(500).json({ error: err.message });
-  }
 };
 
-// Crear un nuevo registro de personal
 export const createPersonal = async (req: Request, res: Response) => {
-  try {
-    const newEmployee = await PersonalServices.addPersonal(req.body);
-    if (newEmployee) {
-      res.status(201).json(newEmployee); // 201 para recurso creado
-    } else {
-      res.status(400).json({ message: 'Error al crear el registro' }); // Cambiado a 400 para solicitud incorrecta
+    try {
+        const newEmployee = await PersonalServices.addPersonal(req.body);
+        if (newEmployee) {
+            res.status(201).json(newEmployee);
+        } else {
+            res.status(404).json({ message: 'Algo salió mal' });
+        }
+    } catch (error: any) {
+        res.status(500).json({ error: error.message });
     }
-  } catch (error: any) {
-    res.status(500).json({ error: error.message });
-  }
 };
-
 
 export const updatePersonal = async (req: Request, res: Response) => {
-  try {
-    const personalId = parseInt(req.params.personal_id, 10);
-    const personalData: Personal = req.body.personalData;
-    const alumnos: AlumnData[] = req.body.alumnos || [];
-    const asistencia: { alumn_id: number, attended: boolean }[] = req.body.asistencia || [];
+    try {
+        const personalId = parseInt(req.params.personal_id, 10);
+        const personalData: Personal = req.body.personalData;
+        const alumnos: AlumnData[] = req.body.alumnos || [];
+        const asistencia: { alumn_id: number, attended: boolean }[] = req.body.asistencia || [];
+        const urlString = personalData.url;
 
-    const screenshotUrls = personalData.url;
-    if (Array.isArray(screenshotUrls) && screenshotUrls.length > 0) {
-      const screenshotUrl = screenshotUrls[0]; 
-      const screenshotPath = path.join(__dirname, 'output.png'); 
-      await generateScreenshot(screenshotUrl, screenshotPath);
+        if (!urlString) {
+            throw new Error('La URL no está definida en los datos personales.');
+        }
+
+
+        let url: string;
+
+        if (Array.isArray(urlString)) {
+            url = urlString.join('');
+        } else if (typeof urlString === 'string') {
+            url = urlString;
+        } else {
+            throw new Error('La URL no es una cadena o un array de cadenas.');
+        }
+
+        const screenshotPath = path.join(__dirname, 'output.png');
+        await generateScreenshot(url, screenshotPath);
+        const updatedEmployee = await PersonalServices.modifyPersonal(personalId, personalData, alumnos, asistencia);
+
+        if (updatedEmployee) {
+            res.status(200).json(updatedEmployee);
+        } else {
+            res.status(404).json({ message: 'Registro no encontrado' });
+        }
+    } catch (error: any) {
+        res.status(500).json({ error: error.message });
     }
-    
-
-    const updatedEmployee = await PersonalServices.modifyPersonal(personalId, personalData, alumnos, asistencia);
-
-    if (updatedEmployee) {
-      res.status(200).json(updatedEmployee); 
-    } else {
-      res.status(404).json({ message: 'Registro no encontrado para actualización' });
-    }
-  } catch (error: any) {
-    res.status(500).json({ error: error.message });
-  }
 };
 
-// Eliminar un registro de personal
 export const deletePersonal = async (req: Request, res: Response) => {
-  try {
-    const deleted = await PersonalServices.deletePersonal(parseInt(req.params.personal_id, 10));
-    if (deleted) {
-      res.status(200).json({ message: "Eliminado exitosamente" }); // 200 para éxito en eliminación
-    } else {
-      res.status(404).json({ message: "Registro no encontrado para eliminación" });
+    try {
+        const deleted = await PersonalServices.deletePersonal(parseInt(req.params.personal_id, 10));
+        if (deleted) {
+            res.status(200).json({ message: "Eliminado exitosamente" });
+        } else {
+            res.status(404).json({ message: "No se encontró el registro" });
+        }
+    } catch (error: any) {
+        res.status(500).json({ error: error.message });
     }
-  } catch (error: any) {
-    res.status(500).json({ error: error.message });
-  }
 };
 
 export const loginPersonal = async (req: Request, res: Response) => {
-  const { name, password } = req.body;
-  try {
-    const result = await PersonalServices.login(name, password);
-    if (!result) {
-      return res.status(401).json({ message: 'Nombre de usuario o contraseña inválidos' }); // 401 para credenciales inválidas
-    } else {
-      const personal = jwt.verify(result, secretKey) as PersonalPayload;
-      res.setHeader("Authorization", result);
-      res.setHeader("Access-Control-Expose-Headers", "Authorization");
-      res.status(200).json({ message: 'Inicio de sesión exitoso', personal });
+    const { name, password } = req.body;
+    try {
+        const result = await PersonalServices.login(name, password);
+
+        if (!result) {
+            return res.status(401).json({ message: 'Nombre de usuario o contraseña inválidos' });
+        } else {
+            const personal = jwt.verify(result, secretKey) as PersonalPayload;
+            res.setHeader("Authorization", result);
+            res.setHeader("Access-Control-Expose-Headers", "Authorization");
+            res.status(200).json({ message: 'Inicio de sesión exitoso', personal });
+        }
+
+    } catch (error: any) {
+        console.error('Error en inicio de sesión:', error);
+        res.status(500).json({ message: 'Error interno del servidor' });
     }
-  } catch (error: any) {
-    console.error('Error en inicio de sesión:', error);
-    res.status(500).json({ message: 'Error interno del servidor' });
-  }
 };
