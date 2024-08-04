@@ -49,8 +49,7 @@ export class PersonalServices {
 
     public static async modifyPersonal(personalId: number, personalData: Personal, alumnos: AlumnData[], asistencia: any[]): Promise<Personal | null> {
         try {
-            const urlProject = process.env.URL;
-            const portProject = process.env.PORT;
+
     
             const personalFound = await PersonalRepository.findById(personalId);
             if (!personalFound) throw new Error('Registro personal no encontrado');
@@ -100,11 +99,7 @@ export class PersonalServices {
             // Eliminar archivo de imagen temporal
             fs.unlinkSync(imagePath);
     
-            // Crear URL
-            const pdfUrl = `${urlProject}:${portProject}/${pdfPath}`;
-            
-            // Agregar la nueva URL a la lista existente
-            personalFound.url = [...(personalFound.url || []), pdfUrl];
+            // Crear 
             personalFound.alumns = alumnos;
     
             const salt = await bcrypt.genSalt(saltRounds);
