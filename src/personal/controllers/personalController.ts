@@ -22,7 +22,7 @@ export const getPersonalAll = async (_req: Request, res: Response) => {
 
 export const getPersonalId = async (req: Request, res: Response) => {
   try {
-    const personals = await PersonalServices.getPersonalById(parseInt(req.params.personal_name, 10))
+    const personals = await PersonalServices.getPersonalById(parseInt(req.params.personal_id, 10))
 
     if(personals) {
       res.status(201).json(personals)
