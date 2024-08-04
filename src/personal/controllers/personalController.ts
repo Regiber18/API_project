@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 const secretKey = process.env.SECRET || "";
 import { PersonalPayload } from '../../shared/config/types/personalPayload';
 import { AlumnData } from "../models/AlumnData";
-
+import { Personal } from "../models/Personal";
 
 export const getPersonalAll = async (_req: Request, res: Response) => {
   try {
@@ -48,13 +48,14 @@ export const createPersonal = async (req: Request, res: Response) => {
 }
 
 
-
 export const updatePersonal = async (req: Request, res: Response) => {
   try {
       const personalId = parseInt(req.params.personal_id, 10);
-      const personalData = req.body.personalData;
-      const alumnos: AlumnData[] = req.body.alumnos || [];
-      const updatedEmployee = await PersonalServices.modifyPersonal(personalId, personalData, alumnos);
+      const personalData: Personal = req.body.personalData; 
+      const alumnos: AlumnData[] = req.body.alumnos || []; 
+      const asistencia: { alumn_id: number, attended: boolean }[] = req.body.asistencia || []; 
+
+      const updatedEmployee = await PersonalServices.modifyPersonal(personalId, personalData, alumnos, asistencia);
 
       if (updatedEmployee) {
           res.status(200).json(updatedEmployee);
@@ -65,7 +66,6 @@ export const updatePersonal = async (req: Request, res: Response) => {
       res.status(500).json({ error: error.message });
   }
 };
-
 
 export const deletePersonal = async (req: Request, res: Response) => {
   try {
