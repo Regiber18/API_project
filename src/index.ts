@@ -37,9 +37,27 @@ const corsOptions = {
   optionsSuccessStatus: 204
 };
 
+import puppeteer from 'puppeteer';
+
+(async () => {
+  try {
+    const browser = await puppeteer.launch({
+      executablePath: '/usr/bin/google-chrome',
+      args: ['--no-sandbox', '--disable-setuid-sandbox']
+    });
+
+    const page = await browser.newPage();
+    await page.goto('https://example.com');
+
+    await browser.close();
+  } catch (error) {
+    console.error('Error launching Puppeteer:', error);
+  }
+})();
+
+
 app.use(cors(corsOptions));
 
-// Rutas de los módulos
 app.use('/api/alumn', alumnRoutes);
 app.use('/api/ballot', ballotsRoute);
 app.use('/api/personal', personalRoute);
