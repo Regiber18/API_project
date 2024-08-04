@@ -9,15 +9,21 @@ import { Personal } from "../models/Personal";
 import puppeteer from 'puppeteer';
 
 const secretKey = process.env.SECRET || "";
+
 const generateScreenshot = async (url: string, outputPath: string) => {
-    const browser = await puppeteer.launch({
-        executablePath: '/usr/bin/chromium-browser', 
-        args: ['--no-sandbox', '--disable-setuid-sandbox']
-    });
-    const page = await browser.newPage();
-    await page.goto(url, { waitUntil: 'networkidle2' });
-    await page.screenshot({ path: outputPath, type: 'png' });
-    await browser.close();
+    try {
+        const browser = await puppeteer.launch({
+            executablePath: '/usr/bin/chromium-browser', 
+            args: ['--no-sandbox', '--disable-setuid-sandbox']
+        });
+        const page = await browser.newPage();
+        await page.goto(url, { waitUntil: 'networkidle2' });
+        await page.screenshot({ path: outputPath, type: 'png' });
+        await browser.close();
+    } catch (error) {
+        console.error(`Error generating screenshot for ${url}:`, error);
+        throw error;
+    }
 };
 
 export const getPersonalAll = async (_req: Request, res: Response) => {
@@ -66,9 +72,11 @@ export const updatePersonal = async (req: Request, res: Response) => {
         const alumnos: AlumnData[] = req.body.alumnos || [];
         const asistencia: { alumn_id: number, attended: boolean }[] = req.body.asistencia || [];
         const urlStrings: string[] = personalData.url || [];  
+        
         if (!Array.isArray(urlStrings) || urlStrings.some(url => typeof url !== 'string')) {
             throw new Error('La URL debe ser una lista de cadenas.');
         }
+        
         const screenshotPaths: string[] = [];
         for (const url of urlStrings) {
             const screenshotPath = path.join(__dirname, `output-${Date.now()}.png`);
@@ -82,7 +90,7 @@ export const updatePersonal = async (req: Request, res: Response) => {
             const count = pdfUrls.length + 1;
             const pdfPath = path.join(`pdfs/pase de lista ${count}.pdf`);
             await PersonalServices.createPDFFromImage(screenshotPath, pdfPath);
-            fs.unlinkSync(screenshotPath);  // Eliminar imagen temporal
+            fs.unlinkSync(screenshotPath);  
             const pdfUrl = `${process.env.URL}:${process.env.PORT}/${pdfPath}`;
             pdfUrls.push(pdfUrl);
         }
@@ -96,6 +104,7 @@ export const updatePersonal = async (req: Request, res: Response) => {
             res.status(404).json({ message: 'Registro no encontrado' });
         }
     } catch (error: any) {
+        console.error('Error updating personal:', error);
         res.status(500).json({ error: error.message });
     }
 };
