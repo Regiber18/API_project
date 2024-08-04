@@ -15,6 +15,20 @@ export const getAlumnAll = async (_req: Request, res: Response) => {
   }
 }
 
+export const getAllAlumnIds = async (_req: Request, res: Response) => {
+  try {
+    const alumns = await alumnService.getAllAlumnIds()
+
+    if(alumns) {
+      res.status(201).json(alumns)
+    }else {
+      res.status(404).json(alumns)
+    }
+  }catch(err: any) {
+    res.status(500).json({erro: err.message})
+  }
+}
+
 export const getNameComplete = async (_req: Request, res: Response) => {
   try {
     const alumns = await alumnService.getNameComplete()

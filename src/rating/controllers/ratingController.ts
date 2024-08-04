@@ -101,7 +101,7 @@ export const createRating = async (req: Request, res: Response) => {
 
 export const  updateRating = async (req: Request, res: Response) => {
   try {
-    const updatedEmployee = await RatingService.modifyRating(parseInt(req.params.ballot_id, 10), req.body);
+    const updatedEmployee = await RatingService.modifyRating(parseInt(req.params.rating_id, 10), req.body);
     if(updatedEmployee){
       res.status(201).json(updatedEmployee);
     }else{

@@ -30,6 +30,16 @@ export const getSubjectAllSubjectRating = async (_req: Request, res: Response) =
   }
 }
 
+export const getTotalAmountForAllAlumns = async (_req: Request, res: Response) => {
+  try {
+      const totalAmounts = await subjectService.getTotalAmountForAllAlumns();
+      res.status(200).json(totalAmounts);
+  } catch (err: any) {
+      res.status(500).json({ error: err.message });
+  }
+};
+
+
 export const getSubjectRatingEspañol = async (_req: Request, res: Response) => {
   try {
     const subjectRatings = await subjectService.getSubjectRatinSpanish()

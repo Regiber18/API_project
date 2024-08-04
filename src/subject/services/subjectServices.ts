@@ -3,6 +3,7 @@ import { DateUtils } from "../../shared/utils/Date";
 import { Subject } from "../models/Subject";
 import { subjectRating } from "../models/subjectRating";
 import { subjectRatingEspañol } from "../models/subjectsRatingEspañol";
+import { AlumnRepository } from "../../alumn/repositories/AlumnRepository";
 
 
 
@@ -23,6 +24,45 @@ export class subjectService {
             throw new Error(`Error al obtener subjects: ${error.message}`);
         }
     }
+
+    public static async getTotalAmountForAllAlumns(): Promise<{ alumn_id: number, averageAmount: number }[]> {
+        try {
+            const alumns = await AlumnRepository.findAllIds(); 
+            const result: { alumn_id: number, averageAmount: number }[] = [];
+    
+            for (const alumn of alumns) {
+                const amountsAll = await SubjectRepository.getAllRatingId(alumn.alumn_id); 
+    
+                console.log('Amounts por alumn_id', alumn.alumn_id, amountsAll); 
+                
+                if (amountsAll.length === 0) {
+                    result.push({ alumn_id: alumn.alumn_id, averageAmount: 0 });
+                    continue;
+                }
+                
+                let totalAmount = 0;
+                for (const item of amountsAll) {
+                    if (item && 'amount' in item) {
+                        totalAmount += item.amount; 
+                    } else {
+                        console.warn('!estructura:', item);
+                    }
+                }
+                
+                const averageAmount = totalAmount / amountsAll.length;
+            
+                result.push({ alumn_id: alumn.alumn_id, averageAmount });
+            }
+    
+            return result;
+        } catch (error: any) {
+            throw new Error(`Error al obtener la suma total de calificaciones para los alumnos: ${error.message}`);
+        }
+    }
+    
+    
+    
+    
 
     public static async getSubjectRatinSpanish(): Promise<subjectRatingEspañol[]> {
         try{

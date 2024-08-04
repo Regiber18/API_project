@@ -34,7 +34,7 @@ export class RatingRepository {
 
     public static async findAmountRating(): Promise<Rating[]> {
         return new Promise((resolve, reject) => {
-            connection.query('SELECT amount FROM Rating', (error: any, results: any) => {
+            connection.query('SELECT alumn_id, pertenence,  amount FROM Rating', (error: any, results: any) => {
                 if (error) {
                     reject(new Error("Error fetching all rating"));
                 } else {
@@ -191,11 +191,12 @@ export class RatingRepository {
   
 
     public static async updateRating(rating_id: number, ballotRating: Rating): Promise<Rating | null> {
-        const query = 'UPDATE Rating SET alumn_id = ?, amount = ?, updated_at = ?, updated_by = ?, deleted = ? WHERE rating_id = ? AND deleted = 0';
+        const query = 'UPDATE Rating SET alumn_id = ?, amount = ?, pertenence = ?, gradePertenence = ?,updated_at = ?, updated_by = ?, deleted = ? WHERE rating_id = ? AND deleted = 0';
         return new Promise((resolve, reject) => {
-            connection.execute(query, [ballotRating.alumn_id ,ballotRating.amount, ballotRating.updated_at, ballotRating.updated_by, ballotRating.deleted, rating_id], (error: any, result: ResultSetHeader) => {
+            connection.execute(query, [ballotRating.alumn_id,ballotRating.amount,ballotRating.pertenence, ballotRating.gradePertenence,ballotRating.updated_at,ballotRating.updated_by,ballotRating.deleted,rating_id],
+                 (error: any, result: ResultSetHeader) => {
                 if (error) {
-                    reject(new Error("Error updating ballot"));
+                    reject(new Error(`Error updating rating: ${error.message}`));
                 } else {
                     if (result.affectedRows > 0) {
                         const updatedRating: Rating = { ...ballotRating, rating_id: rating_id };

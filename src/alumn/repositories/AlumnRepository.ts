@@ -17,6 +17,19 @@ export class AlumnRepository {
     });
   }
 
+  public static async findAllIds(): Promise<Alumns[]> {
+    return new Promise((resolve, reject) => {
+      connection.query('SELECT alumn_id FROM Alumn', (error: any, results) => {
+        if (error) {
+          reject(error);
+        } else {
+          const alumns: Alumns[] = results as Alumns[];
+          resolve(alumns);
+        }
+      });
+    });
+  }
+
 
   public static async findName(): Promise<Alumns[]> {
     return new Promise((resolve, reject) => {

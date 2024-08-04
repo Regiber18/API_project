@@ -1,5 +1,5 @@
 export interface Alumns{
-    alumn_id: number | null;
+    alumn_id: number;
     class_id: number | null;
     name: string;
     lastName: string;

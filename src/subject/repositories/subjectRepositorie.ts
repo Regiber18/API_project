@@ -5,6 +5,7 @@ import { subjectRating } from "../models/subjectRating";
 import { subjectRatingEspañol } from "../models/subjectsRatingEspañol";
 import { subjectRatingMath } from "../models/subjectRatingMatematicas";
 import { subjectRatingCience } from "../models/subjectRatingCience";
+import { Rating } from "../../rating/models/Rating";
 
 
 export class SubjectRepository {
@@ -66,6 +67,27 @@ export class SubjectRepository {
       });
     });
   }
+
+  public static async getAllRatingId(alumn_id: number): Promise<Rating[]> {
+    return new Promise((resolve, reject) => {
+        const query = `
+            SELECT r.amount 
+            FROM Rating r 
+            JOIN SubjectRating sr ON r.rating_id = sr.rating_id 
+            JOIN Subject s ON sr.subject_id = s.subject_id 
+            WHERE r.alumn_id = ? AND r.deleted = 0
+        `;
+        connection.query(query, [alumn_id],(error: any, results) => {
+            if (error) {
+                reject(error);
+            } else {
+                const ratings: Rating[] = results as Rating[];
+                resolve(ratings);
+            }
+        });
+    });
+}
+
 
   public static async getSubjectRatingMath(): Promise<subjectRatingMath[]> {
     return new Promise((resolve, reject) => {

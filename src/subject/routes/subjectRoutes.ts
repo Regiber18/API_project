@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getSubjectAll , getSubjectId, getSubjectRatingEspañol,createSubject, getSubjectAllSubjectRating ,updateSubject, deleteSubject, getSubjectRatingMath, getSubjectRatingCience,  } from "../controllers/subjectController";
+import { getSubjectAll , getTotalAmountForAllAlumns ,getSubjectId, getSubjectRatingEspañol,createSubject, getSubjectAllSubjectRating ,updateSubject, deleteSubject, getSubjectRatingMath, getSubjectRatingCience,  } from "../controllers/subjectController";
 import { authMiddleware } from '../../shared/middlewares/auth';
 
 const subjectRatingRoutes: Router = Router();
@@ -15,5 +15,7 @@ subjectRatingRoutes.get('/cience', getSubjectRatingCience)
 subjectRatingRoutes.post("/", createSubject)
 subjectRatingRoutes.put("/:subject_id", updateSubject)
 subjectRatingRoutes.delete("/:subject_id", deleteSubject)
+
+subjectRatingRoutes.get('/totalAmount', getTotalAmountForAllAlumns); 
 
 export default subjectRatingRoutes;
