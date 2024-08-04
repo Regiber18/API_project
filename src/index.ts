@@ -73,9 +73,6 @@ console.log(__dirname);
 
 
 
-
-
-
 // Middleware para manejar rutas no encontradas
 app.use(notFoundHandler);
 
