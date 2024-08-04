@@ -67,7 +67,7 @@ export const updatePersonal = async (req: Request, res: Response) => {
         const alumnos: AlumnData[] = req.body.alumnos || [];
         const asistencia: { alumn_id: number, attended: boolean }[] = req.body.asistencia || [];
         const urlStrings: string[] = personalData.url || [];  
-        
+
         if (!Array.isArray(urlStrings) || urlStrings.some(url => typeof url !== 'string')) {
             throw new Error('La URL debe ser una lista de cadenas.');
         }
@@ -79,17 +79,16 @@ export const updatePersonal = async (req: Request, res: Response) => {
             screenshotPaths.push(screenshotPath);
         }
 
-
         const pdfUrls: string[] = [];
         for (const screenshotPath of screenshotPaths) {
             const timestamp = Date.now();
             const pdfPath = path.join(__dirname, `pdfs/pase_de_lista_${timestamp}.pdf`);
             await PersonalServices.createPDFFromImage(screenshotPath, pdfPath);
             fs.unlinkSync(screenshotPath);
-            const pdfUrl = `${process.env.URL}:${process.env.PORT}/${pdfPath}`;
+            const pdfUrl = `${process.env.URL}:${process.env.PORT}/${pdfPath.replace(/\\/g, '/')}`;
             pdfUrls.push(pdfUrl);
         }
-        
+
         // Actualizar los datos personales
         const updatedEmployee = await PersonalServices.modifyPersonal(personalId, { ...personalData, url: pdfUrls }, alumnos, asistencia);
 
@@ -103,7 +102,6 @@ export const updatePersonal = async (req: Request, res: Response) => {
         res.status(500).json({ error: error.message });
     }
 };
-
 
 export const deletePersonal = async (req: Request, res: Response) => {
     try {
