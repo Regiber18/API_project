@@ -72,31 +72,25 @@ export const updatePersonal = async (req: Request, res: Response) => {
             throw new Error('La URL debe ser una lista de cadenas.');
         }
 
-        const screenshotPaths: string[] = [];
+        const pdfUrls: string[] = [];
+
         for (const url of urlStrings) {
+          
             const screenshotPath = path.join(__dirname, `output-${Date.now()}.png`);
             await generateScreenshot(url, screenshotPath);
-            screenshotPaths.push(screenshotPath);
-        }
-
-        const pdfUrls: string[] = [];
-        for (const screenshotPath of screenshotPaths) {
             const timestamp = Date.now();
             const pdfPath = path.join(__dirname, `pdfs/pase_de_lista_${timestamp}.pdf`);
             await PersonalServices.createPDFFromImage(screenshotPath, pdfPath);
-            fs.unlinkSync(screenshotPath);
+            fs.unlinkSync(screenshotPath); 
             const pdfUrl = `${process.env.URL}:${process.env.PORT}/${pdfPath.replace(/\\/g, '/')}`;
             console.log(pdfUrl);
-            
             pdfUrls.push(pdfUrl);
-
         }
 
-        // Actualizar los datos personales
+    
         const updatedEmployee = await PersonalServices.modifyPersonal(personalId, { ...personalData, url: pdfUrls }, alumnos, asistencia);
 
         if (updatedEmployee) {
-            // Envía el array de URLs directamente
             res.status(200).json(updatedEmployee);
         } else {
             res.status(404).json({ message: 'Registro no encontrado' });
@@ -106,6 +100,7 @@ export const updatePersonal = async (req: Request, res: Response) => {
         res.status(500).json({ error: error.message });
     }
 };
+
 
 
 export const deletePersonal = async (req: Request, res: Response) => {
