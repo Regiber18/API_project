@@ -51,14 +51,10 @@ export const createPersonal = async (req: Request, res: Response) => {
 
 export const updatePersonal = async (req: Request, res: Response) => {
   try {
-    if (!req.file) {
-      return res.status(400).send('No file uploaded.');
-    }
-    
       const personalId = parseInt(req.params.personal_id, 10);
       const personalData = req.body.personalData;
       const alumnos: AlumnData[] = req.body.alumnos || [];
-      const updatedEmployee = await PersonalServices.modifyPersonal(personalId, personalData, alumnos, req.file);
+      const updatedEmployee = await PersonalServices.modifyPersonal(personalId, personalData, alumnos);
 
       if (updatedEmployee) {
           res.status(200).json(updatedEmployee);

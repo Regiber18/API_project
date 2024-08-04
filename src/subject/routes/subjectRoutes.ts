@@ -15,7 +15,6 @@ subjectRatingRoutes.get('/cience', getSubjectRatingCience)
 subjectRatingRoutes.post("/", createSubject)
 subjectRatingRoutes.put("/:subject_id", updateSubject)
 subjectRatingRoutes.delete("/:subject_id", deleteSubject)
-
 subjectRatingRoutes.get('/totalAmount', getTotalAmountForAllAlumns); 
 
 export default subjectRatingRoutes;

@@ -3,6 +3,7 @@ import { DateUtils } from "../../shared/utils/Date";
 import { Personal } from "../models/Personal";
 import bcrypt from "bcrypt";
 import jwt from 'jsonwebtoken';
+import jsPDF from "jspdf";
 import dotenv from 'dotenv';
 import { AlumnData } from "../models/AlumnData";
 dotenv.config();
@@ -42,37 +43,68 @@ export class PersonalServices {
         }
     }
 
-    public static async modifyPersonal(personalId: number, personalData: Personal, alumnos: AlumnData[], file: Express.Multer.File): Promise<Personal | null> {
+    public static async modifyPersonal(personalId: number, personalData: Personal, alumnos: AlumnData[]): Promise<Personal | null> {
         try {
             const urlProject = process.env.URL;
             const portProject = process.env.PORT;
-    
+
             const personalFound = await PersonalRepository.findById(personalId);
-    
+
             if (!personalFound) throw new Error('Registro personal no encontrado');
-    
+
             const idSet = new Set(alumnos.map(a => a.alumn_id));
             if (idSet.size !== alumnos.length) throw new Error('Se encontró el mismo ID');
             if (!alumnos || alumnos.length === 0) throw new Error('No se encontraron alumnos');
-    
-            const pdfUrl = `${urlProject}:${portProject}/pdfs/${file.filename}`;
-            personalFound.url = [...(personalFound.url || []), pdfUrl]; 
+
+            // Generar el PDF
+            const pdfDoc = new jsPDF({ orientation: 'portrait', unit: 'in', format: 'letter' });
+            pdfDoc.setFontSize(18).setFont('Helvetica', 'bold').text('Lista de Alumnos', 0.5, 1);
+            pdfDoc.setFontSize(14).text(`Escuela Chiapa Unida - Clase ${personalFound.class_id}A`, 0.5, 1.5);
+            pdfDoc.text(`Maestro: ${personalData.name || 'Desconocido'} ${personalData.lastName}`, 0.5, 2);
+
+            const startX = 0.5, startY = 2.25, columnWidths = [1.5, 3, 3], rowHeight = 0.25;
+            let currentY = startY;
+
+            // Header Row
+            pdfDoc.setFontSize(12).setFont('Helvetica', 'bold').setFillColor(220, 230, 255);
+            pdfDoc.rect(startX - 0.1, currentY - 0.1, columnWidths.reduce((a, b) => a + b, 0) + 0.2, rowHeight + 0.2, 'F');
+            pdfDoc.setTextColor(0, 0, 0).text('Num. lista', startX, currentY + 0.1);
+            pdfDoc.text('Nombre', startX + columnWidths[0], currentY + 0.1);
+            pdfDoc.text('Apellido', startX + columnWidths[0] + columnWidths[1], currentY + 0.1);
+
+            currentY += rowHeight + 0.1;
+            pdfDoc.setLineWidth(0.09).setDrawColor(0, 0, 0).line(startX - 0.1, currentY, startX + columnWidths.reduce((a, b) => a + b, 0) + 0.2, currentY);
+
+            // Data Rows
+            pdfDoc.setFont('Helvetica', 'normal');
+            alumnos.forEach(alumno => {
+                currentY += rowHeight;
+                pdfDoc.text(alumno.alumn_id?.toString() || '', startX, currentY + 0.1);
+                pdfDoc.text(alumno.name, startX + columnWidths[0], currentY + 0.1);
+                pdfDoc.text(alumno.lastName, startX + columnWidths[0] + columnWidths[1], currentY + 0.1);
+            });
+
+            // Save PDF to filesystem
+            const pdfPath = `pdfs/lista_asistencia_Grupo${personalData.class_id || 'unknown'}A_maestro_${personalData.name || 'unknown'}_${personalData.lastName || 'unknown'}.pdf`;
+            const pdfUrl = `${urlProject}:${portProject}/${pdfPath}`;
+            personalFound.url = [...(personalFound.url || []), pdfUrl];
             personalFound.alumns = alumnos;
-    
+
             const salt = await bcrypt.genSalt(saltRounds);
             if (personalData.name) personalFound.name = personalData.name;
             if (personalData.lastName) personalFound.lastName = personalData.lastName;
             if (personalData.password) personalFound.password = await bcrypt.hash(personalData.password, salt);
             if (personalData.deleted !== undefined) personalFound.deleted = personalData.deleted;
-    
+
             personalFound.updated_by = personalData.updated_by;
             personalFound.updated_at = DateUtils.formatDate(new Date());
-    
+
             return await PersonalRepository.updatePersonal(personalFound);
         } catch (error: any) {
             throw new Error(`Error updating personal record: ${error.message}`);
         }
     }
+
     
     
 
