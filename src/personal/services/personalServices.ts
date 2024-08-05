@@ -4,6 +4,7 @@ import { DateUtils } from "../../shared/utils/Date";
 import { Personal } from "../models/Personal";
 import bcrypt from "bcrypt";
 import jwt from 'jsonwebtoken';
+import { format } from 'date-fns'
 import dotenv from 'dotenv';
 import { AlumnData } from "../models/AlumnData";
 import puppeteer from 'puppeteer';
@@ -85,12 +86,13 @@ export class PersonalServices {
     
             const imagePath = path.join(__dirname, 'output.png');
             await PersonalServices.generateImageFromHTML(htmlContent, imagePath);
-    
-            const date = new Date();
-            const timestamp = date.getTime(); 
-            const pdfPath = path.join(`pdfs/pase_de_lista_${timestamp}.pdf`);
+            const date = new Date(); 
+            const formattedDate = format(date, 'dd/MM/yyyy');    
+
+            const pdfPath = path.join(`pdfs/pase_de_lista_${formattedDate}.pdf`);
             await PersonalServices.createPDFFromImage(imagePath, pdfPath);
             fs.unlinkSync(imagePath);
+
     
             const pdfUrl = `${process.env.URL}:${process.env.PORT}/${pdfPath}`;
             personalFound.url = [pdfUrl];
