@@ -4,7 +4,7 @@ import { DateUtils } from "../../shared/utils/Date";
 import { Personal } from "../models/Personal";
 import bcrypt from "bcrypt";
 import jwt from 'jsonwebtoken';
-import { format } from 'date-fns'
+import { v4 as uuidv4 } from 'uuid';
 import dotenv from 'dotenv';
 import { AlumnData } from "../models/AlumnData";
 import puppeteer from 'puppeteer';
@@ -86,10 +86,8 @@ export class PersonalServices {
     
             const imagePath = path.join(__dirname, 'output.png');
             await PersonalServices.generateImageFromHTML(htmlContent, imagePath);
-            const date = new Date(); 
-            const formattedDate = format(date, 'dd/MM/yyyy');    
 
-            const pdfPath = path.join(`pdfs/pase_de_lista_${formattedDate}.pdf`);
+            const pdfPath = path.join(`pdfs/pase_de_lista_${uuidv4()}.pdf`);
             await PersonalServices.createPDFFromImage(imagePath, pdfPath);
             fs.unlinkSync(imagePath);
 
