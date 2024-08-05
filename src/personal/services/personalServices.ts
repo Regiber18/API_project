@@ -68,8 +68,7 @@ export class PersonalServices {
                     </thead>
                     <tbody>
                         ${alumnos.map(alumno => {
-                            // Encuentra el estado de asistencia para el alumno actual
-                            const asistenciaStatus = asistencia.find(a => a.attended == true)?.attended ? '✔️' : '';
+                            const asistenciaStatus = asistencia.find(a => a.attended == true) ? '✔️' : '';
                             return `
                                 <tr>
                                     <td style="border: 1px solid #ddd; padding: 8px;">${alumno.alumn_id}</td>
