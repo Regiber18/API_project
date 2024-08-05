@@ -1,4 +1,3 @@
-// PersonalServices.ts
 import { PersonalRepository } from "../repositories/PersonalRepository";
 import { DateUtils } from "../../shared/utils/Date";
 import { Personal } from "../models/Personal";
@@ -41,19 +40,19 @@ export class PersonalServices {
             personal.created_at = DateUtils.formatDate(new Date());
             personal.updated_at = DateUtils.formatDate(new Date());
             personal.password = await bcrypt.hash(personal.password, salt);
-            personal.url = [];
-            // Deja que el repositorio maneje la generación del ID
+            personal.url = [];  // Inicializa el campo de URLs como un array vacío
             return await PersonalRepository.createPersonal(personal);
         } catch (error: any) {
             throw new Error(`Error creating personal record: ${error.message}`);
         }
     }
 
-    public static async modifyPersonal(personalId: number, personalData: Personal, alumnos: AlumnData[], asistencia: any[]): Promise<Personal | null> {
+    public static async modifyPersonal(personalId: number, personalData: Partial<Personal>, alumnos: AlumnData[], asistencia: any[]): Promise<Personal | null> {
         try {
             const personalFound = await PersonalRepository.findById(personalId);
             if (!personalFound) throw new Error('Registro personal no encontrado');
     
+            // Generación del contenido HTML y PDF
             const htmlContent = `
             <html>
             <body>
@@ -68,7 +67,6 @@ export class PersonalServices {
                     </thead>
                     <tbody>
                         ${alumnos.map(alumno => {
-                            // Encuentra la entrada de asistencia correspondiente al alumno actual
                             const asistenciaStatus = asistencia.find(a => a.alumn_id === alumno.alumn_id && a.attended) ? '✔️' : '';
                             return `
                                 <tr>
@@ -92,9 +90,14 @@ export class PersonalServices {
             await PersonalServices.createPDFFromImage(imagePath, pdfPath);
             fs.unlinkSync(imagePath);
 
-    
+            // Generar URL del PDF
             const pdfUrl = `${process.env.URL}:${process.env.PORT}/${pdfPath}`;
-            personalFound.url = [pdfUrl];
+            if (!personalFound.url) {
+                personalFound.url = [];
+            }
+            personalFound.url.push(pdfUrl);
+            
+            // Actualización de otros datos
             personalFound.alumns = alumnos;
             const salt = await bcrypt.genSalt(saltRounds);
             if (personalData.name) personalFound.name = personalData.name;
@@ -102,7 +105,7 @@ export class PersonalServices {
             if (personalData.password) personalFound.password = await bcrypt.hash(personalData.password, salt);
             if (personalData.deleted !== undefined) personalFound.deleted = personalData.deleted;
     
-            personalFound.updated_by = personalData.updated_by;
+            personalFound.updated_by = personalData.updated_by || personalFound.updated_by;
             personalFound.updated_at = DateUtils.formatDate(new Date());
     
             return await PersonalRepository.updatePersonal(personalFound);
