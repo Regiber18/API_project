@@ -51,7 +51,7 @@ export class PersonalServices {
         try {
             const personalFound = await PersonalRepository.findById(personalId);
             if (!personalFound) throw new Error('Registro personal no encontrado');
-    
+        
             const htmlContent = `
             <html>
             <body>
@@ -81,37 +81,47 @@ export class PersonalServices {
             </body>
             </html>
             `;
-    
+        
             const imagePath = path.join(__dirname, 'output.png');
             await PersonalServices.generateImageFromHTML(htmlContent, imagePath);
-    
-            const pdfPath = path.join(`pdfs/pase_de_lista_${uuidv4()}.pdf`);
-            await PersonalServices.createPDFFromImage(imagePath, pdfPath);
-            fs.unlinkSync(imagePath);
-    
-            const pdfUrl = `${process.env.URL}:${process.env.PORT}/${pdfPath}`;
-
-            // Usar el operador de propagación para agregar nuevas URLs
-            const updatedUrls = personalFound.url ? [...personalFound.url, pdfUrl] : [pdfUrl];
+        
+            const pdfPaths: string[] = [];
+            const pdfUrls: string[] = [];
             
-            // Actualizar el objeto `personalFound` con la nueva lista de URLs
-            personalFound.url = updatedUrls;
+            for (let i = 0; i < 3; i++) { // Asumiendo que necesitas generar 3 PDFs por ejemplo
+
+                const pdfPath = path.join(`pdfs/pase_de_lista_${uuidv4}.pdf`);
+                pdfPaths.push(pdfPath);
+                await PersonalServices.createPDFFromImage(imagePath, pdfPath);
+                pdfUrls.push(`${process.env.URL}:${process.env.PORT}/${pdfPath}`);
+            }
+            
+            fs.unlinkSync(imagePath);
+            
+            // Asegúrate de que el campo url en personalFound sea un array
+            if (!Array.isArray(personalFound.url)) {
+                personalFound.url = [];
+            }
     
+            // Usar el operador de propagación para agregar nuevas URLs
+            personalFound.url = [...personalFound.url, ...pdfUrls];
+        
             personalFound.alumns = alumnos;
             const salt = await bcrypt.genSalt(saltRounds);
             if (personalData.name) personalFound.name = personalData.name;
             if (personalData.lastName) personalFound.lastName = personalData.lastName;
             if (personalData.password) personalFound.password = await bcrypt.hash(personalData.password, salt);
             if (personalData.deleted !== undefined) personalFound.deleted = personalData.deleted;
-    
+        
             personalFound.updated_by = personalData.updated_by || personalFound.updated_by;
             personalFound.updated_at = DateUtils.formatDate(new Date());
-    
+        
             return await PersonalRepository.updatePersonal(personalFound);
         } catch (error: any) {
             throw new Error(`Error updating personal record: ${error.message}`);
         }
     }
+    
 
     public static async generateImageFromHTML(htmlContent: string, outputPath: string) {
         const browser = await puppeteer.launch({
