@@ -75,22 +75,22 @@ export const updatePersonal = async (req: Request, res: Response) => {
         const pdfUrls: string[] = [];
 
         for (const url of urlStrings) {
-          
             const screenshotPath = path.join(__dirname, `output-${Date.now()}.png`);
             await generateScreenshot(url, screenshotPath);
             const timestamp = Date.now();
             const pdfPath = path.join(__dirname, `pdfs/pase_de_lista_${timestamp}.pdf`);
             await PersonalServices.createPDFFromImage(screenshotPath, pdfPath);
-            fs.unlinkSync(screenshotPath); 
-            const pdfUrl = `${process.env.URL}:${process.env.PORT}/${pdfPath.replace(/\\/g, '/')}`;
+            fs.unlinkSync(screenshotPath);
+            const pdfUrl = `${process.env.URL}:${process.env.PORT}/${pdfPath}`;
             console.log(pdfUrl);
             pdfUrls.push(pdfUrl);
         }
 
-    
+        // Actualizar los datos personales
         const updatedEmployee = await PersonalServices.modifyPersonal(personalId, { ...personalData, url: pdfUrls }, alumnos, asistencia);
 
         if (updatedEmployee) {
+            // Envía el array de URLs directamente
             res.status(200).json(updatedEmployee);
         } else {
             res.status(404).json({ message: 'Registro no encontrado' });

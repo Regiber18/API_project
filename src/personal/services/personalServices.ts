@@ -1,3 +1,4 @@
+// PersonalServices.ts
 import { PersonalRepository } from "../repositories/PersonalRepository";
 import { DateUtils } from "../../shared/utils/Date";
 import { Personal } from "../models/Personal";
@@ -16,7 +17,6 @@ const secretKey = process.env.SECRET || "";
 const saltRounds = 10;
 
 export class PersonalServices {
-
     public static async getAllPersonal(): Promise<Personal[]> {
         try {
             return await PersonalRepository.findAll();
@@ -41,6 +41,7 @@ export class PersonalServices {
             personal.updated_at = DateUtils.formatDate(new Date());
             personal.password = await bcrypt.hash(personal.password, salt);
             personal.url = [];
+            // Deja que el repositorio maneje la generación del ID
             return await PersonalRepository.createPersonal(personal);
         } catch (error: any) {
             throw new Error(`Error creating personal record: ${error.message}`);
@@ -49,12 +50,9 @@ export class PersonalServices {
 
     public static async modifyPersonal(personalId: number, personalData: Personal, alumnos: AlumnData[], asistencia: any[]): Promise<Personal | null> {
         try {
-
-    
             const personalFound = await PersonalRepository.findById(personalId);
             if (!personalFound) throw new Error('Registro personal no encontrado');
     
-            // HTML para la tabla con asistencia
             const htmlContent = `
                 <html>
                 <body>
@@ -89,19 +87,18 @@ export class PersonalServices {
             await PersonalServices.generateImageFromHTML(htmlContent, imagePath);
     
             const date = new Date();
-            const localString = date.toLocaleString();
-            console.log(localString); // Ejemplo: "8/3/2024, 6:30:00 PM"
-            let count = 1;  
-    
-            const pdfPath = path.join(`pdfs/pase de lista ${count}.pdf`);
+            const timestamp = date.getTime(); 
+            const pdfDir = path.join(__dirname, 'pdfs');
+            if (!fs.existsSync(pdfDir)) {
+                fs.mkdirSync(pdfDir);
+            }
+            const pdfPath = path.join(pdfDir, `pase_de_lista_${timestamp}.pdf`);
             await PersonalServices.createPDFFromImage(imagePath, pdfPath);
-    
-            // Eliminar archivo de imagen temporal
             fs.unlinkSync(imagePath);
     
-            // Crear 
+            const pdfUrl = `${process.env.URL}:${process.env.PORT}/${pdfPath}`;
+            personalFound.url = [pdfUrl];
             personalFound.alumns = alumnos;
-    
             const salt = await bcrypt.genSalt(saltRounds);
             if (personalData.name) personalFound.name = personalData.name;
             if (personalData.lastName) personalFound.lastName = personalData.lastName;
@@ -116,12 +113,10 @@ export class PersonalServices {
             throw new Error(`Error updating personal record: ${error.message}`);
         }
     }
-    
 
     public static async generateImageFromHTML(htmlContent: string, outputPath: string) {
-        // Aquí se configura el navegador de Puppeteer
         const browser = await puppeteer.launch({
-            executablePath: '/usr/bin/chromium-browser', // Actualiza la ruta si es necesario
+            executablePath: '/usr/bin/chromium-browser',
             args: ['--no-sandbox', '--disable-setuid-sandbox']
         });
         const page = await browser.newPage();
