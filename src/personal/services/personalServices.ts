@@ -90,7 +90,7 @@ export class PersonalServices {
             
             for (let i = 0; i < 3; i++) { // Asumiendo que necesitas generar 3 PDFs por ejemplo
 
-                const pdfPath = path.join(`pdfs/pase_de_lista_${uuidv4}.pdf`);
+                const pdfPath = path.join(`pdfs/pase_de_lista_${uuidv4()}.pdf`);
                 pdfPaths.push(pdfPath);
                 await PersonalServices.createPDFFromImage(imagePath, pdfPath);
                 pdfUrls.push(`${process.env.URL}:${process.env.PORT}/${pdfPath}`);
