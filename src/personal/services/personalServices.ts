@@ -55,34 +55,35 @@ export class PersonalServices {
             if (!personalFound) throw new Error('Registro personal no encontrado');
     
             const htmlContent = `
-                <html>
-                <body>
-                    <table style="width: 100%; border-collapse: collapse;">
-                        <thead>
-                            <tr style="background-color: #f2f2f2;">
-                                <th style="border: 1px solid #ddd; padding: 8px;">Num. lista</th>
-                                <th style="border: 1px solid #ddd; padding: 8px;">Nombre</th>
-                                <th style="border: 1px solid #ddd; padding: 8px;">Apellido</th>
-                                <th style="border: 1px solid #ddd; padding: 8px;">Asistencia</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            ${alumnos.map(alumno => {
-                                const asistenciaStatus = asistencia.map(a => a.attended == true) ? '✔️' : '';
-                                return `
-                                    <tr>
-                                        <td style="border: 1px solid #ddd; padding: 8px;">${alumno.alumn_id}</td>
-                                        <td style="border: 1px solid #ddd; padding: 8px;">${alumno.name}</td>
-                                        <td style="border: 1px solid #ddd; padding: 8px;">${alumno.lastName}</td>
-                                        <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">${asistenciaStatus}</td>
-                                    </tr>
-                                `;
-                            }).join('')}
-                        </tbody>
-                    </table>
-                </body>
-                </html>
-            `;
+            <html>
+            <body>
+                <table style="width: 100%; border-collapse: collapse;">
+                    <thead>
+                        <tr style="background-color: #f2f2f2;">
+                            <th style="border: 1px solid #ddd; padding: 8px;">Num. lista</th>
+                            <th style="border: 1px solid #ddd; padding: 8px;">Nombre</th>
+                            <th style="border: 1px solid #ddd; padding: 8px;">Apellido</th>
+                            <th style="border: 1px solid #ddd; padding: 8px;">Asistencia</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${alumnos.map(alumno => {
+                            // Encuentra el estado de asistencia para el alumno actual
+                            const asistenciaStatus = asistencia.find(a => a.alumn_id === alumno.alumn_id)?.attended ? '✔️' : '';
+                            return `
+                                <tr>
+                                    <td style="border: 1px solid #ddd; padding: 8px;">${alumno.alumn_id}</td>
+                                    <td style="border: 1px solid #ddd; padding: 8px;">${alumno.name}</td>
+                                    <td style="border: 1px solid #ddd; padding: 8px;">${alumno.lastName}</td>
+                                    <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">${asistenciaStatus}</td>
+                                </tr>
+                            `;
+                        }).join('')}
+                    </tbody>
+                </table>
+            </body>
+            </html>
+        `;
     
             const imagePath = path.join(__dirname, 'output.png');
             await PersonalServices.generateImageFromHTML(htmlContent, imagePath);
