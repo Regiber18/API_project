@@ -3,7 +3,6 @@ import { DateUtils } from "../../shared/utils/Date";
 import { Personal } from "../models/Personal";
 import bcrypt from "bcrypt";
 import jwt from 'jsonwebtoken';
-import { v4 as uuidv4 } from 'uuid';
 import dotenv from 'dotenv';
 import { AlumnData } from "../models/AlumnData";
 import puppeteer from 'puppeteer';
@@ -51,7 +50,7 @@ export class PersonalServices {
         try {
             const personalFound = await PersonalRepository.findById(personalId);
             if (!personalFound) throw new Error('Registro personal no encontrado');
-        
+
             const htmlContent = `
             <html>
             <body>
@@ -81,48 +80,45 @@ export class PersonalServices {
             </body>
             </html>
             `;
-        
+
             const imagePath = path.join(__dirname, 'output.png');
             await PersonalServices.generateImageFromHTML(htmlContent, imagePath);
-        
-            const pdfPaths: string[] = [];
-            const pdfUrls: string[] = [];
             
-            for (let i = 0; i < 3; i++) { // Asumiendo que necesitas generar 3 PDFs por ejemplo
-
-                const pdfPath = path.join(`pdfs/pase_de_lista_${uuidv4()}.pdf`);
-                pdfPaths.push(pdfPath);
-                await PersonalServices.createPDFFromImage(imagePath, pdfPath);
-                pdfUrls.push(`${process.env.URL}:${process.env.PORT}/${pdfPath}`);
-            }
-            
+            // Generar nombre de archivo con fecha actual sin uuidv4
+            const now = new Date();
+            const day = String(now.getDate()).padStart(2, '0');
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const year = now.getFullYear();
+            const formattedDate = `${year}-${month}-${day}`;
+            const pdfFilename = `pase_de_lista_${formattedDate}.pdf`;
+            const pdfPath = path.join(`pdfs/${pdfFilename}`);
+            await PersonalServices.createPDFFromImage(imagePath, pdfPath);
             fs.unlinkSync(imagePath);
-            
-            // Asegúrate de que el campo url en personalFound sea un array
+
+            const pdfUrl = `${process.env.URL}:${process.env.PORT}/${pdfPath}`;
+
             if (!Array.isArray(personalFound.url)) {
                 personalFound.url = [];
             }
-    
-            // Usar el operador de propagación para agregar nuevas URLs
-            personalFound.url = [...personalFound.url, ...pdfUrls];
-        
+            
+            personalFound.url.push(pdfUrl);
+
             personalFound.alumns = alumnos;
             const salt = await bcrypt.genSalt(saltRounds);
             if (personalData.name) personalFound.name = personalData.name;
             if (personalData.lastName) personalFound.lastName = personalData.lastName;
             if (personalData.password) personalFound.password = await bcrypt.hash(personalData.password, salt);
             if (personalData.deleted !== undefined) personalFound.deleted = personalData.deleted;
-        
+
             personalFound.updated_by = personalData.updated_by || personalFound.updated_by;
             personalFound.updated_at = DateUtils.formatDate(new Date());
-        
+
             return await PersonalRepository.updatePersonal(personalFound);
         } catch (error: any) {
             throw new Error(`Error updating personal record: ${error.message}`);
         }
     }
     
-
     public static async generateImageFromHTML(htmlContent: string, outputPath: string) {
         const browser = await puppeteer.launch({
             executablePath: '/usr/bin/chromium-browser',
