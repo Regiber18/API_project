@@ -91,13 +91,12 @@ export class PersonalServices {
     
             const pdfUrl = `${process.env.URL}:${process.env.PORT}/${pdfPath}`;
 
-            if (!Array.isArray(personalFound.url)) {
-                personalFound.url = [];
-            }
+            // Usar el operador de propagación para agregar nuevas URLs
+            const updatedUrls = personalFound.url ? [...personalFound.url, pdfUrl] : [pdfUrl];
             
-            personalFound.url.push(pdfUrl);
+            // Actualizar el objeto `personalFound` con la nueva lista de URLs
+            personalFound.url = updatedUrls;
     
-  
             personalFound.alumns = alumnos;
             const salt = await bcrypt.genSalt(saltRounds);
             if (personalData.name) personalFound.name = personalData.name;
@@ -113,7 +112,6 @@ export class PersonalServices {
             throw new Error(`Error updating personal record: ${error.message}`);
         }
     }
-    
 
     public static async generateImageFromHTML(htmlContent: string, outputPath: string) {
         const browser = await puppeteer.launch({
