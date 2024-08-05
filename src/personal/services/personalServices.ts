@@ -68,7 +68,7 @@ export class PersonalServices {
                         </thead>
                         <tbody>
                             ${alumnos.map(alumno => {
-                                const asistenciaStatus = asistencia.find(a => a.attended == true) ? '✔️' : '';
+                                const asistenciaStatus = asistencia.map(a => a.attended == true) ? '✔️' : '';
                                 return `
                                     <tr>
                                         <td style="border: 1px solid #ddd; padding: 8px;">${alumno.alumn_id}</td>
