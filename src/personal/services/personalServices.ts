@@ -68,7 +68,8 @@ export class PersonalServices {
                     </thead>
                     <tbody>
                         ${alumnos.map(alumno => {
-                            const asistenciaStatus = asistencia.find(a => a.attended == true) ? '✔️' : '';
+                            // Encuentra la entrada de asistencia correspondiente al alumno actual
+                            const asistenciaStatus = asistencia.find(a => a.alumn_id === alumno.alumn_id && a.attended) ? '✔️' : '';
                             return `
                                 <tr>
                                     <td style="border: 1px solid #ddd; padding: 8px;">${alumno.alumn_id}</td>
@@ -82,7 +83,7 @@ export class PersonalServices {
                 </table>
             </body>
             </html>
-        `;
+            `;
     
             const imagePath = path.join(__dirname, 'output.png');
             await PersonalServices.generateImageFromHTML(htmlContent, imagePath);
