@@ -88,11 +88,7 @@ export class PersonalServices {
     
             const date = new Date();
             const timestamp = date.getTime(); 
-            const pdfDir = path.join('pdfs'); // creo que está mal la ruta nadamas
-            if (!fs.existsSync(pdfDir)) {
-                fs.mkdirSync(pdfDir);
-            }
-            const pdfPath = path.join(pdfDir, `/pase_de_lista_${timestamp}.pdf`);
+            const pdfPath = path.join(`pdfs/pase_de_lista_${timestamp}.pdf`);
             await PersonalServices.createPDFFromImage(imagePath, pdfPath);
             fs.unlinkSync(imagePath);
     
