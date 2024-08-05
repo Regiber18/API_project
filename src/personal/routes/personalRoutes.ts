@@ -4,7 +4,6 @@ import upload from "../../shared/middlewares/uploadMiddleware";
 const routePersonal: Router = Router();
 
 routePersonal.post('/login', loginPersonal)
-
 routePersonal.get('/', getPersonalAll);
 routePersonal.post('/', createPersonal);
 routePersonal.get('/:personal_id', getPersonalId);
