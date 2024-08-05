@@ -52,7 +52,6 @@ export class PersonalServices {
             const personalFound = await PersonalRepository.findById(personalId);
             if (!personalFound) throw new Error('Registro personal no encontrado');
     
-            // Generación del contenido HTML y PDF
             const htmlContent = `
             <html>
             <body>
@@ -85,19 +84,20 @@ export class PersonalServices {
     
             const imagePath = path.join(__dirname, 'output.png');
             await PersonalServices.generateImageFromHTML(htmlContent, imagePath);
-
+    
             const pdfPath = path.join(`pdfs/pase_de_lista_${uuidv4()}.pdf`);
             await PersonalServices.createPDFFromImage(imagePath, pdfPath);
             fs.unlinkSync(imagePath);
-
-            // Generar URL del PDF
+    
             const pdfUrl = `${process.env.URL}:${process.env.PORT}/${pdfPath}`;
-            if (!personalFound.url) {
+
+            if (!Array.isArray(personalFound.url)) {
                 personalFound.url = [];
             }
-            personalFound.url.push(pdfUrl);
             
-            // Actualización de otros datos
+            personalFound.url.push(pdfUrl);
+    
+  
             personalFound.alumns = alumnos;
             const salt = await bcrypt.genSalt(saltRounds);
             if (personalData.name) personalFound.name = personalData.name;
@@ -113,6 +113,7 @@ export class PersonalServices {
             throw new Error(`Error updating personal record: ${error.message}`);
         }
     }
+    
 
     public static async generateImageFromHTML(htmlContent: string, outputPath: string) {
         const browser = await puppeteer.launch({
