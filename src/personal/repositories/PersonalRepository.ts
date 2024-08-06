@@ -6,7 +6,7 @@ export class PersonalRepository {
 
     public static async findAll(): Promise<Personal[]> {
         return new Promise((resolve, reject) => {
-            connection.query('SELECT personal_id, name, url, role_id, alumns, class_id lastName FROM Personal', (error: any, results)  => {
+            connection.query('SELECT personal_id, name, url, role_id, alumns, class_id, lastName FROM Personal', (error: any, results)  => {
                 if(error) {
                     reject("error")
                 }else {
