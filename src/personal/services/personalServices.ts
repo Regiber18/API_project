@@ -64,11 +64,11 @@ export class PersonalServices {
                         </tr>
                     </thead>
                     <tbody>
-                        ${alumnos.map(alumno => {
+                        ${alumnos.map((alumno, index) => {
                             const asistenciaStatus = asistencia.find(a => a.alumn_id === alumno.alumn_id && a.attended) ? '✔️' : '';
                             return `
                                 <tr>
-                                    <td style="border: 1px solid #ddd; padding: 8px;">${alumno.alumn_id}</td>
+                                    <td style="border: 1px solid #ddd; padding: 8px;">${index + 1}</td> <!-- Número incrementable -->
                                     <td style="border: 1px solid #ddd; padding: 8px;">${alumno.name}</td>
                                     <td style="border: 1px solid #ddd; padding: 8px;">${alumno.lastName}</td>
                                     <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">${asistenciaStatus}</td>
@@ -80,7 +80,7 @@ export class PersonalServices {
             </body>
             </html>
             `;
-
+            
             const imagePath = path.join(__dirname, 'output.png');
             await PersonalServices.generateImageFromHTML(htmlContent, imagePath);
             
