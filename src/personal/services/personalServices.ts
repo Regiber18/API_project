@@ -64,11 +64,11 @@ export class PersonalServices {
                         </tr>
                     </thead>
                     <tbody>
-                        ${alumnos.map((alumno, index) => {
+                        ${alumnos.map(alumno => {
                             const asistenciaStatus = asistencia.find(a => a.alumn_id === alumno.alumn_id && a.attended) ? '✔️' : '';
                             return `
                                 <tr>
-                                    <td style="border: 1px solid #ddd; padding: 8px;">${index + 1}</td>
+                                    <td style="border: 1px solid #ddd; padding: 8px;">${alumno.alumn_id}</td>
                                     <td style="border: 1px solid #ddd; padding: 8px;">${alumno.name}</td>
                                     <td style="border: 1px solid #ddd; padding: 8px;">${alumno.lastName}</td>
                                     <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">${asistenciaStatus}</td>
