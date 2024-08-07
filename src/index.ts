@@ -6,11 +6,9 @@ import path from  "path"
 
 // Importar rutas de módulos
 import alumnRoutes from './alumn/routes/alumnRoutes';
-import ballotsRoute from './ballot/routes/ballotRoutes';
 import personalRoute from "./personal/routes/personalRoutes"; 
 import classRoutes from "./class/routes/classRoutes";
 import roleRoutes from './role/routes/RoleRoutes';
-import reportRoutes from './report/routes/reportRoute';
 import subjectRoutes from './subject/routes/subjectRoutes';
 import  ratingRoutes  from './rating/routes/ratingRoutes';
 
@@ -59,11 +57,9 @@ import puppeteer from 'puppeteer';
 app.use(cors(corsOptions));
 
 app.use('/api/alumn', alumnRoutes);
-app.use('/api/ballot', ballotsRoute);
 app.use('/api/personal', personalRoute);
 app.use('/api/class', classRoutes);
 app.use('/api/role', roleRoutes);
-app.use('/api/report', reportRoutes);
 app.use('/api/subject', subjectRoutes);
 app.use('/api/rating', ratingRoutes);
 
