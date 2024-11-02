@@ -1,6 +1,6 @@
 import { ResultSetHeader } from "mysql2";
 import connection from "../../shared/config/database";
-import { Personal } from "../models/personal";
+import { Personal } from "../models/User";
 export class AlumnRepository {
 
   public static async findAll(): Promise<Personal[]> {
@@ -58,7 +58,7 @@ export class AlumnRepository {
     const query = 'INSERT INTO personal (id_role, name, email, password) VALUES (?, ?, ?, ?)';
     console.log(product);
     return new Promise((resolve, reject) => {
-      connection.execute(query,[product.id_role,product.name, product.email, product.password], (error, result: ResultSetHeader) => {
+      connection.execute(query, [product.id_role, product.name, product.email, product.password], (error, result: ResultSetHeader) => {
         if (error) {
           reject(error);
         } else {

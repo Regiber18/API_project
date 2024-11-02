@@ -1,5 +1,5 @@
 import { AlumnRepository } from "../repositories/productRepository";
-import { Personal } from "../models/personal";
+import { Personal } from "../models/User";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
@@ -27,7 +27,7 @@ export class ProductService {
 
     public static async addAlumn(product: Personal) {
         try {
-            const salt = await bcrypt.genSalt(10); 
+            const salt = await bcrypt.genSalt(10);
             product.password = await bcrypt.hash(product.password, salt); // Asegúrate de hashear la contraseña
             return await AlumnRepository.createProduct(product);
         } catch (error: any) {
