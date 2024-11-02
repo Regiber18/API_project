@@ -203,7 +203,7 @@ export class AlumnRepository {
   }
 
   public static async addPersonToEvent(eventPerson: EventPerson): Promise<EventPerson | null> {
-    const participantCountQuery = 'SELECT COUNT(*) as count FROM eventerson WHERE id_event = ?';
+    const participantCountQuery = 'SELECT COUNT(*) as count FROM eventperson WHERE id_event = ?';
     const eventQuery = 'SELECT amount FROM event WHERE id_event = ?';
 
     return new Promise(async (resolve, reject) => {
