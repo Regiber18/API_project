@@ -1,7 +1,7 @@
 import { Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
-import { PersonalRepository } from '../../personal/repositories/PersonalRepository';
+import { AlumnRepository} from '../../personal/repositories/productRepository';
 import { PersonalPayload } from '../config/types/personalPayload';
 import { AuthRequest } from '../config/types/authRequest'; // Asegúrate de importar AuthRequest con las propiedades extendidas
 
@@ -19,7 +19,7 @@ export const authMiddleware = async (req: AuthRequest, res: Response, next: Next
 
   try {
     const payload = jwt.verify(token, secretKey) as PersonalPayload;
-    const empleado = await PersonalRepository.findById(payload.personal_id);
+    const empleado = await AlumnRepository.findById(payload.personal_id);
 
     if (!empleado) {
       res.status(401).json({ message: 'Token inválido' });
