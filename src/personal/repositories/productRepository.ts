@@ -5,7 +5,7 @@ export class AlumnRepository {
 
   public static async findAll(): Promise<Personal[]> {
     return new Promise((resolve, reject) => {
-      connection.query('SELECT * FROM Personal', (error: any, results) => {
+      connection.query('SELECT * FROM personal', (error: any, results) => {
         if (error) {
           reject(error);
         } else {
@@ -19,7 +19,7 @@ export class AlumnRepository {
 
   public static async findById(id_personal: number): Promise<Personal | null> {
     return new Promise((resolve, reject) => {
-      connection.query('SELECT * FROM Personal WHERE id_personal = ?', [id_personal], (error: any, results) => {
+      connection.query('SELECT * FROM personal WHERE id_personal = ?', [id_personal], (error: any, results) => {
         if (error) {
           reject(error);
         } else {
@@ -38,7 +38,7 @@ export class AlumnRepository {
 
   public static async findByNamePassword(name: string): Promise<Personal | null> {
     return new Promise((resolve, reject) => {
-      connection.query('SELECT * FROM Personal WHERE name = ?', [name], (error: any, results) => {
+      connection.query('SELECT * FROM personal WHERE name = ?', [name], (error: any, results) => {
         if (error) {
           reject(error);
         } else {
@@ -55,7 +55,7 @@ export class AlumnRepository {
 
 
   public static async createProduct(product: Personal): Promise<Personal> {
-    const query = 'INSERT INTO Personal (id_role, name, email, password) VALUES (?, ?, ?, ?)';
+    const query = 'INSERT INTO personal (id_role, name, email, password) VALUES (?, ?, ?, ?)';
     console.log(product);
     return new Promise((resolve, reject) => {
       connection.execute(query,[product.id_role,product.name, product.email, product.password], (error, result: ResultSetHeader) => {
@@ -71,7 +71,7 @@ export class AlumnRepository {
   }
 
   public static async updateProduct(id_personal: number, productData: Personal): Promise<Personal | null> {
-    const query = 'UPDATE Personal SET name = ?, lastName = ?, password = ? WHERE id_personal = ?';
+    const query = 'UPDATE personal SET name = ?, lastName = ?, password = ? WHERE id_personal = ?';
     return new Promise((resolve, reject) => {
       connection.execute(query, [productData.name, productData.email, productData.password], (error, result: ResultSetHeader) => {
         if (error) {
@@ -89,7 +89,7 @@ export class AlumnRepository {
   }
 
   public static async deleteProduct(name: string, lastName: string): Promise<boolean> {
-    const query = 'DELETE FROM Personal WHERE name = ? AND lastName = ?';
+    const query = 'DELETE FROM personal WHERE name = ? AND lastName = ?';
     return new Promise((resolve, reject) => {
       connection.execute(query, [name, lastName], (error, result: ResultSetHeader) => {
         if (error) {
@@ -106,7 +106,7 @@ export class AlumnRepository {
   }
 
   public static async loginByNameLastName(name: string, lastName: string): Promise<boolean> {
-    const query = 'SELECT * FROM Personal WHERE name = ? AND email = ?';
+    const query = 'SELECT * FROM personal WHERE name = ? AND email = ?';
     return new Promise((resolve, reject) => {
       connection.execute(query, [name, lastName], (error, result: ResultSetHeader) => {
         if (error) {

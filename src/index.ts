@@ -2,7 +2,6 @@ import express, { Application } from 'express';
 import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
 import cors from 'cors';
-import path from  "path"
 
 // Importar rutas de módulos
 import personalRoute from "./personal/routes/productRoutes"; 
