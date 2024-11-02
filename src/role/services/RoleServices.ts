@@ -1,5 +1,4 @@
 import { RoleRepository } from "../repositories/RoleRepository";
-import { DateUtils } from "../../shared/utils/Date";
 import { Role } from "../models/Role";
 
 
@@ -32,8 +31,6 @@ export class roleService {
 
     public static async addRole(role: Role) {
         try {
-            role.created_at = DateUtils.formatDate(new Date());
-            role.updated_at = DateUtils.formatDate(new Date());
             return await RoleRepository.createRole(role);
         } catch (error: any) {
             throw new Error(`Error al crear role: ${error.message}`);
@@ -48,14 +45,9 @@ export class roleService {
                 if(roleData.description){
                     roleFinded.description = roleData.description;
                 }
-                if(roleData.deleted){
-                    roleFinded.deleted = roleData.deleted;
-                }
             }else{
                 return null;
             }
-            roleFinded.updated_by = roleData.updated_by
-            roleFinded.updated_at = DateUtils.formatDate(new Date());
             return await RoleRepository.updateRole(roleId, roleFinded);
         }catch (error: any){
             throw new Error(`Error al modificar role: ${error.message}`);

@@ -1,0 +1,38 @@
+import { Response, NextFunction } from 'express';
+import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
+import { AlumnRepository } from '../../src/personal/repositories/productRepository';
+import { PersonalPayload } from '../types/personalPayload';
+import { AuthRequest } from '../types/authRequest'; // Asegúrate de importar AuthRequest con las propiedades extendidas
+
+dotenv.config();
+
+const secretKey = process.env.SECRET || "";
+
+export const authMiddleware = async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
+  const token = req.header('Authorization')?.replace('Bearer ', '');
+
+  if (!token) {
+    res.status(401).json({ message: 'No se proporcionó token' });
+    return;
+  }
+
+  try {
+    const payload = jwt.verify(token, secretKey) as PersonalPayload;
+    const empleado = await AlumnRepository.findById(payload.personal_id);
+
+    if (!empleado) {
+      res.status(401).json({ message: 'Token inválido' });
+      return;
+    }
+
+    req.personalData = payload;
+    next()
+  } catch (error: any) {
+    if (error.name === 'TokenExpiredError') {
+      res.status(401).json({ message: 'Token expirado' });
+      return; 
+    }
+    res.status(401).json({ message: 'No autorizado' });
+  }
+};
