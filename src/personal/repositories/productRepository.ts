@@ -1,4 +1,4 @@
-import { ResultSetHeader } from "mysql2";
+import { ResultSetHeader, RowDataPacket } from "mysql2";
 import connection from "../../shared/config/database";
 import { Personal } from "../models/User";
 export class AlumnRepository {
@@ -51,6 +51,20 @@ export class AlumnRepository {
         }
       });
     });
+  }
+
+  public static async findByIdRole(id_role: number): Promise<RowDataPacket[] | null> {
+    return new Promise((resolve, reject) => {
+      const query = 'SELECT description FROM role WHERE  id_role = ?'; 
+      connection.query(query, [id_role], (error: any, results) => {
+        if(error) {
+          reject(error); 
+        }else {
+          const result: RowDataPacket[] = results as RowDataPacket[]; 
+          resolve(result)
+        }
+      })
+    })
   }
 
 

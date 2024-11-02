@@ -3,6 +3,7 @@ import { Personal } from "../models/User";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import { RowDataPacket } from "mysql2";
 
 dotenv.config();
 
@@ -68,19 +69,24 @@ export class ProductService {
     public static async login(name: string, password: string) {
         try {
             const personal = await this.getPersonalByFullName(name);
+
             if (!personal) return null;
 
-            const passwordMatch = await bcrypt.compare(password, personal.password);
-            if (!passwordMatch) return null;
+            if (personal) {
+                const role = await this.getRoleByIdRole(personal.id_role);
+                const passwordMatch = await bcrypt.compare(password, personal.password);
+                if (!passwordMatch) return null;
 
-            const payload = {
-                personal_id: personal.id_personal,
-                name: personal.name,
-                lastName: personal.email,
-                id_role: personal.id_role,
-            };
+                const payload = {
+                    personal_id: personal.id_personal,
+                    name: personal.name,
+                    lastName: personal.email,
+                    id_role: personal.id_role,
+                    role: role
+                };
 
-            return await jwt.sign(payload, secretKey, { expiresIn: '1h' });
+                return await jwt.sign(payload, secretKey, { expiresIn: '1h' });
+            }
         } catch (error: any) {
             throw new Error(`Error durante el inicio de sesión: ${error.message}`);
         }
@@ -93,4 +99,15 @@ export class ProductService {
             throw new Error(`Error al encontrar personal por nombre: ${error.message}`);
         }
     }
+
+    public static async getRoleByIdRole(id_role: number): Promise<RowDataPacket[] | null> {
+        try {
+            return await AlumnRepository.findByIdRole(id_role);
+        } catch (error: any) {
+            throw new Error(`Error al encontrar personal por nombre: ${error.message}`);
+        }
+    }
+
+
+
 }

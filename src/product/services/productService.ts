@@ -31,6 +31,13 @@ export class productService {
             throw new Error(`Error al obtener productos: ${error.message}`);
         }
     }
+    public static async getAllEventsWithStatus(): Promise<any[]> {
+        try {
+            return await AlumnRepository.getAllWithStatus();
+        } catch (error: any) {
+            throw new Error(`Error al obtener productos: ${error.message}`);
+        }
+    }
 
 
     public static async addAlumn(product: Product) {

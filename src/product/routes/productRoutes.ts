@@ -1,5 +1,5 @@
 import { Router } from "express"
-import { getAlumnAll, createProduct, getAllEventsStatus,findByTypeGameModify,updateALumn, deleteEventI,deleteAlumn, findByNameModify, createEventPerson, findGameType, restEventPerson, getEventAllWith, findEventAllId } from "../controllers/productController";
+import { getAlumnAll, createProduct, getEventAllWithStatus ,getAllEventsStatus,findByTypeGameModify,updateALumn, deleteEventI,deleteAlumn, findByNameModify, createEventPerson, findGameType, restEventPerson, getEventAllWith, findEventAllId } from "../controllers/productController";
 
 const routes: Router = Router();
 
@@ -14,6 +14,7 @@ routes.delete('/rest', restEventPerson)
 routes.post('/', createProduct)
 routes.get('/e/:id_personal', findEventAllId)
 routes.get('/eventAll', getEventAllWith)
+routes.get('/eventAllStatus', getEventAllWithStatus)
 routes.delete('/delete/:id_personal/:id_event', deleteEventI)
 /*
 routes.put('/updateAmount', updateStockProduct)

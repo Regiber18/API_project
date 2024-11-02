@@ -6,7 +6,7 @@ export class RoleRepository {
 
     public static async findAll(): Promise<Role[]> {
         return new Promise((resolve, reject) => {
-            connection.query('SELECT * FROM Role', (error: any, results)  => {
+            connection.query('SELECT * FROM role', (error: any, results)  => {
                 if(error) {
                     reject("error")
                 }else {
@@ -20,7 +20,7 @@ export class RoleRepository {
 
     public static async findAllRolesAct(): Promise<Role[]> {
       return new Promise((resolve, reject) => {
-          connection.query('SELECT description FROM Role', (error: any, results)  => {
+          connection.query('SELECT description FROM role', (error: any, results)  => {
               if(error) {
                   reject("error")
               }else {
@@ -34,7 +34,7 @@ export class RoleRepository {
 
     public static async findById(role_id: number): Promise<Role | null> {
         return new Promise((resolve, reject) => {
-            connection.query('SELECT description FROM Role WHERE id_role = ?', [role_id], (error: any, results) => {
+            connection.query('SELECT description FROM role WHERE id_role = ?', [role_id], (error: any, results) => {
                 if(error) {
                     reject("error")
                 }else {
@@ -50,7 +50,7 @@ export class RoleRepository {
     } 
 
     public static async createRole(role: Role): Promise<Role> {
-        const query = 'INSERT INTO Role(description) VALUES (?)';
+        const query = 'INSERT INTO role(description) VALUES (?)';
         console.log(role);
         return new Promise((resolve, reject) => {
           connection.execute(query, [role.description], (error, result: ResultSetHeader) => {
@@ -66,7 +66,7 @@ export class RoleRepository {
       }
 
     public static async updateRole(role_id: number, roleData: Role): Promise<Role | null> {
-        const query = 'UPDATE Role SET description = ? WHERE id_role = ?';
+        const query = 'UPDATE role SET description = ? WHERE id_role = ?';
         return new Promise((resolve, reject) => {
           connection.execute(query, [roleData.description, role_id], (error, result: ResultSetHeader) => {
             if (error) {
@@ -84,7 +84,7 @@ export class RoleRepository {
       }
 
       public static async deletePersonal(role_id: number): Promise<boolean> {
-        const query = 'DELETE FROM Role WHERE id_role = ?';
+        const query = 'DELETE FROM role WHERE id_role = ?';
         return new Promise((resolve, reject) => {
           connection.execute(query, [role_id], (error, result: ResultSetHeader) => {
             if (error) {

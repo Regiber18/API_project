@@ -54,7 +54,7 @@ export class AlumnRepository {
     LEFT JOIN 
       event AS e ON p.id_personal = e.id_personal 
     LEFT JOIN 
-      eventPerson AS ep ON e.id_event = ep.id_event 
+      eventperson AS ep ON e.id_event = ep.id_event 
     WHERE e.game != ''
     AND e.status = 'espera'
     GROUP BY 
@@ -84,6 +84,54 @@ export class AlumnRepository {
       });
     });
   }
+
+  public static async getAllWithStatus(): Promise<{ event: any; participantCount: number }[]> {
+    return new Promise((resolve, reject) => {
+      const query = `
+      SELECT 
+      p.name, 
+      e.game, 
+      e.type_game, 
+      e.amount, 
+      e.status, 
+      e.id_personal, 
+      e.id_event, 
+      COUNT(ep.id_personal) AS participant_count
+    FROM 
+      personal AS p 
+    LEFT JOIN 
+      event AS e ON p.id_personal = e.id_personal 
+    LEFT JOIN 
+      eventperson AS ep ON e.id_event = ep.id_event 
+    WHERE e.game != ''
+    GROUP BY 
+      e.id_event, p.id_personal
+      `;
+
+      connection.query(query, (error: any, results) => {
+        if (error) {
+          reject(error);
+        } else {
+          const resultQuery: any[] = results as [];
+          const eventsWithCounts = resultQuery.map((row: any) => ({
+            event: {
+              name: row.name,
+              game: row.game,
+              type_game: row.type_game,
+              amount: row.amount,
+              status: row.status,
+              id_personal: row.id_personal,
+              id_event: row.id_event
+            },
+            participantCount: row.participant_count || 0 // Default to 0 if no participants
+          }));
+          console.log(eventsWithCounts)
+          resolve(eventsWithCounts);
+        }
+      });
+    });
+  }
+
 
 
 
@@ -155,7 +203,7 @@ export class AlumnRepository {
   }
 
   public static async addPersonToEvent(eventPerson: EventPerson): Promise<EventPerson | null> {
-    const participantCountQuery = 'SELECT COUNT(*) as count FROM eventPerson WHERE id_event = ?';
+    const participantCountQuery = 'SELECT COUNT(*) as count FROM eventerson WHERE id_event = ?';
     const eventQuery = 'SELECT amount FROM event WHERE id_event = ?';
 
     return new Promise(async (resolve, reject) => {
@@ -196,7 +244,7 @@ export class AlumnRepository {
 
         // Permitir agregar participantes si no se ha alcanzado el máximo
         if (participantCount < eventAmount) {
-          const insertQuery = 'INSERT INTO eventPerson (id_personal, id_event) VALUES (?, ?)';
+          const insertQuery = 'INSERT INTO eventperson (id_personal, id_event) VALUES (?, ?)';
           connection.execute(insertQuery, [eventPerson.id_personal, eventPerson.id_event], (error: any) => {
             if (error) {
               reject(error);
@@ -219,7 +267,7 @@ export class AlumnRepository {
 
 
   public static async restPersonToEvent(eventPerson: EventPerson): Promise<EventPerson | null> {
-    const participantCountQuery = 'SELECT COUNT(*) as count FROM eventPerson WHERE id_event = ?';
+    const participantCountQuery = 'SELECT COUNT(*) as count FROM eventperson WHERE id_event = ?';
 
     return new Promise(async (resolve, reject) => {
       try {
@@ -247,7 +295,7 @@ export class AlumnRepository {
         // Allow adding participants if we haven't reached the maximum
         if (participantCount > 0) {
           console.log(eventPerson.id_event)
-          const insertQuery = 'DELETE FROM eventPerson WHERE id_personal = ? AND id_event = ?';
+          const insertQuery = 'DELETE FROM eventperson WHERE id_personal = ? AND id_event = ?';
           connection.execute(insertQuery, [eventPerson.id_personal, eventPerson.id_event], (error: any) => {
             if (error) {
               reject(error);
@@ -272,7 +320,7 @@ export class AlumnRepository {
   public static async finMyEventsIn(id_personal: number): Promise<eventAllWith[] | null> {
     return new Promise((resolve, reject) => {
       connection.query(
-        'SELECT e.*, p.name FROM event AS e JOIN eventPerson AS ep JOIN personal AS p ON e.id_event = ep.id_event WHERE ep.id_personal = ? AND e.id_personal = p.id_personal',
+        'SELECT e.*, p.name FROM event AS e JOIN eventperson AS ep JOIN personal AS p ON e.id_event = ep.id_event WHERE ep.id_personal = ? AND e.id_personal = p.id_personal',
         [id_personal], (error: any, results) => {
           if (error) {
             console.error("Error en la consulta:", error);
@@ -322,7 +370,7 @@ export class AlumnRepository {
         LEFT JOIN 
           event AS e ON p.id_personal = e.id_personal 
         LEFT JOIN 
-          eventPerson AS ep ON e.id_event = ep.id_event 
+          eventperson AS ep ON e.id_event = ep.id_event 
         WHERE 
           e.game != ''
         AND e.status = 'espera'
@@ -378,7 +426,7 @@ export class AlumnRepository {
         LEFT JOIN 
           event AS e ON p.id_personal = e.id_personal 
         LEFT JOIN 
-          eventPerson AS ep ON e.id_event = ep.id_event 
+          eventperson AS ep ON e.id_event = ep.id_event 
         WHERE 
           e.game != ''
         AND e.status = 'espera'
@@ -506,7 +554,7 @@ export class AlumnRepository {
 
 
   public static async deleteEventI(id_personal: number, id_event: number): Promise<boolean> {
-    const query = 'DELETE ep FROM event AS e JOIN eventPerson AS ep ON e.id_event = ep.id_event JOIN personal AS p ON e.id_personal = p.id_personal WHERE ep.id_personal = ? AND ep.id_event = ? AND e.status = "espera"';
+    const query = 'DELETE ep FROM event AS e JOIN eventperson AS ep ON e.id_event = ep.id_event JOIN personal AS p ON e.id_personal = p.id_personal WHERE ep.id_personal = ? AND ep.id_event = ? AND e.status = "espera"';
     return new Promise((resolve, reject) => {
       connection.execute(query, [id_personal, id_event], (error, result: ResultSetHeader) => {
         if (error) {
