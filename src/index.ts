@@ -33,10 +33,6 @@ app.use('/api/role', roleRoutes);
 app.use('/api/event', routes),
 
 //ruta de los pdfs
-app.use('/pdfs', express.static(path.join(__dirname, '../pdfs')));
-console.log(__dirname);
-
-
 
 // Middleware para manejar rutas no encontradas
 app.use(notFoundHandler);
